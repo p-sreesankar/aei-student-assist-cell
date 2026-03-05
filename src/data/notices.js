@@ -1,0 +1,88 @@
+// ============================================================================
+//  NOTICES — Student Assist Cell Notice Board
+// ============================================================================
+//
+//  HOW TO ADD A NEW NOTICE:
+//  ------------------------
+//  1. Copy the block below (between the --- markers) and paste it
+//     at the TOP of the list (right after the opening "[").
+//
+//     ---
+//     {
+//       id:            "your-unique-slug",
+//       title:         "Your Notice Title Here",
+//       date:          "YYYY-MM-DD",
+//       description:   "A short summary of the notice (1–3 sentences).",
+//       attachmentUrl: "https://drive.google.com/...",   ← or set to null if no file
+//       pinned:        false,
+//     },
+//     ---
+//
+//  2. Replace the placeholder values with your actual content.
+//  3. Save → git add . → git commit -m "add notice: your title" → git push
+//
+//  HOW TO REMOVE A NOTICE:
+//  -----------------------
+//  Find the { ... } block for that notice and delete the entire block
+//  (from the opening { to the closing },). Save and push.
+//
+//  HOW TO PIN A NOTICE:
+//  --------------------
+//  Set  pinned: true  — it will always appear at the top regardless of date.
+//  Only pin 1–2 notices at a time to avoid clutter.
+//
+//  FIELD REFERENCE:
+//  ┌─────────────────┬──────────────────┬──────────┬─────────────────────────────────────┐
+//  │ Field           │ Type             │ Required │ Description                         │
+//  ├─────────────────┼──────────────────┼──────────┼─────────────────────────────────────┤
+//  │ id              │ String           │ Yes      │ Unique slug (lowercase, hyphens)    │
+//  │ title           │ String           │ Yes      │ Notice heading                      │
+//  │ date            │ String           │ Yes      │ Date in YYYY-MM-DD format           │
+//  │ description     │ String           │ Yes      │ Short body text (1–3 sentences)     │
+//  │ attachmentUrl   │ String or null   │ No       │ Link to PDF/file, or null if none   │
+//  │ pinned          │ true / false     │ No       │ Stick to top? (default: false)      │
+//  └─────────────────┴──────────────────┴──────────┴─────────────────────────────────────┘
+//
+// ============================================================================
+
+const NOTICES = [
+
+  {
+    id:            "mid-sem-exam-schedule-s6-2026",
+    title:         "Mid-Semester Exam Schedule — S6 AEI (March 2026)",
+    date:          "2026-03-04",
+    description:   "The mid-semester examination for S6 AEI will begin on March 17, 2026. Timetable and seating arrangement have been uploaded. Students are advised to check the attachment and report any conflicts to the class advisor before March 10.",
+    attachmentUrl: "https://drive.google.com/file/d/EXAMPLE1/view?usp=sharing",
+    pinned:        true,
+  },
+
+  {
+    id:            "ieee-workshop-registration-2026",
+    title:         "IEEE Workshop on Embedded Systems — Registration Open",
+    date:          "2026-03-01",
+    description:   "A two-day workshop on 'Embedded Systems for IoT Applications' will be conducted on March 22–23 by the IEEE Student Branch. Registration is free for AEI students. Fill the Google Form linked below before March 15.",
+    attachmentUrl: "https://forms.gle/EXAMPLE_FORM_LINK",
+    pinned:        false,
+  },
+
+  {
+    id:            "internship-opportunity-bosch-2026",
+    title:         "Internship Opportunity — Bosch India (Summer 2026)",
+    date:          "2026-02-20",
+    description:   "Bosch India is offering summer internships for pre-final year students in instrumentation and control systems. Interested students should submit their resume to the placement cell by February 28. See the attached brochure for eligibility details.",
+    attachmentUrl: "https://drive.google.com/file/d/EXAMPLE2/view?usp=sharing",
+    pinned:        false,
+  },
+
+  {
+    id:            "lab-manual-submission-deadline",
+    title:         "Lab Manual Submission Deadline — S4 AEI",
+    date:          "2026-02-15",
+    description:   "All S4 AEI students must submit their completed Measurements & Instrumentation lab manual to the lab in-charge by March 5, 2026. Late submissions will not be accepted for internal assessment.",
+    attachmentUrl: null,
+    pinned:        false,
+  },
+
+];
+
+export { NOTICES };

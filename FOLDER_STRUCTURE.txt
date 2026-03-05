@@ -1,0 +1,103 @@
+Student Assist Cell — Project Structure
+========================================
+
+aei-student-assist-cell/
+│
+├── public/                         # Static assets served as-is
+│   ├── favicon.svg                 # Site favicon
+│   └── images/                     # Gallery photos, event posters
+│       └── README.md               # Usage guide for this folder
+│
+├── src/                            # Source code
+│   │
+│   ├── assets/                     # Assets imported in code (processed by Vite)
+│   │   └── README.md               # Usage guide for this folder
+│   │
+│   ├── components/                 # Reusable UI components
+│   │   ├── Footer.jsx              # Site footer with links & social icons
+│   │   ├── Layout.jsx              # Page layout wrapper (Navbar + Footer)
+│   │   ├── LoadingSpinner.jsx      # Loading state component
+│   │   ├── Navbar.jsx              # Top navigation bar (mobile-responsive)
+│   │   ├── ScrollToTop.jsx         # Auto-scroll to top on route change
+│   │   └── SectionHeader.jsx       # Reusable section title component
+│   │
+│   ├── data/                       # ⭐ CONTENT DATA FILES — EDIT THESE TO UPDATE THE SITE
+│   │   ├── about.js                # About section content (heading, paragraphs, team photo)
+│   │   ├── events.js               # Event calendar entries (upcoming & past events)
+│   │   ├── faculty.js              # Contact cards for faculty/coordinators
+│   │   ├── gallery.js              # Photo gallery items (URL, caption, date)
+│   │   ├── notices.js              # Notice board entries (title, date, description, attachment)
+│   │   ├── resources.js            # Downloadable resources (forms, guides, syllabi, lab manuals)
+│   │   └── site-config.js          # Global site configuration (name, tagline, colors, socials, form URL)
+│   │
+│   ├── pages/                      # Page components (one file per route)
+│   │   ├── About.jsx               # /about — About the Cell page
+│   │   ├── Contact.jsx             # /contact — Faculty contact cards
+│   │   ├── Events.jsx              # /events — Event calendar (upcoming & past)
+│   │   ├── Gallery.jsx             # /gallery — Photo grid with lightbox
+│   │   ├── Grievance.jsx           # /grievance — Embedded Google Form
+│   │   ├── Home.jsx                # / — Hero + quick links to all sections
+│   │   ├── NotFound.jsx            # 404 page
+│   │   ├── Notices.jsx             # /notices — Notice board
+│   │   └── Resources.jsx           # /resources — Downloadable resources with category filter
+│   │
+│   ├── utils/                      # Helper functions
+│   │   ├── date.js                 # Date formatting & comparison utilities
+│   │   └── helpers.js              # General helpers (initials, truncate, slugify)
+│   │
+│   ├── App.jsx                     # Main app component with routing (HashRouter)
+│   ├── index.css                   # Tailwind CSS + global styles
+│   └── main.jsx                    # React entry point
+│
+├── .gitignore                      # Files/folders ignored by Git
+├── DEPLOYMENT_GUIDE.md             # Step-by-step deployment instructions
+├── index.html                      # HTML shell (Google Fonts, meta tags)
+├── package.json                    # Dependencies & scripts
+├── postcss.config.js               # PostCSS config for Tailwind
+├── PRD.md                          # Product Requirements Document
+├── README.md                       # Project overview & usage guide
+├── tailwind.config.js              # Tailwind CSS theme customization
+└── vite.config.js                  # Vite build config (GitHub Pages deployment)
+
+========================================
+Key Directories to Know:
+========================================
+
+📂 src/data/
+    ↳ The ONLY folder you need to edit to update content
+    ↳ Each file has detailed instructions at the top
+    ↳ No HTML/CSS knowledge required
+
+📂 src/pages/
+    ↳ One React component per page/route
+    ↳ Rendered by App.jsx via React Router
+
+📂 src/components/
+    ↳ Shared UI components used across multiple pages
+    ↳ Layout, Navbar, Footer, etc.
+
+📂 public/
+    ↳ Static files served as-is (not processed by Vite)
+    ↳ Use for large images, favicon, CNAME file (custom domain)
+
+========================================
+How Content Flows:
+========================================
+
+1. You edit a data file (e.g., src/data/notices.js) → add a new notice
+2. The corresponding page (e.g., src/pages/Notices.jsx) imports that data
+3. The page renders the data using React components
+4. You run 'npm run deploy' → site updates on GitHub Pages
+
+========================================
+Common Tasks:
+========================================
+
+Add a notice:           Edit src/data/notices.js
+Add an event:           Edit src/data/events.js
+Add a gallery photo:    Edit src/data/gallery.js
+Update contact info:    Edit src/data/faculty.js
+Change site colors:     Edit src/data/site-config.js (themeColors section)
+Swap Google Form:       Edit src/data/site-config.js (grievanceFormUrl)
+
+========================================
