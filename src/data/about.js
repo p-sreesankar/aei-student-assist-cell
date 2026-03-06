@@ -15,7 +15,7 @@
 // ============================================================================
 
 export const ABOUT = {
-  
+
   heading: "Our Mission",
 
   paragraphs: [
@@ -28,5 +28,31 @@ export const ABOUT = {
 
   // Optional team photo URL — set to null if you don't have one yet
   teamPhotoUrl: null,  // e.g., "assets/team-photo.jpg" or a Google Drive link
+
+  // ── Timeline Milestones ────────────────────────────────────────────────
+  // To HIDE the timeline: set this to an empty array []
+  // To ADD a milestone: paste a new { year, title, description } block
+  milestones: [
+    {
+      year: "2019",
+      title: "Cell Founded",
+      description: "AEI Student Assist Cell established as a bridge between students and department.",
+    },
+    {
+      year: "2021",
+      title: "Went Digital",
+      description: "Launched online notice board and event listings during COVID-19 remote learning.",
+    },
+    {
+      year: "2023",
+      title: "Grievance Portal",
+      description: "Introduced anonymous grievance submission through Google Forms integration.",
+    },
+    {
+      year: "2025",
+      title: "Website Launched",
+      description: "Full-featured website with events, resources, and real-time updates deployed on GitHub Pages.",
+    },
+  ],
 
 };

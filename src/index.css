@@ -2,41 +2,174 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Base reset & defaults ─────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES — Layered Blues Design Tokens
+   ══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Blue Layer System ─────────────────────────────────────────────── */
+  --color-bg:           #0A1628;   /* darkest — page bg */
+  --color-surface:      #0F2744;   /* mid blue — cards */
+  --color-surface-2:    #163354;   /* elevated cards, hover */
+  --color-surface-3:    #1A3F66;   /* deepest card hover */
+  --color-border:       #1E4976;   /* blue borders */
+  --color-border-bright:#0EA5E9;   /* active/focus borders */
+
+  /* ── Sky Blue — the bright layer ───────────────────────────────────── */
+  --color-primary:        #0EA5E9;  /* sky blue — main brand */
+  --color-primary-dim:    #0284C7;  /* one shade darker */
+  --color-primary-bright: #38BDF8;  /* one shade lighter */
+  --color-primary-muted:  #075985;  /* very deep, for large fills */
+  --color-primary-soft:   rgba(14,165,233,0.12);
+  --color-primary-glow:   rgba(14,165,233,0.25);
+
+  /* ── Amber — 10% only, one CTA ────────────────────────────────────── */
+  --color-accent:         #F59E0B;
+  --color-accent-hover:   #D97706;
+  --color-accent-glow:    rgba(245,158,11,0.20);
+
+  /* ── Typography — all white/blue variants ──────────────────────────── */
+  --color-text-primary:   #F0F9FF;   /* near white with blue tint */
+  --color-text-secondary: #7DD3FC;   /* light sky blue */
+  --color-text-muted:     #38BDF8;   /* sky blue, muted contexts */
+  --color-text-dim:       #0EA5E9;   /* sky blue for labels */
+
+  /* ── Semantic ───────────────────────────────────────────────────────── */
+  --color-success:  #10B981;
+  --color-warning:  #F59E0B;
+  --color-error:    #F87171;
+  --color-info:     #38BDF8;
+
+  /* ── Typography ────────────────────────────────────────────────────── */
+  --font-heading: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-body:    "DM Sans", system-ui, -apple-system, sans-serif;
+
+  --font-size-display: 3.5rem;
+  --font-size-h1:      2.5rem;
+  --font-size-h2:      2rem;
+  --font-size-h3:      1.5rem;
+  --font-size-h4:      1.25rem;
+  --font-size-body-lg: 1.125rem;
+  --font-size-body:    1rem;
+  --font-size-body-sm: 0.875rem;
+  --font-size-caption: 0.75rem;
+
+  /* ── Spacing (Base-4) ──────────────────────────────────────────────── */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-6:  1.5rem;
+  --space-8:  2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+
+  /* ── Border Radius ─────────────────────────────────────────────────── */
+  --radius-sm:  0.25rem;
+  --radius:     0.5rem;
+  --radius-md:  0.75rem;
+  --radius-lg:  1rem;
+  --radius-xl:  1.5rem;
+  --radius-full: 9999px;
+
+  /* ── Shadows — dark theme, deep shadows + blue edge glow ───────────── */
+  --shadow-card:     0 1px 3px rgba(0,0,0,0.4), 0 0 0 1px rgba(14,165,233,0.08);
+  --shadow-hover:    0 8px 25px rgba(0,0,0,0.5), 0 0 0 1px rgba(14,165,233,0.2);
+  --shadow-elevated: 0 10px 40px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);
+  --shadow-focus:    0 0 0 3px rgba(14,165,233,0.3);
+  --shadow-navbar:   0 1px 0 rgba(14,165,233,0.15);
+  --shadow-primary-glow: 0 0 30px rgba(14,165,233,0.25);
+  --shadow-accent-glow:  0 0 30px rgba(245,158,11,0.25);
+
+  /* ── Transitions ───────────────────────────────────────────────────── */
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   BASE STYLES — Reset & Defaults
+   ══════════════════════════════════════════════════════════════════════════ */
+
 @layer base {
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    text-size-adjust: 100%;
   }
 
   body {
-    @apply bg-surface-50 font-body text-text-primary;
-    font-size: 16px;
+    @apply font-body antialiased;
+    background-color: #0A1628;
+    color: #F0F9FF;
+    font-size: 1rem;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
+  /* ── Typography Defaults ───────────────────────────────────────────── */
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading font-bold tracking-tight;
+    color: #F0F9FF;
+    text-wrap: balance;
   }
 
-  h1 { @apply text-4xl md:text-5xl lg:text-6xl; }
-  h2 { @apply text-3xl md:text-4xl; }
-  h3 { @apply text-2xl md:text-3xl; }
-  h4 { @apply text-xl md:text-2xl; }
+  h1 { @apply text-h1; }
+  h2 { @apply text-h2; }
+  h3 { @apply text-h3; }
+  h4 { @apply text-h4; }
+
+  p {
+    text-wrap: pretty;
+  }
 
   a {
-    @apply transition-colors duration-200;
+    color: #0EA5E9;
+    text-decoration: none;
+    transition: color var(--transition-base);
   }
 
-  img {
-    @apply max-w-full h-auto;
+  a:hover {
+    color: #38BDF8;
+  }
+
+  img, picture, video, canvas, svg {
+    @apply block max-w-full h-auto;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  /* ── Focus Styles (Accessibility) ──────────────────────────────────── */
+  *:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    @apply shadow-focus outline-none;
+  }
+
+  /* ── Text selection — sky blue tint ───────────────────────────────── */
+  ::selection {
+    background: rgba(14,165,233,0.3);
+    color: #F0F9FF;
   }
 }
 
 /* ── Reusable component classes ────────────────────────────── */
 @layer components {
   .section-container {
-    @apply w-full max-w-content mx-auto px-4 sm:px-6 lg:px-8;
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
   .section-padding {
@@ -44,58 +177,105 @@
   }
 
   .section-title {
-    @apply font-heading text-3xl md:text-4xl font-bold text-text-primary mb-2;
+    @apply font-heading text-3xl md:text-4xl font-bold mb-2;
+    color: #F0F9FF;
   }
 
   .section-subtitle {
-    @apply font-body text-lg text-text-secondary max-w-2xl;
+    @apply font-body text-lg max-w-2xl;
+    color: #7DD3FC;
   }
 
   .card {
-    @apply bg-white rounded-card shadow-card hover:shadow-card-lg
+    background-color: #0F2744;
+    @apply rounded-lg shadow-card hover:shadow-card-hover
            transition-shadow duration-300 overflow-hidden;
   }
 
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3
-           bg-primary-500 text-white font-heading font-semibold
-           rounded-lg hover:bg-primary-600 active:bg-primary-700
-           transition-colors duration-200 text-sm;
+           font-heading font-semibold
+           rounded-lg transition-colors duration-200 text-sm;
+    background-color: #0EA5E9;
+    color: #0A1628;
+  }
+  .btn-primary:hover {
+    background-color: #0284C7;
   }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3
-           bg-white text-primary-600 font-heading font-semibold border-2 border-primary-200
-           rounded-lg hover:bg-primary-50 hover:border-primary-300
-           transition-colors duration-200 text-sm;
+           font-heading font-semibold
+           rounded-lg transition-colors duration-200 text-sm;
+    background-color: transparent;
+    color: #F0F9FF;
+    border: 2px solid #1E4976;
+  }
+  .btn-secondary:hover {
+    border-color: #0EA5E9;
+    background-color: rgba(14,165,233,0.08);
   }
 
   .btn-accent {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3
-           bg-accent-500 text-white font-heading font-semibold
-           rounded-lg hover:bg-accent-600 active:bg-accent-700
-           transition-colors duration-200 text-sm;
+           font-heading font-semibold
+           rounded-lg transition-colors duration-200 text-sm;
+    background-color: #F59E0B;
+    color: #0A1628;
+  }
+  .btn-accent:hover {
+    background-color: #D97706;
   }
 
   .badge {
-    @apply inline-flex items-center px-3 py-1 rounded-pill
+    @apply inline-flex items-center px-3 py-1 rounded-full
            text-xs font-semibold uppercase tracking-wide;
   }
 
+  /* Badge — General (blue) */
   .badge-primary {
-    @apply badge bg-primary-100 text-primary-700;
+    @apply badge;
+    background: rgba(14,165,233,0.15);
+    color: #38BDF8;
+  }
+
+  /* Badge — Academic */
+  .badge-academic {
+    @apply badge;
+    background: rgba(56,189,248,0.10);
+    color: #7DD3FC;
+  }
+
+  /* Badge — Urgent */
+  .badge-urgent {
+    @apply badge;
+    background: rgba(248,113,113,0.12);
+    color: #F87171;
+  }
+
+  /* Badge — Event */
+  .badge-event {
+    @apply badge;
+    background: rgba(245,158,11,0.12);
+    color: #F59E0B;
   }
 
   .badge-accent {
-    @apply badge bg-accent-100 text-accent-700;
+    @apply badge;
+    background: rgba(245,158,11,0.12);
+    color: #F59E0B;
   }
 
   .badge-success {
-    @apply badge bg-green-100 text-green-700;
+    @apply badge;
+    background: rgba(16,185,129,0.12);
+    color: #10B981;
   }
 
   .badge-muted {
-    @apply badge bg-surface-200 text-text-muted;
+    @apply badge;
+    background: rgba(14,165,233,0.10);
+    color: #38BDF8;
   }
 }
 
@@ -105,8 +285,60 @@
     text-wrap: balance;
   }
 
+  /* Hide scrollbar but keep scrolling (for filter pill rows) */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Safe area padding for notch / home-bar devices */
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
   .animate-delay-100 { animation-delay: 100ms; }
   .animate-delay-200 { animation-delay: 200ms; }
   .animate-delay-300 { animation-delay: 300ms; }
   .animate-delay-400 { animation-delay: 400ms; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   CUSTOM SCROLLBAR — Dark theme, sky blue thumb
+   ══════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0A1628;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(14,165,233,0.4);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(14,165,233,0.7);
+}
+
+/* Firefox */
+html {
+  scrollbar-color: rgba(14,165,233,0.4) #0A1628;
+  scrollbar-width: thin;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TICKER MARQUEE — Pure CSS infinite scroll
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.ticker-track {
+  animation: ticker-scroll var(--ticker-speed, 30s) linear infinite;
+  will-change: transform;
 }

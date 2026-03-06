@@ -34,3 +34,6 @@ lerna-debug.log*
 
 # OS
 Thumbs.db
+
+# Local maintenance docs
+MAINTENANCE.md

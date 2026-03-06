@@ -70,6 +70,49 @@ const SITE_CONFIG = {
 
   metaDescription: "Student Assist Cell — AEI Department, College of Engineering Trivandrum. Notices, events, resources, grievance portal and more for AEI students.", // [Required]
   ogImage: "assets/og-image.png", // [Optional] Social sharing preview image (1200×630 px recommended)
+
+  // ---------- Contact / Office ----------
+  // Used on the Contact page. Set any field to "" to hide it.
+
+  contact: {
+    officeRoom:    "Room 203, AEI Block",         // [Optional] Office room / location
+    officeHours:   "Mon–Fri, 10:00 AM – 4:00 PM", // [Optional] Working hours
+    phone:         "+91-471-2515555",              // [Optional] Department office phone
+    email:         "studentassistcell.aei@cet.ac.in", // [Required] Primary contact email
+    whatsapp:      "",                             // [Optional] WhatsApp link (https://wa.me/91XXXXXXXXXX)
+    address:       "Department of AEI, College of Engineering Trivandrum, Thiruvananthapuram, Kerala 695016",
+  },
+
+  // ---------- Google Maps Embed ----------
+  // To get this URL: Google Maps → search your location → Share → Embed a map → copy the src URL
+  // Set to "" to hide the map section entirely.
+
+  // mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3946.123!2d76.9!3d8.55!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sCollege+of+Engineering+Trivandrum!5e0!3m2!1sen!2sin!4v1234567890", // [Optional]
 };
 
-export { SITE_CONFIG };
+// ============================================================================
+//  SECTIONS TOGGLE — Show or hide entire sections of the website
+// ============================================================================
+//
+//  HOW TO USE:
+//  Set any section to `false` to hide it everywhere:
+//    - Navigation bar (desktop & mobile)
+//    - Route / page (visiting the URL shows 404)
+//    - Home page quick-link card
+//
+//  Home and About are always visible (not toggleable).
+//
+//  Example: To temporarily disable the Grievance page:
+//    grievance: false,
+//
+// ============================================================================
+
+const SECTIONS = {
+  notices:   true,   // Notices board page
+  events:    true,   // Events page
+  resources: true,   // Resources / downloads page
+  grievance: true,   // Anonymous grievance form page
+  contact:   true,   // Contact page
+};
+
+export { SITE_CONFIG, SECTIONS };

@@ -4,19 +4,17 @@
 //
 //  HOW TO ADD A NEW NOTICE:
 //  ------------------------
-//  1. Copy the block below (between the --- markers) and paste it
-//     at the TOP of the list (right after the opening "[").
+//  1. Copy the template below and paste it at the TOP of the array.
 //
-//     ---
 //     {
 //       id:            "your-unique-slug",
 //       title:         "Your Notice Title Here",
+//       category:      "academic",                      ← one of: academic | administrative | urgent | general
 //       date:          "YYYY-MM-DD",
 //       description:   "A short summary of the notice (1–3 sentences).",
-//       attachmentUrl: "https://drive.google.com/...",   ← or set to null if no file
-//       pinned:        false,
+//       attachmentUrl: "https://drive.google.com/...",   ← or null if no file
+//       pinned:        false,                            ← set true to pin at top
 //     },
-//     ---
 //
 //  2. Replace the placeholder values with your actual content.
 //  3. Save → git add . → git commit -m "add notice: your title" → git push
@@ -31,25 +29,36 @@
 //  Set  pinned: true  — it will always appear at the top regardless of date.
 //  Only pin 1–2 notices at a time to avoid clutter.
 //
+//  CATEGORY OPTIONS:
+//  -----------------
+//  "academic"       → Exams, submissions, timetables, academic deadlines
+//  "administrative" → Fees, registrations, office hours, admin matters
+//  "urgent"         → Time-sensitive / critical announcements
+//  "general"        → Everything else (workshops, opportunities, etc.)
+//
 //  FIELD REFERENCE:
-//  ┌─────────────────┬──────────────────┬──────────┬─────────────────────────────────────┐
-//  │ Field           │ Type             │ Required │ Description                         │
-//  ├─────────────────┼──────────────────┼──────────┼─────────────────────────────────────┤
-//  │ id              │ String           │ Yes      │ Unique slug (lowercase, hyphens)    │
-//  │ title           │ String           │ Yes      │ Notice heading                      │
-//  │ date            │ String           │ Yes      │ Date in YYYY-MM-DD format           │
-//  │ description     │ String           │ Yes      │ Short body text (1–3 sentences)     │
-//  │ attachmentUrl   │ String or null   │ No       │ Link to PDF/file, or null if none   │
-//  │ pinned          │ true / false     │ No       │ Stick to top? (default: false)      │
-//  └─────────────────┴──────────────────┴──────────┴─────────────────────────────────────┘
+//  ┌─────────────────┬──────────────────────────────────┬──────────┬──────────────────────────────────────────┐
+//  │ Field           │ Type                             │ Required │ Description                              │
+//  ├─────────────────┼──────────────────────────────────┼──────────┼──────────────────────────────────────────┤
+//  │ id              │ String                           │ Yes      │ Unique slug (lowercase, hyphens)         │
+//  │ title           │ String                           │ Yes      │ Notice heading                           │
+//  │ category        │ "academic" | "administrative"    │ Yes      │ Determines badge color in the UI         │
+//  │                 │ | "urgent" | "general"           │          │                                          │
+//  │ date            │ String (YYYY-MM-DD)              │ Yes      │ Date posted — used for sorting           │
+//  │ description     │ String                           │ Yes      │ Short body text (1–3 sentences)          │
+//  │ attachmentUrl   │ String | null                    │ No       │ Link to PDF/file, or null                │
+//  │ pinned          │ Boolean                          │ No       │ Stick to top? (default: false)           │
+//  └─────────────────┴──────────────────────────────────┴──────────┴──────────────────────────────────────────┘
 //
 // ============================================================================
 
+/** @type {Array<{id: string, title: string, category: string, date: string, description: string, attachmentUrl: string|null, pinned: boolean}>} */
 const NOTICES = [
 
   {
     id:            "mid-sem-exam-schedule-s6-2026",
     title:         "Mid-Semester Exam Schedule — S6 AEI (March 2026)",
+    category:      "academic",
     date:          "2026-03-04",
     description:   "The mid-semester examination for S6 AEI will begin on March 17, 2026. Timetable and seating arrangement have been uploaded. Students are advised to check the attachment and report any conflicts to the class advisor before March 10.",
     attachmentUrl: "https://drive.google.com/file/d/EXAMPLE1/view?usp=sharing",
@@ -59,6 +68,7 @@ const NOTICES = [
   {
     id:            "ieee-workshop-registration-2026",
     title:         "IEEE Workshop on Embedded Systems — Registration Open",
+    category:      "general",
     date:          "2026-03-01",
     description:   "A two-day workshop on 'Embedded Systems for IoT Applications' will be conducted on March 22–23 by the IEEE Student Branch. Registration is free for AEI students. Fill the Google Form linked below before March 15.",
     attachmentUrl: "https://forms.gle/EXAMPLE_FORM_LINK",
@@ -66,8 +76,19 @@ const NOTICES = [
   },
 
   {
+    id:            "fee-payment-reminder-s4-s6",
+    title:         "Fee Payment Reminder — S4 & S6 AEI",
+    category:      "administrative",
+    date:          "2026-02-25",
+    description:   "Students of S4 and S6 AEI are reminded to complete their semester fee payment by March 10, 2026. Late fee will be applicable after the deadline. Visit the accounts section or pay online through the college portal.",
+    attachmentUrl: null,
+    pinned:        false,
+  },
+
+  {
     id:            "internship-opportunity-bosch-2026",
     title:         "Internship Opportunity — Bosch India (Summer 2026)",
+    category:      "general",
     date:          "2026-02-20",
     description:   "Bosch India is offering summer internships for pre-final year students in instrumentation and control systems. Interested students should submit their resume to the placement cell by February 28. See the attached brochure for eligibility details.",
     attachmentUrl: "https://drive.google.com/file/d/EXAMPLE2/view?usp=sharing",
@@ -77,8 +98,19 @@ const NOTICES = [
   {
     id:            "lab-manual-submission-deadline",
     title:         "Lab Manual Submission Deadline — S4 AEI",
+    category:      "academic",
     date:          "2026-02-15",
     description:   "All S4 AEI students must submit their completed Measurements & Instrumentation lab manual to the lab in-charge by March 5, 2026. Late submissions will not be accepted for internal assessment.",
+    attachmentUrl: null,
+    pinned:        false,
+  },
+
+  {
+    id:            "emergency-campus-closure-weather",
+    title:         "Campus Closed — Heavy Rainfall Warning (Feb 12)",
+    category:      "urgent",
+    date:          "2026-02-12",
+    description:   "Due to IMD's red alert for heavy rainfall in Thiruvananthapuram district, all classes and lab sessions are cancelled on February 12, 2026. Students are advised to stay safe and avoid unnecessary travel. Updates will be shared on the college website.",
     attachmentUrl: null,
     pinned:        false,
   },

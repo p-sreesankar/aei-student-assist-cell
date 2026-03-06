@@ -1,11 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Home } from 'lucide-react';
+import SEO from '@components/SEO';
 
 export default function NotFound() {
   return (
-    <section className="section-container section-padding text-center">
+    <>
+      <SEO title="Page Not Found" description="The page you're looking for doesn't exist or has been moved." />
+      <section className="section-container section-padding text-center">
       <div className="max-w-md mx-auto">
-        <h1 className="text-8xl font-heading font-extrabold text-primary-200 mb-4">404</h1>
+        <h1 className="text-8xl font-heading font-extrabold text-primary-muted mb-4">404</h1>
         <h2 className="text-2xl font-heading font-bold text-text-primary mb-2">Page Not Found</h2>
         <p className="text-text-secondary mb-8">
           The page you're looking for doesn't exist or has been moved.
@@ -15,5 +18,6 @@ export default function NotFound() {
         </Link>
       </div>
     </section>
+    </>
   );
 }

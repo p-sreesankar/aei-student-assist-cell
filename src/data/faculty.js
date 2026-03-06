@@ -54,42 +54,50 @@
 
 const FACULTY = [
 
+  // ──── Coordinators (shown first) ───────────────────────────────────────
   {
+    id:          "anitha-s",
     name:        "Dr. Anitha S.",
     designation: "Associate Professor & Cell Coordinator",
     department:  "Applied Electronics and Instrumentation",
     email:       "anitha.s@cet.ac.in",
     phone:       "+91-471-2515555",
-    photoUrl:    "assets/faculty/anitha-s.jpg",
+    photoUrl:    null,
     role:        "coordinator",
   },
 
+  // ──── Advisors ─────────────────────────────────────────────────────────
   {
+    id:          "rajesh-kumar-t",
     name:        "Prof. Rajesh Kumar T.",
     designation: "Assistant Professor & Faculty Advisor",
     department:  "Applied Electronics and Instrumentation",
     email:       "rajesh.t@cet.ac.in",
     phone:       "+91-471-2515556",
-    photoUrl:    "assets/faculty/rajesh-kumar.jpg",
+    photoUrl:    null,
     role:        "advisor",
   },
 
+  // ──── Faculty ──────────────────────────────────────────────────────────
   {
+    id:          "meera-krishnan",
     name:        "Dr. Meera Krishnan",
     designation: "Professor & HOD",
     department:  "Applied Electronics and Instrumentation",
     email:       "meera.k@cet.ac.in",
     phone:       null,
-    photoUrl:    "assets/faculty/meera-krishnan.jpg",
+    photoUrl:    null,
     role:        "faculty",
   },
 
+  // ──── Student Representatives ──────────────────────────────────────────
   {
-    name:        "Sreesankar S.",
+    id:          "Mayoogh Manohar",
+    name:        "Mayoogh Manohar",
     designation: "Student Representative (S6 AEI)",
     department:  "Applied Electronics and Instrumentation",
-    email:       "sreesankar.aei@gmail.com",
-    phone:       null,
+    email:       "mayoogh.aei@gmail.com",
+    phone:       "+91 8089108682",
     photoUrl:    null,
     role:        "student-rep",
   },
