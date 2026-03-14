@@ -10,6 +10,12 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  # Avoid Node 20 deprecation warnings for JavaScript-based actions.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # Ensure exactly one Pages artifact name per run attempt.
+  PAGES_ARTIFACT_NAME: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+
 # Allow only one concurrent deployment
 concurrency:
   group: "pages"
@@ -37,6 +43,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          name: ${{ env.PAGES_ARTIFACT_NAME }}
           path: ./dist
 
   deploy:
@@ -49,3 +56,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: ${{ env.PAGES_ARTIFACT_NAME }}
