@@ -31,7 +31,7 @@ export function getYoutubeThumbnail(youtubeLink) {
 export function getSubjectCount(schemeId) {
   const scheme = schemes.find((s) => s.id === schemeId);
   if (!scheme) return 0;
-  return scheme.semesters.reduce((sum, sem) => sum + sem.subjects.length, 0);
+  return scheme.semesters.reduce((sum, sem) => sum + (Array.isArray(sem.subjects) ? sem.subjects.length : 0), 0);
 }
 
 /**
@@ -43,6 +43,6 @@ export function getSemestersWithContent(schemeId) {
   const scheme = schemes.find((s) => s.id === schemeId);
   if (!scheme) return [];
   return scheme.semesters
-    .filter((sem) => sem.subjects.length > 0)
+    .filter((sem) => Array.isArray(sem.subjects) && sem.subjects.length > 0)
     .map((sem) => sem.semester);
 }

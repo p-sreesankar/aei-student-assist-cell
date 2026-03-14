@@ -126,7 +126,7 @@ export default function Home() {
 
       {/* ─── Marquee Strip — mid blue bg, subtle ────────────────── */}
       <Ticker
-        items={['📌 Notice Board', '📅 Events', '🖼️ Gallery', '📂 Resources', '📝 Grievance', '📞 Contact']}
+        items={['Notice Board', 'Events', 'Gallery', 'Resources', 'Grievance', 'Contact']}
         separator="✦"
         className="py-3 font-heading font-semibold text-sm md:text-base tracking-wide"
         style={{

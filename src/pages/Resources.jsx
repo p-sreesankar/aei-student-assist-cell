@@ -42,7 +42,7 @@ function PapersDropdown({ papers }) {
         className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-primary-soft text-primary hover:bg-primary hover:text-white transition-colors"
       >
         <FileText size={14} />
-        Papers
+        Answer Key
       </a>
     );
   }
@@ -54,7 +54,7 @@ function PapersDropdown({ papers }) {
         className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-primary-soft text-primary hover:bg-primary hover:text-white transition-colors"
       >
         <FileText size={14} />
-        Papers
+        Answer Key
         <span className="ml-0.5 bg-primary/20 text-primary text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
           {papers.length}
         </span>
@@ -148,7 +148,7 @@ function SubjectCard({ subject }) {
 
   const notes = subject.resources.filter((r) => r.type === 'notes');
   const formulas = subject.resources.filter((r) => r.type === 'formula');
-  const papers = subject.resources.filter((r) => r.type === 'paper');
+  const answerKey = subject.resources.filter((r) => r.type === 'answer-key');
   const videos = subject.resources.filter((r) => r.type === 'video');
   const isEmpty = subject.resources.length === 0;
 
@@ -227,7 +227,7 @@ function SubjectCard({ subject }) {
               Formula
             </a>
           )}
-          {papers.length > 0 && <PapersDropdown papers={papers} />}
+          {answerKey.length > 0 && <PapersDropdown papers={answerKey} />}
         </div>
       )}
     </motion.div>
@@ -239,8 +239,11 @@ function SubjectCard({ subject }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export default function Resources() {
-  const [selectedScheme, setSelectedScheme] = useState(schemes[0]?.id ?? '');
-  const [selectedSemester, setSelectedSemester] = useState(1);
+  const initialSchemeId = schemes.find((scheme) => getSemestersWithContent(scheme.id).length > 0)?.id ?? schemes[0]?.id ?? '';
+  const [selectedScheme, setSelectedScheme] = useState(initialSchemeId);
+  const [selectedSemester, setSelectedSemester] = useState(
+    () => getSemestersWithContent(initialSchemeId)[0] ?? 1,
+  );
   const [query, setQuery] = useState('');
 
   // ── Derived data ──────────────────────────────────────────────────────
@@ -365,7 +368,7 @@ export default function Resources() {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search subjects..."
+            placeholder="Search resources..."
             className="
               w-full pl-10 pr-10 py-3 min-h-[48px]
               rounded-full border border-border

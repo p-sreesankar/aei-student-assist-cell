@@ -25,17 +25,26 @@ export default function Ticker({
 }) {
   if (items.length === 0) return null;
 
-  // Build the repeated content with optional colored separator
-  const tickerContent = items.flatMap((item, i) => [
-    <span key={`item-${i}`}>{item}</span>,
-    <span key={`sep-${i}`} style={separatorColor ? { color: separatorColor } : {}}>
-      {'  '}{separator}{'  '}
-    </span>,
-  ]);
+  // Render each item in a fixed slot so spacing stays even regardless of text length.
+  const tickerContent = items.map((item, i) => (
+    <span key={`group-${i}`} className="inline-flex items-center shrink-0">
+      <span className="inline-flex items-center justify-center min-w-[14rem] px-3 text-center">
+        {item}
+      </span>
+      {i !== items.length - 1 && (
+        <span
+          className="inline-flex items-center justify-center w-8"
+          style={separatorColor ? { color: separatorColor } : {}}
+        >
+          {separator}
+        </span>
+      )}
+    </span>
+  ));
 
   // Duplicate for seamless loop
   const strip = (
-    <span className="inline-block whitespace-nowrap" aria-hidden="true">
+    <span className="inline-flex items-center whitespace-nowrap" aria-hidden="true">
       {tickerContent}
     </span>
   );
