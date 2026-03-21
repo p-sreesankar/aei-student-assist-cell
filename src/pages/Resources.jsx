@@ -106,11 +106,12 @@ function VideoPanel({ videos }) {
     >
       <div className="pt-4 mt-4 border-t border-border space-y-2">
         {videos.map((video, i) => {
+          const videoLink = video.youtubeLink || video.driveLink;
           const thumb = getYoutubeThumbnail(video.youtubeLink);
           return (
             <a
               key={i}
-              href={video.youtubeLink}
+              href={videoLink}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-2.5 rounded-xl bg-surface2 hover:bg-surface3 transition-colors group"

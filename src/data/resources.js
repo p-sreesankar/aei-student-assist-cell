@@ -44,7 +44,7 @@ export const schemes = [
     semesters: [
       // ── Semester 5 ──────────────────────────────────────────────────────
       {
-        semester: 5,
+        semester: 6,
         subjects: [
           {
             id: '2019-s6-control-systems',
@@ -249,13 +249,13 @@ export const schemes = [
             ],
           },
           {
-            id: '2024-s2-ipr-series-1-March-2026',
+            id: '2024-s2-chemistry-2026',
             name: 'Chemistry Lab',
             code: 'GXCYT122',
             isLab: true,
             resources: [
-              { type: 'video', title: 'Expt. 10',   driveLink: 'https://drive.google.com/file/d/1POkMK7YhkW12q_hnxkIDHXIQFa0zmV_N/view?usp=sharing' },
-              { type: 'video', title: 'Expt. 11',   driveLink: 'https://drive.google.com/file/d/1m1O3mxvhcv3hClGheR_OXI8qAmvkKIfg/view?usp=sharing' },
+              { type: 'video', title: 'Expt. 10',   youtubeLink: 'https://drive.google.com/file/d/1POkMK7YhkW12q_hnxkIDHXIQFa0zmV_N/view?usp=sharing' },
+              { type: 'video', title: 'Expt. 11',   youtubeLink: 'https://drive.google.com/file/d/1m1O3mxvhcv3hClGheR_OXI8qAmvkKIfg/view?usp=sharing' },
             ],
           },
         ],
