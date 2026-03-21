@@ -47,7 +47,7 @@ export const schemes = [
         semester: 5,
         subjects: [
           {
-            id: '2019-s5-control-systems',
+            id: '2019-s6-control-systems',
             name: 'Process Dynamics & Control',
             code: 'AET304',
             isLab: false,
