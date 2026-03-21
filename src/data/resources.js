@@ -225,7 +225,7 @@ export const schemes = [
             isLab: false,
             resources: [
               { type: 'answer-key', title: 'Answer Key',   driveLink: 'https://drive.google.com/file/d/1HEN7IjAmdGdD9JVfszBdGHqv1wj3ZI42/view?usp=sharing' },
-              { type: 'qn-paper', title: 'Question Paper',   driveLink: 'https://drive.google.com/file/d/1tALjxQ_rvHbFoNLJi2YaGCFb4KQqxS_0/view?usp=sharing' },
+              { type: 'qn-paper', title: 'Question Paper',   driveLink: 'https://drive.google.com/file/d/1dk9JFTynnsMKh3ei0NkBdE-SYEGVdM5f/view?usp=drive_link' },
             ],
           },
           {
