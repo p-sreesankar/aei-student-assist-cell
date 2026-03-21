@@ -150,6 +150,9 @@ function SubjectCard({ subject }) {
   const formulas = subject.resources.filter((r) => r.type === 'formula');
   const answerKey = subject.resources.filter((r) => r.type === 'answer-key');
   const videos = subject.resources.filter((r) => r.type === 'video');
+  const qnPapers = subject.resources.filter(
+    (r) => r.type === 'qn-papers' || r.type === 'qn-paper' || r.type === 'question-paper',
+  );
   const isEmpty = subject.resources.length === 0;
 
   return (
@@ -189,13 +192,16 @@ function SubjectCard({ subject }) {
             onClick={() => setVideosOpen(!videosOpen)}
             className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
               videosOpen
-                ? 'bg-primary text-white'
-                : 'bg-primary-soft text-primary hover:bg-primary hover:text-white'
+                ? "bg-primary text-white"
+                : "bg-primary-soft text-primary hover:bg-primary hover:text-white"
             }`}
           >
             <PlayCircle size={14} />
-            {videos.length} Video{videos.length !== 1 ? 's' : ''}
-            <ChevronDown size={12} className={`transition-transform ${videosOpen ? 'rotate-180' : ''}`} />
+            {videos.length} Video{videos.length !== 1 ? "s" : ""}
+            <ChevronDown
+              size={12}
+              className={`transition-transform ${videosOpen ? "rotate-180" : ""}`}
+            />
           </button>
 
           <AnimatePresence>
@@ -203,19 +209,21 @@ function SubjectCard({ subject }) {
           </AnimatePresence>
         </div>
       ) : (
-        /* Theory: notes / formula / papers buttons */
+        /* Theory: notes / formula / papers / answer-key / buttons */
         <div className="flex flex-wrap gap-2">
-          {notes.length > 0 && (
-            <a
-              href={notes[0].driveLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-primary-soft text-primary hover:bg-primary hover:text-white transition-colors"
-            >
-              <BookOpen size={14} />
-              Notes
-            </a>
-          )}
+          {notes.length > 0 &&
+            notes.map((note, index) => (
+              <a
+                key={`${subject.id}-note-${index}`}
+                href={note.driveLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-primary-soft text-primary hover:bg-primary hover:text-white transition-colors"
+              >
+                <BookOpen size={14} />
+                {note.title || `Notes ${index + 1}`}
+              </a>
+            ))}
           {formulas.length > 0 && (
             <a
               href={formulas[0].driveLink}
@@ -228,6 +236,17 @@ function SubjectCard({ subject }) {
             </a>
           )}
           {answerKey.length > 0 && <PapersDropdown papers={answerKey} />}
+          {qnPapers.length > 0 && (
+            <a
+              href={qnPapers[0].driveLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-primary-soft text-primary hover:bg-primary hover:text-white transition-colors"
+            >
+              <FileText size={14} />
+              {qnPapers.length === 1 ? "Question Paper" : "Question Papers"}
+            </a>
+          )}
         </div>
       )}
     </motion.div>

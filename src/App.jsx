@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { HashRouter, Routes, Route } from 'react-router';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { PageLayout } from '@components/layout';
 import LoadingSpinner from '@components/LoadingSpinner';
 import { SECTIONS } from '@data/site-config';

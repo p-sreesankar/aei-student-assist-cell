@@ -23,9 +23,8 @@
 //    code:      "ABC123",            // optional KTU code
 //    isLab:     false,               // true for lab subjects
 //    resources: [
-//      // Theory types: "notes" | "formula" | "paper"
-//      { type: "notes",   title: "Unit 1-5 Notes",    driveLink: "https://drive.google.com/..." },
-//      { type: "formula", title: "Formula Sheet",      driveLink: "https://drive.google.com/..." },
+//      // Theory types: "notes" | "formula" | "paper" | "answer-key" | "qn-paper" | "qn-papers" | "question-paper"
+//      { type: "notes",   title: "Unit 1-5 Notes",    driveLink: "https://drive.google.com/..." },//      { type: "formula", title: "Formula Sheet",      driveLink: "https://drive.google.com/..." },
 //      { type: "paper",   title: "2023 Solved Paper",  driveLink: "https://drive.google.com/..." },
 //
 //      // Lab type: "video"
@@ -46,28 +45,24 @@ export const schemes = [
       // ── Semester 5 ──────────────────────────────────────────────────────
       {
         semester: 5,
-        // subjects: [
-        //   {
-        //     id: '2019-s5-control-systems',
-        //     name: 'Control Systems',
-        //     code: 'AET301',
-        //     isLab: false,
-        //     resources: [
-        //       { type: 'notes',   title: 'Complete Notes',    driveLink: 'https://drive.google.com/file/d/PLACEHOLDER/view' },
-        //       { type: 'formula', title: 'Formula Sheet',     driveLink: 'https://drive.google.com/file/d/PLACEHOLDER/view' },
-        //       { type: 'paper',   title: '2023 Question Paper', driveLink: 'https://drive.google.com/file/d/PLACEHOLDER/view' },
-        //     ],
-        //   },
-        //   {
-        //     id: '2019-s5-microprocessors',
-        //     name: 'Microprocessors & Microcontrollers',
-        //     code: 'AET303',
-        //     isLab: false,
-        //     resources: [
-        //       { type: 'notes', title: 'Module 1-5 Notes',   driveLink: 'https://drive.google.com/file/d/PLACEHOLDER/view' },
-        //     ],
-        //   },
-        // ],
+        subjects: [
+          {
+            id: '2019-s5-control-systems',
+            name: 'Process Dynamics & Control',
+            code: 'AET304',
+            isLab: false,
+            resources: [
+              { type: 'notes',   title: 'Module 1',    driveLink: 'https://drive.google.com/file/d/1Q8qH_mPETYoAat0nDOHxdQS4xasTs_xo/view?usp=sharing' },
+              { type: 'notes',   title: 'Module 2',    driveLink: 'https://drive.google.com/file/d/14ylRPIpqDxslFUzQxckxId3Brbdpfbnk/view?usp=sharing' },
+              { type: 'notes',   title: 'Module 3',    driveLink: 'https://drive.google.com/file/d/14vw2rGe4li5LFiTwlIgwS8pkmFu7ULr-/view?usp=sharing' },
+              { type: 'notes',   title: 'Module 4',    driveLink: 'https://drive.google.com/file/d/1nTGtzLjEZMMjDxaHXZzyNlpujx_1MnBb/view?usp=sharing' },
+              { type: 'notes',   title: 'Module 5',    driveLink: 'https://drive.google.com/file/d/1UmRsQueovFDMMfP6bDRWDfsLCi0PJ7_Z/view?usp=sharing' },
+
+
+            ],
+          },
+
+        ],
       },
 
       // ── Semester 6 ──────────────────────────────────────────────────────
@@ -198,6 +193,8 @@ export const schemes = [
             isLab: false,
             resources: [
               { type: 'answer-key', title: 'Answer Key',   driveLink: 'https://drive.google.com/file/d/16K1J3TQufdCFRwLDRzVuVJMrS_E4eWca/view?usp=sharing' },
+              { type: 'qn-paper', title: 'Question Paper',   driveLink: 'https://drive.google.com/file/d/1jBM6NKDAmTbJcEhVWUl-ky17oSAdOyJm/view?usp=sharing' },
+
             ],
           },
           {
@@ -206,7 +203,9 @@ export const schemes = [
             code: '',
             isLab: false,
             resources: [
-              { type: 'answer-key', title: 'Answer Key',   driveLink: 'https://drive.google.com/file/d/1eHjdefFL_W0iKoIPBo0J9oJIeKMhp7rs/view?usp=sharing' },
+              { type: 'answer-key', title: 'Answer Key',   driveLink: 'https://drive.google.com/file/d/1Om4YjJXFbiqjXqgNpHc7GhESwbpsUATn/view?usp=sharing' },
+              { type: 'qn-paper', title: 'Question Paper',   driveLink: 'https://drive.google.com/file/d/1x3S5YapTSMSPgnMemqj5Jzu9GRYMFe0M/view?usp=sharing' },
+
             ],
           },
                     {
@@ -216,6 +215,7 @@ export const schemes = [
             isLab: false,
             resources: [
               { type: 'answer-key', title: 'Answer Key',   driveLink: 'https://drive.google.com/file/d/1DrcZNGbvFmd0wvML3206BMdDXlrUCNIj/view?usp=sharing' },
+              { type: 'qn-paper', title: 'Question Paper',   driveLink: 'https://drive.google.com/file/d/1hD4xsSc-z5UHjbAeCjeSvgPfUginqZHj/view?usp=sharing' },
             ],
           },
                     {
@@ -225,6 +225,37 @@ export const schemes = [
             isLab: false,
             resources: [
               { type: 'answer-key', title: 'Answer Key',   driveLink: 'https://drive.google.com/file/d/1HEN7IjAmdGdD9JVfszBdGHqv1wj3ZI42/view?usp=sharing' },
+              { type: 'qn-paper', title: 'Question Paper',   driveLink: 'https://drive.google.com/file/d/1tALjxQ_rvHbFoNLJi2YaGCFb4KQqxS_0/view?usp=sharing' },
+            ],
+          },
+          {
+            id: '2024-s2-ipr-series-1-March-2026',
+            name: 'IPR First Series (Mar 2026)',
+            code: '',
+            isLab: false,
+            resources: [
+              { type: 'answer-key', title: 'Answer Key',   driveLink: 'https://drive.google.com/file/d/1tALjxQ_rvHbFoNLJi2YaGCFb4KQqxS_0/view?usp=sharing' },
+              { type: 'qn-paper', title: 'Question Paper',   driveLink: 'https://drive.google.com/file/d/11yB9Vq9-A6awcDQbXWBDZ2E29TAG60Nu/view?usp=sharing' },
+            ],
+          },
+          {
+            id: '2024-s2-ipr-series-1-March-2026',
+            name: 'PRC First Series (Mar 2026)',
+            code: '',
+            isLab: false,
+            resources: [
+              { type: 'answer-key', title: 'Answer Key',   driveLink: 'https://drive.google.com/file/d/1tyXcoG7LDb6W2TVs_ol_w5Jbp28Li-WH/view?usp=sharing' },
+              { type: 'qn-paper', title: 'Question Paper',   driveLink: 'https://drive.google.com/file/d/1vgRPS9cES7t-HZ0EJz7bXPM0ruMzOSuL/view?usp=sharing' },
+            ],
+          },
+          {
+            id: '2024-s2-ipr-series-1-March-2026',
+            name: 'Chemistry Lab',
+            code: 'GXCYT122',
+            isLab: true,
+            resources: [
+              { type: 'video', title: 'Expt. 10',   driveLink: 'https://drive.google.com/file/d/1POkMK7YhkW12q_hnxkIDHXIQFa0zmV_N/view?usp=sharing' },
+              { type: 'video', title: 'Expt. 11',   driveLink: 'https://drive.google.com/file/d/1m1O3mxvhcv3hClGheR_OXI8qAmvkKIfg/view?usp=sharing' },
             ],
           },
         ],
@@ -233,37 +264,44 @@ export const schemes = [
       // ── Semester 3 ──────────────────────────────────────────────────────
       {
         semester: 3,
-        // subjects: [
-        //   {
-        //     id: '2024-s3-circuits',
-        //     name: 'Circuits & Networks',
-        //     code: 'AET201',
-        //     isLab: false,
-        //     resources: [
-        //       { type: 'notes', title: 'Module 1-5 Notes', driveLink: 'https://drive.google.com/file/d/PLACEHOLDER/view' },
-        //     ],
-        //   },
-        //   {
-        //     id: '2024-s3-electronics',
-        //     name: 'Electronic Devices & Circuits',
-        //     code: 'AET203',
-        //     isLab: false,
-        //     resources: [
-        //       { type: 'notes', title: 'Complete Notes',         driveLink: 'https://drive.google.com/file/d/PLACEHOLDER/view' },
-        //       { type: 'paper', title: '2025 Question Paper',    driveLink: 'https://drive.google.com/file/d/PLACEHOLDER/view' },
-        //     ],
-        //   },
-        //   {
-        //     id: '2024-s3-electronics-lab',
-        //     name: 'Electronics Lab',
-        //     code: 'AEL201',
-        //     isLab: true,
-        //     resources: [
-        //       { type: 'video', title: 'Exp 1 - Diode Characteristics', youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
-        //       { type: 'video', title: 'Exp 2 - BJT Amplifier',        youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
-        //     ],
-        //   },
-        // ],
+        subjects: [
+          {
+            id: '2024-s3-circuits',
+            name: 'Artificial Intelligence & Data Science',
+            code: 'GNEST305',
+            isLab: false,
+            resources: [
+              { type: 'notes', title: 'Module 1', driveLink: 'https://drive.google.com/file/d/13cKhTPohFsqgmieN3_q-rDebMtw6OiMD/view?usp=sharing' },
+              { type: 'notes', title: 'Module 2', driveLink: 'https://drive.google.com/file/d/14RpxtA9VzcKQnjiYPlrdIyPvEfbQYmGh/view?usp=sharing' },
+              { type: 'notes', title: 'Module 3', driveLink: 'https://drive.google.com/file/d/1hULjjtZlRgsVgPEH9rLoghM_4TXQYf0q/view?usp=sharing' },
+              { type: 'notes', title: 'Module 4', driveLink: 'https://drive.google.com/file/d/1QVKTouVTFJcgwaVCgUOCxQEz2ENpzGrB/view?usp=sharing' },
+          ],
+          },
+          {
+            id: '2024-s3-electronics',
+            name: 'Transducers & Measurements',
+            code: 'PCAET303',
+            isLab: false,
+            resources: [
+              { type: 'notes', title: 'Module 1', driveLink: 'https://drive.google.com/file/d/13kzioEJlEGN8mQQJ9g51TZySmwmHzXzV/view?usp=sharing' },
+              { type: 'notes', title: 'Module 2', driveLink: 'https://drive.google.com/file/d/13x6hmsyMeE6tdFsPENxkOGdjnOMrXNTr/view?usp=sharing' },
+              { type: 'notes', title: 'Module 3', driveLink: 'https://drive.google.com/file/d/12_Hq2aJ81nbbuj2rdrzOpgVMIIfois8i/view?usp=sharing' },
+              { type: 'notes', title: 'Module 4', driveLink: 'https://drive.google.com/file/d/1RDG9rTvDzQgNm2-FsbvA2F6ChGYGyryX/view?usp=sharing' },
+            ],
+          },
+          {
+            id: '2024-s3-electronics-lab',
+            name: 'Logic Circuit Design',
+            code: 'PBECT304',
+            isLab: false,
+            resources: [
+              { type: 'notes', title: 'Module 1', driveLink: 'https://drive.google.com/file/d/1Ch6oSZjB5BM--QSaO14RjwE1A0HLGrXy/view?usp=sharing' },
+              { type: 'notes', title: 'Module 2', driveLink: 'https://drive.google.com/file/d/152FkbrA_wChsX11YClkheKYxrsf4w-hm/view?usp=sharing' },
+              { type: 'notes', title: 'Module 3', driveLink: 'https://drive.google.com/file/d/1ntNK_RDPQxPbaUWw3UzlBjRqO3FhjMrV/view?usp=sharing' },
+              { type: 'notes', title: 'Module 4', driveLink: 'https://drive.google.com/file/d/1mhGplSLfGP_AOF4V4CzIrw3ejHRPbsS4/view?usp=sharing' },
+            ],
+          },
+        ],
       },
 
       // ── Semester 4 ──────────────────────────────────────────────────────
