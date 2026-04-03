@@ -111,6 +111,7 @@ const SECTIONS = {
   notices:   true,   // Notices board page
   events:    true,   // Events page
   resources: true,   // Resources / downloads page
+  mockTests: true,   // Mock tests page
   grievance: true,   // Anonymous grievance form page
   contact:   true,   // Contact page
 };

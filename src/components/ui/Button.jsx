@@ -37,7 +37,7 @@ export default function Button({
   // ── Variant Styles (Dark blue theme) ────────────────────────────────
   const variants = {
     primary: `
-      bg-primary text-text-primary 
+      bg-primary text-[#0B1220]
       hover:bg-primary-dim active:bg-primary-muted
       shadow-card hover:shadow-card-hover
       disabled:bg-surface3 disabled:text-text-muted disabled:shadow-none

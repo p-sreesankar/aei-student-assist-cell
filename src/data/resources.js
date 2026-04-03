@@ -44,10 +44,10 @@ export const schemes = [
     semesters: [
       // ── Semester 5 ──────────────────────────────────────────────────────
       {
-        semester: 6,
+        semester: 5,
         subjects: [
           {
-            id: '2019-s6-control-systems',
+            id: '2019-s5-control-systems',
             name: 'Process Dynamics & Control',
             code: 'AET304',
             isLab: false,
@@ -239,7 +239,7 @@ export const schemes = [
             ],
           },
           {
-            id: '2024-s2-ipr-series-1-March-2026',
+            id: '2024-s2-prc-series-1-March-2026',
             name: 'PRC First Series (Mar 2026)',
             code: '',
             isLab: false,

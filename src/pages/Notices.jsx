@@ -1,8 +1,8 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Pin, Paperclip, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 import SEO from '@components/SEO';
-import { NOTICES } from '@data/notices';
+import { getNotices } from '@lib/repositories/contentRepository';
 import { SectionWrapper } from '@components/layout';
 import { Badge, Card, EmptyState, PageBanner } from '@components/ui';
 import { formatDate, isNew } from '@utils/date';
@@ -171,21 +171,42 @@ function NoticeCard({ notice, isPinned = false }) {
 
 export default function Notices() {
   const [activeFilter, setActiveFilter] = useState('all');
+  const [notices, setNotices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function load() {
+      setLoading(true);
+      try {
+        const items = await getNotices();
+        if (mounted) setNotices(items);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // ── Derived Data ─────────────────────────────────────────────────────────
   const pinnedNotices = useMemo(
-    () => NOTICES.filter((n) => n.pinned).sort((a, b) => new Date(b.date) - new Date(a.date)),
-    [],
+    () => notices.filter((n) => n.pinned).sort((a, b) => new Date(b.date) - new Date(a.date)),
+    [notices],
   );
 
   const filteredNotices = useMemo(() => {
-    const unpinned = NOTICES.filter((n) => !n.pinned);
+    const unpinned = notices.filter((n) => !n.pinned);
     const filtered =
       activeFilter === 'all'
         ? unpinned
         : unpinned.filter((n) => n.category === activeFilter);
     return filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
-  }, [activeFilter]);
+  }, [activeFilter, notices]);
 
   const handleFilterClick = useCallback((key) => {
     setActiveFilter(key);
@@ -205,6 +226,12 @@ export default function Notices() {
       />
 
       <SectionWrapper background="default">
+        {loading && (
+          <Card className="mb-6">
+            <p className="text-body-sm text-text-muted">Loading notices...</p>
+          </Card>
+        )}
+
         {/* ═════════════════════════════════════════════════════════════ */}
         {/*  FILTER BAR                                                  */}
         {/* ═════════════════════════════════════════════════════════════ */}

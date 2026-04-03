@@ -11,11 +11,19 @@ dist/
 build/
 
 # Misc
+.env
+.env.*
+!.env.example
 .DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Firebase / Google Cloud secrets
+*service-account*.json
+*firebase-adminsdk*.json
+google-service-account*.json
 
 # Logs
 npm-debug.log*

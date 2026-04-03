@@ -1,14 +1,14 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Mail, Phone, MapPin, Clock, Building2,
   ArrowRight, MessageCircle, Send,
 } from 'lucide-react';
 import SEO from '@components/SEO';
-import { FACULTY } from '@data/faculty';
 import { SITE_CONFIG } from '@data/site-config';
 import { SectionWrapper } from '@components/layout';
 import { Card, EmptyState, PageBanner, SectionHeader } from '@components/ui';
+import { getContacts } from '@lib/repositories/contentRepository';
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  CONSTANTS
@@ -159,13 +159,34 @@ function ContactCard({ person }) {
 
 export default function Contact() {
   const contact = SITE_CONFIG.contact ?? {};
+  const [facultyList, setFacultyList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadContacts() {
+      try {
+        const items = await getContacts();
+        if (mounted) setFacultyList(items);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    loadContacts();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const sortedFaculty = useMemo(
     () =>
-      [...FACULTY].sort(
+      [...facultyList].sort(
         (a, b) => ROLE_ORDER.indexOf(a.role) - ROLE_ORDER.indexOf(b.role),
       ),
-    [],
+    [facultyList],
   );
 
   const officeDetails = [
@@ -202,7 +223,11 @@ export default function Contact() {
           centered
         />
 
-        {sortedFaculty.length === 0 ? (
+        {loading ? (
+          <Card>
+            <p className="text-body-sm text-text-secondary">Loading contacts...</p>
+          </Card>
+        ) : sortedFaculty.length === 0 ? (
           <Card>
             <EmptyState
               icon="inbox"

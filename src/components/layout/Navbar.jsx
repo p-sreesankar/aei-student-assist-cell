@@ -176,7 +176,7 @@ export default function Navbar() {
                   >
                     <Link
                       to={link.path}
-                      className="block px-6 py-4 rounded-lg min-h-[48px] flex items-center text-body-lg font-heading font-semibold transition-all duration-200"
+                      className="px-6 py-4 rounded-lg min-h-[48px] flex items-center text-body-lg font-heading font-semibold transition-all duration-200"
                       style={{
                         color: isActive(link.path) ? '#F0F9FF' : '#7DD3FC',
                         backgroundColor: isActive(link.path) ? 'rgba(14,165,233,0.12)' : 'transparent',

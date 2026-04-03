@@ -6,9 +6,9 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
 
-  // ── GitHub Pages deployment ──────────────────────────────────
-  // Vercel should use root '/', GitHub Pages can keep repo base path.
-  // Override manually with VITE_BASE_PATH when needed.
+  // ── Deployment ───────────────────────────────────────────────
+  // Detects Vercel vs GitHub Pages for the correct base path.
+  // Overridable with VITE_BASE_PATH in Environment Variables.
   base:
     process.env.VITE_BASE_PATH ||
     (process.env.VERCEL ? '/' : '/aei-student-assist-cell/'),
@@ -20,6 +20,7 @@ export default defineConfig({
       '@pages': path.resolve(__dirname, './src/pages'),
       '@data': path.resolve(__dirname, './src/data'),
       '@config': path.resolve(__dirname, './src/config'),
+      '@lib': path.resolve(__dirname, './src/lib'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@utils': path.resolve(__dirname, './src/utils'),
       '@assets': path.resolve(__dirname, './src/assets'),

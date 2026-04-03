@@ -225,6 +225,16 @@ https://YOUR_USERNAME.github.io/aei-student-assist-cell/
 
 ---
 
+## 🔐 Firebase Security
+
+If you are using Firebase-backed content CRUD, follow the security setup guide:
+
+- [FIREBASE_SECURITY_SETUP.md](FIREBASE_SECURITY_SETUP.md)
+
+This includes Firestore rules deployment and admin-claim requirements for production-safe writes.
+
+---
+
 ## 🤝 Contributing
 
 This site is maintained by the AEI Student Assist Cell team. If you're a student or faculty member:

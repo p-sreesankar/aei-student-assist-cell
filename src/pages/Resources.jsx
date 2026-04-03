@@ -1,4 +1,5 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search, X, BookOpen, Calculator, FileText,
@@ -6,8 +7,10 @@ import {
 } from 'lucide-react';
 import SEO from '@components/SEO';
 import { schemes } from '@data/resources';
+import { getUpcomingMockTests, getPreviousMockTests } from '@utils/mock-tests';
 import { SectionWrapper } from '@components/layout';
-import { EmptyState, PageBanner, SectionHeader, Button } from '@components/ui';
+import { EmptyState, PageBanner, SectionHeader, Button, Card, Badge } from '@components/ui';
+import { getMockTests } from '@lib/repositories/contentRepository';
 import {
   getYoutubeThumbnail,
   getSubjectCount,
@@ -265,6 +268,24 @@ export default function Resources() {
     () => getSemestersWithContent(initialSchemeId)[0] ?? 1,
   );
   const [query, setQuery] = useState('');
+  const [mockTests, setMockTests] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadMockTests() {
+      const items = await getMockTests();
+      if (mounted) setMockTests(items);
+    }
+
+    loadMockTests();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const upcomingMockTests = useMemo(() => getUpcomingMockTests(mockTests), [mockTests]);
+  const previousMockTests = useMemo(() => getPreviousMockTests(mockTests), [mockTests]);
 
   // ── Derived data ──────────────────────────────────────────────────────
   const scheme = schemes.find((s) => s.id === selectedScheme);
@@ -316,6 +337,38 @@ export default function Resources() {
       />
 
       <SectionWrapper background="default">
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/*  MOCK TESTS ENTRY POINT                                        */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <Card className="mb-8">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant="event">Mock Tests</Badge>
+                {upcomingMockTests.length > 0 && <Badge variant="soon">Upcoming Highlighted</Badge>}
+              </div>
+              <h3 className="font-heading font-semibold text-h4 text-text-primary">Timed Mock Test Area</h3>
+              <p className="text-body-sm text-text-secondary mt-1">
+                Attempt mock tests, review scores, and reattempt anytime.
+              </p>
+              <p className="text-caption text-text-muted mt-2">
+                Upcoming: {upcomingMockTests.length} · Previous: {previousMockTests.length}
+              </p>
+            </div>
+
+            <Link to="/mock-tests" className="shrink-0">
+              <Button variant="primary" size="sm">Open Mock Tests</Button>
+            </Link>
+          </div>
+
+          {upcomingMockTests.length > 0 && (
+            <div className="mt-4 rounded-lg border border-border bg-surface2 px-3 py-2">
+              <p className="text-caption text-text-muted uppercase tracking-wide mb-1">Next upcoming</p>
+              <p className="text-body-sm text-text-primary font-semibold">{upcomingMockTests[0].title}</p>
+            </div>
+          )}
+        </Card>
+
         {/* ═══════════════════════════════════════════════════════════════ */}
         {/*  STEP 1 — SCHEME SELECTOR                                     */}
         {/* ═══════════════════════════════════════════════════════════════ */}

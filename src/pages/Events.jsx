@@ -1,8 +1,8 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, ExternalLink, CalendarDays } from 'lucide-react';
 import SEO from '@components/SEO';
-import { EVENTS } from '@data/events';
+import { getEvents } from '@lib/repositories/contentRepository';
 import { SectionWrapper } from '@components/layout';
 import { Badge, Card, EmptyState, PageBanner, Button } from '@components/ui';
 import { formatDate, isUpcoming, isSoon } from '@utils/date';
@@ -248,17 +248,38 @@ function EventCard({ event, isPast = false }) {
 
 export default function Events() {
   const [activeTab, setActiveTab] = useState('upcoming');
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function load() {
+      setLoading(true);
+      try {
+        const items = await getEvents();
+        if (mounted) setEvents(items);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // ── Derived filtered lists ─────────────────────────────────────────────
   const { upcoming, past } = useMemo(() => {
-    const up = EVENTS
+    const up = events
       .filter((e) => isUpcoming(e.date))
       .sort((a, b) => new Date(a.date) - new Date(b.date));
-    const pa = EVENTS
+    const pa = events
       .filter((e) => !isUpcoming(e.date))
       .sort((a, b) => new Date(b.date) - new Date(a.date));
     return { upcoming: up, past: pa };
-  }, []);
+  }, [events]);
 
   const activeList = activeTab === 'upcoming' ? upcoming : past;
 
@@ -280,6 +301,12 @@ export default function Events() {
       />
 
       <SectionWrapper background="default">
+        {loading && (
+          <Card className="mb-6">
+            <p className="text-body-sm text-text-muted">Loading events...</p>
+          </Card>
+        )}
+
         {/* ═══════════════════════════════════════════════════════════════ */}
         {/*  TABS                                                         */}
         {/* ═══════════════════════════════════════════════════════════════ */}
