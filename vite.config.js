@@ -7,9 +7,11 @@ export default defineConfig({
   plugins: [react()],
 
   // ── GitHub Pages deployment ──────────────────────────────────
-  // If using default GitHub Pages URL:  base: '/aei-student-assist-cell/'
-  // If using a custom domain:           base: '/'
-  base: '/aei-student-assist-cell/',
+  // Vercel should use root '/', GitHub Pages can keep repo base path.
+  // Override manually with VITE_BASE_PATH when needed.
+  base:
+    process.env.VITE_BASE_PATH ||
+    (process.env.VERCEL ? '/' : '/aei-student-assist-cell/'),
 
   resolve: {
     alias: {
