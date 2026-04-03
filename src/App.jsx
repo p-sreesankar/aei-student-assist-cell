@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { PageLayout } from '@components/layout';
 import LoadingSpinner from '@components/LoadingSpinner';
 import { SECTIONS } from '@data/site-config';
@@ -32,6 +33,7 @@ export default function App() {
           </Routes>
         </Suspense>
       </PageLayout>
+      <Analytics />
     </HashRouter>
   );
 }
