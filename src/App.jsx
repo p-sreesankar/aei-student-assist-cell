@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { PageLayout } from '@components/layout';
 import LoadingSpinner from '@components/LoadingSpinner';
 import { SECTIONS } from '@data/site-config';
@@ -59,7 +59,7 @@ function ProtectedAdminRoute({ children }) {
 
 export default function App() {
   return (
-    <HashRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <PageLayout>
         <Suspense fallback={<LoadingSpinner />}>
           <Routes>
@@ -88,6 +88,6 @@ export default function App() {
           </Routes>
         </Suspense>
       </PageLayout>
-    </HashRouter>
+    </BrowserRouter>
   );
 }

@@ -16,14 +16,14 @@ const fadeUp = {
 
 const steps = [
   { icon: MessageSquare, text: 'Fill out the form below — your identity is kept confidential.' },
-  { icon: ShieldCheck,   text: 'The Student Assist Cell coordinator will review your submission.' },
+  { icon: ShieldCheck,   text: 'The Applied Association coordinator will review your submission.' },
   { icon: Clock,         text: "You'll receive a response via the email you provide (if given)." },
   { icon: Lock,          text: 'For urgent matters, contact us directly via the Contact page.' },
 ];
 
 export default function Grievance() {
   return (
-    <>      <SEO title="Grievance Portal" description="Submit your concerns anonymously through the Student Assist Cell grievance form. Confidential and secure." />      {/* ═══════════════════════════════════════════════════════════════ */}
+    <>      <SEO title="Grievance Portal" description="Submit your concerns anonymously through the Applied Association grievance form. Confidential and secure." />      {/* ═══════════════════════════════════════════════════════════════ */}
       {/*  PAGE BANNER                                                   */}
       {/* ═══════════════════════════════════════════════════════════════ */}
       <PageBanner

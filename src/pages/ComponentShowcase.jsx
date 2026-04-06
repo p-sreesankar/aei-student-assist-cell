@@ -16,7 +16,7 @@ export default function ComponentShowcase() {
       {/* Page Banner */}
       <PageBanner
         title="UI Component Library"
-        subtitle="Warm, friendly, accessible components for Student Assist Cell"
+        subtitle="Warm, friendly, accessible components for Applied Association"
         breadcrumb={[
           { label: 'Home', path: '/' },
           { label: 'Showcase', path: '/showcase' }

@@ -11,7 +11,7 @@ export default defineConfig({
   // Overridable with VITE_BASE_PATH in Environment Variables.
   base:
     process.env.VITE_BASE_PATH ||
-    (process.env.VERCEL ? '/' : '/aei-student-assist-cell/'),
+    (process.env.VERCEL ? '/' : '/applied-association/'),
 
   resolve: {
     alias: {

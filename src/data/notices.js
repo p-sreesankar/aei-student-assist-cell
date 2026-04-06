@@ -1,5 +1,5 @@
 // ============================================================================
-//  NOTICES — Student Assist Cell Notice Board
+//  NOTICES — Applied Association Notice Board
 // ============================================================================
 //
 //  HOW TO ADD A NEW NOTICE:

@@ -1,4 +1,4 @@
-# Design System — Student Assist Cell
+# Design System — Applied Association
 
 > **Design Philosophy:** Warm · Friendly · Approachable · Student-Centric
 

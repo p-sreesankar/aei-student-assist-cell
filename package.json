@@ -1,11 +1,12 @@
 {
-  "name": "aei-student-assist-cell",
+  "name": "applied-association",
   "private": true,
   "version": "1.0.0",
-  "description": "Student Assist Cell — AEI Department, College of Engineering Trivandrum",
+  "description": "Applied Association — AEI Department, College of Engineering Trivandrum",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/generate-seo-files.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },

@@ -197,7 +197,7 @@ export default function Contact() {
   ].filter((d) => d.value);
 
   return (
-    <>      <SEO title="Contact" description="Get in touch with the AEI Student Assist Cell — office hours, email, phone, and location." />      {/* ═══════════════════════════════════════════════════════════════ */}
+    <>      <SEO title="Contact" description="Get in touch with the Applied Association — office hours, email, phone, and location." />      {/* ═══════════════════════════════════════════════════════════════ */}
       {/*  PAGE BANNER                                                  */}
       {/* ═══════════════════════════════════════════════════════════════ */}
       <PageBanner

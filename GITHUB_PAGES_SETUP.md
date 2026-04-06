@@ -19,7 +19,7 @@ This guide will set up **automatic deployment** to GitHub Pages using GitHub Act
 1. Go to [github.com](https://github.com) and sign in
 2. Click the **+** icon (top-right) → **New repository**
 3. Repository settings:
-   - **Name:** `aei-student-assist-cell`
+   - **Name:** `applied-association`
    - **Visibility:** Public (required for free GitHub Pages)
    - **DO NOT** check "Add a README file" (we already have one)
 4. Click **Create Repository**
@@ -36,24 +36,24 @@ git init
 
 # 2. Add all files and commit
 git add .
-git commit -m "Initial commit: Student Assist Cell website"
+git commit -m "Initial commit: Applied Association website"
 
 # 3. Push to GitHub (replace YOUR_USERNAME with your actual GitHub username)
-git remote add origin https://github.com/YOUR_USERNAME/aei-student-assist-cell.git
+git remote add origin https://github.com/YOUR_USERNAME/applied-association.git
 git branch -M main
 git push -u origin main
 ```
 
 **Example:** If your GitHub username is `sreesankar-cet`, the command would be:
 ```bash
-git remote add origin https://github.com/sreesankar-cet/aei-student-assist-cell.git
+git remote add origin https://github.com/sreesankar-cet/applied-association.git
 ```
 
 ---
 
 ### **Step 3: Configure GitHub Pages**
 
-1. Go to your repository on GitHub: `https://github.com/YOUR_USERNAME/aei-student-assist-cell`
+1. Go to your repository on GitHub: `https://github.com/YOUR_USERNAME/applied-association`
 
 2. Click **Settings** (tab at the top)
 
@@ -86,10 +86,10 @@ To check:
 Once the workflow succeeds:
 
 1. Go back to **Settings → Pages**
-2. You'll see a message at the top: **"Your site is live at https://YOUR_USERNAME.github.io/aei-student-assist-cell/"**
+2. You'll see a message at the top: **"Your site is live at https://YOUR_USERNAME.github.io/applied-association/"**
 3. Click the link to open your site 🎉
 
-**Example URL:** `https://sreesankar-cet.github.io/aei-student-assist-cell/`
+**Example URL:** `https://sreesankar-cet.github.io/applied-association/`
 
 ---
 
@@ -145,7 +145,7 @@ Then push again to trigger a new workflow run.
 
 1. **Base path in vite.config.js** — must match repo name **exactly**:
    ```javascript
-   base: '/aei-student-assist-cell/',  // ← Must start and end with /
+   base: '/applied-association/',  // ← Must start and end with /
    ```
 
 2. **Pages source** — must be set to "GitHub Actions" (not "Deploy from a branch")
@@ -237,7 +237,7 @@ Then create a separate workflow for PR previews using services like Netlify Depl
 
 **Your site will be live at:**
 ```
-https://YOUR_USERNAME.github.io/aei-student-assist-cell/
+https://YOUR_USERNAME.github.io/applied-association/
 ```
 
 **Deploy status:** Check the Actions tab after every push!

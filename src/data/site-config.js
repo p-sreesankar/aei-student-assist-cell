@@ -1,5 +1,5 @@
 // ============================================================================
-//  SITE CONFIGURATION — Student Assist Cell
+//  SITE CONFIGURATION — Applied Association
 // ============================================================================
 //
 //  HOW TO EDIT (for non-developers):
@@ -24,16 +24,24 @@ const SITE_CONFIG = {
 
   // ---------- Basic Info ----------
 
-  siteName: "Student Assist Cell",                          // [Required] Name shown in header & browser tab
+  siteName: "Applied Association",                          // [Required] Name shown in header & browser tab
   departmentName: "Applied Electronics and Instrumentation",// [Required] Full department name
   departmentShort: "AEI",                                   // [Required] Short code used in headings
   collegeName: "College of Engineering Trivandrum",          // [Required] Full college name
   collegeShort: "CET",                                      // [Required] Short code
   tagline: "Your one-stop hub for notices, events, resources & support", // [Required] Hero subtitle text
 
+  // ---------- Domain / Canonical URL ----------
+  // Set these when your production domain is ready.
+  // canonicalSiteUrl should include https:// and no trailing slash.
+  // customDomain should be domain only (no protocol), used for CNAME generation.
+
+  canonicalSiteUrl: "",                                // [Optional] e.g. "https://assistcell.aei.cet.ac.in"
+  customDomain: "",                                    // [Optional] e.g. "assistcell.aei.cet.ac.in"
+
   // ---------- Footer ----------
 
-  footerText: "© 2026 Student Assist Cell — AEI, CET. All rights reserved.", // [Required] Footer copyright line
+  footerText: "© 2026 Applied Association — AEI, CET. All rights reserved.", // [Required] Footer copyright line
 
   // ---------- Grievance Form ----------
   // Replace this with your own Google Form embed URL.
@@ -68,7 +76,7 @@ const SITE_CONFIG = {
 
   // ---------- SEO / Meta ----------
 
-  metaDescription: "Student Assist Cell — AEI Department, College of Engineering Trivandrum. Notices, events, resources, grievance portal and more for AEI students.", // [Required]
+  metaDescription: "Applied Association — AEI Department, College of Engineering Trivandrum. Notices, events, resources, grievance portal and more for AEI students.", // [Required]
   ogImage: "assets/og-image.png", // [Optional] Social sharing preview image (1200×630 px recommended)
 
   // ---------- Contact / Office ----------

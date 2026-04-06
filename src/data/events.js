@@ -1,5 +1,5 @@
 // ============================================================================
-//  EVENTS — Student Assist Cell Event Calendar
+//  EVENTS — Applied Association Event Calendar
 // ============================================================================
 //
 //  HOW TO ADD A NEW EVENT:

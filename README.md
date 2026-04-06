@@ -1,4 +1,4 @@
-# Student Assist Cell — AEI, CET
+# Applied Association — AEI, CET
 
 A modern, mobile-first static website for the Applied Electronics and Instrumentation (AEI) department at College of Engineering Trivandrum. Built with React, Vite, and Tailwind CSS. Zero backend — all content driven by simple JavaScript data files.
 
@@ -14,8 +14,8 @@ A modern, mobile-first static website for the Applied Electronics and Instrument
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/aei-student-assist-cell.git
-cd aei-student-assist-cell
+git clone https://github.com/YOUR_USERNAME/applied-association.git
+cd applied-association
 
 # Install dependencies
 npm install
@@ -31,7 +31,7 @@ Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
 ## 📁 Project Structure
 
 ```
-aei-student-assist-cell/
+applied-association/
 ├── public/
 │   └── images/              # Gallery photos, event images
 ├── src/
@@ -148,16 +148,16 @@ This site is configured to deploy to **GitHub Pages**.
 
 ### First-Time Setup
 
-1. Create a new GitHub repository: `aei-student-assist-cell`
+1. Create a new GitHub repository: `applied-association`
 2. Push this code to the repo:
 
 ```bash
-git remote add origin https://github.com/YOUR_USERNAME/aei-student-assist-cell.git
+git remote add origin https://github.com/YOUR_USERNAME/applied-association.git
 git branch -M main
 git push -u origin main
 ```
 
-3. Update `vite.config.js` → set `base: '/aei-student-assist-cell/'` (match your repo name)
+3. Update `vite.config.js` → set `base: '/applied-association/'` (match your repo name)
 
 ### Deploy
 
@@ -168,7 +168,7 @@ npm run deploy
 This builds the site and pushes it to the `gh-pages` branch. Your site will be live at:
 
 ```
-https://YOUR_USERNAME.github.io/aei-student-assist-cell/
+https://YOUR_USERNAME.github.io/applied-association/
 ```
 
 ### Custom Domain (Optional)
@@ -178,6 +178,19 @@ https://YOUR_USERNAME.github.io/aei-student-assist-cell/
 3. Configure DNS settings to point to GitHub Pages
 4. Deploy: `npm run deploy`
 
+### University Domain Cutover (Recommended)
+
+When the university domain is approved, update these two values in [src/data/site-config.js](src/data/site-config.js):
+
+- `canonicalSiteUrl`: full URL, e.g. `https://assistcell.aei.cet.ac.in`
+- `customDomain`: domain only, e.g. `assistcell.aei.cet.ac.in`
+
+Then build and deploy. The build will automatically:
+
+1. Generate `public/CNAME`
+2. Generate `public/sitemap.xml` with the university domain
+3. Generate `public/robots.txt` pointing to the correct sitemap
+
 ---
 
 ## 🛠️ Tech Stack
@@ -185,7 +198,7 @@ https://YOUR_USERNAME.github.io/aei-student-assist-cell/
 - **React 18** — UI library
 - **Vite** — Lightning-fast build tool
 - **Tailwind CSS** — Utility-first CSS framework
-- **React Router** — Client-side routing (HashRouter for GitHub Pages)
+- **React Router** — Client-side routing (BrowserRouter with GitHub Pages 404 fallback)
 - **Framer Motion** — Smooth animations
 - **Lucide React** — Beautiful open-source icons
 - **GitHub Pages** — Free static hosting
@@ -201,6 +214,14 @@ https://YOUR_USERNAME.github.io/aei-student-assist-cell/
 | `npm run preview`| Preview production build locally               |
 | `npm run deploy` | Build + deploy to GitHub Pages                 |
 
+For SEO files (`public/robots.txt` and `public/sitemap.xml`), set your production URL before building:
+
+```bash
+# Example for GitHub Pages
+set VITE_SITE_URL=https://YOUR_USERNAME.github.io/applied-association
+npm run build
+```
+
 ---
 
 ## 🔧 Troubleshooting
@@ -208,7 +229,7 @@ https://YOUR_USERNAME.github.io/aei-student-assist-cell/
 ### "Page not found" on GitHub Pages
 
 - Make sure `base` in `vite.config.js` matches your repo name
-- Ensure you're using `HashRouter` in `App.jsx` (not `BrowserRouter`)
+- Ensure `public/404.html` is present (generated automatically during build)
 - Run `npm run deploy` again
 
 ### Images not loading
@@ -237,7 +258,7 @@ This includes Firestore rules deployment and admin-claim requirements for produc
 
 ## 🤝 Contributing
 
-This site is maintained by the AEI Student Assist Cell team. If you're a student or faculty member:
+This site is maintained by the Applied Association team. If you're a student or faculty member:
 
 1. Fork the repo
 2. Create a feature branch: `git checkout -b feature/your-feature`
@@ -262,4 +283,4 @@ For questions, issues, or suggestions:
 
 ---
 
-**Built with ❤️ by the AEI Student Assist Cell team**
+**Built with ❤️ by the Applied Association team**

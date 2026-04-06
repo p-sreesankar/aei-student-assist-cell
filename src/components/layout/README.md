@@ -1,6 +1,6 @@
 # Layout Components
 
-> Warm, friendly layout system for Student Assist Cell
+> Warm, friendly layout system for Applied Association
 
 ---
 

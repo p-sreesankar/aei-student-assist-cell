@@ -19,20 +19,50 @@
     <!-- ── SEO Meta ──────────────────────────────────────────── -->
     <meta
       name="description"
-      content="Student Assist Cell — AEI Department, College of Engineering Trivandrum. Notices, events, resources, grievance portal and more for AEI students."
+      content="Applied Association — AEI Department, College of Engineering Trivandrum. Notices, events, resources, grievance portal and more for AEI students."
     />
+    <meta
+      name="keywords"
+      content="Applied Association CET, Applied Association AEI, AEI CET, Applied Electronics and Instrumentation CET, College of Engineering Trivandrum AEI, AEI notices, AEI events, AEI resources"
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="theme-color" content="#0A1628" />
 
     <!-- ── Open Graph ────────────────────────────────────────── -->
-    <meta property="og:title" content="Student Assist Cell — AEI, CET" />
+    <meta property="og:title" content="Applied Association — AEI, CET" />
     <meta
       property="og:description"
       content="Your one-stop hub for notices, events, resources & support — AEI Department, College of Engineering Trivandrum."
     />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Applied Association" />
+    <meta property="og:locale" content="en_IN" />
     <meta property="og:image" content="/assets/og-image.png" />
 
-    <title>Student Assist Cell — AEI, CET</title>
+    <!-- ── Twitter Card ─────────────────────────────────────── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Applied Association — AEI, CET" />
+    <meta
+      name="twitter:description"
+      content="Your one-stop hub for notices, events, resources & support — AEI Department, College of Engineering Trivandrum."
+    />
+    <meta name="twitter:image" content="/assets/og-image.png" />
+
+    <!-- SPA redirect recovery for GitHub Pages 404 fallback -->
+    <script>
+      (function (l) {
+        if (l.search[1] === '/') {
+          const decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) { return s.replace(/~and~/g, '&'); })
+            .join('?');
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+        }
+      })(window.location);
+    </script>
+
+    <title>Applied Association — AEI, CET</title>
   </head>
   <body class="font-body antialiased" style="background-color:#0A1628;color:#F0F9FF">
     <div id="root"></div>

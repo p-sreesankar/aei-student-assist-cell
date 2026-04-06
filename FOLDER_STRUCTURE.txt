@@ -1,7 +1,7 @@
-Student Assist Cell — Project Structure
+Applied Association — Project Structure
 ========================================
 
-aei-student-assist-cell/
+applied-association/
 │
 ├── public/                         # Static assets served as-is
 │   ├── favicon.svg                 # Site favicon
