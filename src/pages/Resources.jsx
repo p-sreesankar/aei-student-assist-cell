@@ -108,6 +108,17 @@ function resolveSemesterFallback(schemeId, schemesList) {
   return semesters.sort((a, b) => a - b)[0];
 }
 
+function resolveSchemeFallback(schemesList) {
+  const withEmptySemester = schemesList.find((scheme) =>
+    (scheme.semesters || []).some((semesterBlock) =>
+      !Array.isArray(semesterBlock.subjects) || semesterBlock.subjects.length === 0,
+    ),
+  );
+
+  if (withEmptySemester) return withEmptySemester.id;
+  return schemesList[0]?.id || '';
+}
+
 function getSemestersWithContentFromScheme(scheme) {
   if (!scheme) return [];
   return (scheme.semesters || [])
@@ -428,6 +439,10 @@ export default function Resources() {
           schemeId = schemeId || lookup[0].schemeId;
           semester = Number.isFinite(semester) ? semester : lookup[0].semester;
         }
+      }
+
+      if (!schemeId) {
+        schemeId = resolveSchemeFallback(schemes);
       }
 
       if (schemeId && !Number.isFinite(semester)) {
