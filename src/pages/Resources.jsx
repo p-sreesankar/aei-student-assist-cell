@@ -13,8 +13,6 @@ import { EmptyState, PageBanner, SectionHeader, Button, Card, Badge } from '@com
 import { getMockTests, getResources, subscribeContentUpdates } from '@lib/repositories/contentRepository';
 import {
   getYoutubeThumbnail,
-  getSubjectCount,
-  getSemestersWithContent,
 } from '@utils/resources.utils';
 
 // ── Animation variants ──────────────────────────────────────────────────────
@@ -40,6 +38,39 @@ function mapFileTypeToResourceType(fileType) {
   if (type === 'question-paper' || type === 'qn-paper' || type === 'qn-papers') return 'qn-paper';
   if (type === 'video') return 'video';
   return 'notes';
+}
+
+function toSlug(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function parseSchemeAndSemester(category) {
+  const text = String(category || '');
+  const schemeMatch = text.match(/(20\d{2})\s*scheme/i);
+  const semesterMatch = text.match(/\bS\s*(\d{1,2})\b/i);
+  const schemeId = schemeMatch?.[1] || '';
+  const semester = semesterMatch ? Number(semesterMatch[1]) : NaN;
+  return {
+    schemeId,
+    semester: Number.isFinite(semester) ? semester : null,
+  };
+}
+
+function getSemestersWithContentFromScheme(scheme) {
+  if (!scheme) return [];
+  return (scheme.semesters || [])
+    .filter((sem) => Array.isArray(sem.subjects) && sem.subjects.length > 0)
+    .map((sem) => sem.semester)
+    .sort((a, b) => a - b);
+}
+
+function getSubjectCountFromScheme(scheme) {
+  if (!scheme) return 0;
+  return (scheme.semesters || []).reduce((sum, sem) => sum + ((sem.subjects || []).length || 0), 0);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -276,11 +307,8 @@ function SubjectCard({ subject }) {
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export default function Resources() {
-  const initialSchemeId = schemes.find((scheme) => getSemestersWithContent(scheme.id).length > 0)?.id ?? schemes[0]?.id ?? '';
-  const [selectedScheme, setSelectedScheme] = useState(initialSchemeId);
-  const [selectedSemester, setSelectedSemester] = useState(
-    () => getSemestersWithContent(initialSchemeId)[0] ?? 1,
-  );
+  const [selectedScheme, setSelectedScheme] = useState(schemes[0]?.id ?? '');
+  const [selectedSemester, setSelectedSemester] = useState(1);
   const [query, setQuery] = useState('');
   const [mockTests, setMockTests] = useState([]);
   const [adminResources, setAdminResources] = useState([]);
@@ -288,16 +316,26 @@ export default function Resources() {
   useEffect(() => {
     let mounted = true;
 
-    async function loadData() {
-      const [tests, resources] = await Promise.all([getMockTests(), getResources()]);
+    async function loadMockTestsData() {
+      const tests = await getMockTests();
       if (!mounted) return;
       setMockTests(tests);
+    }
+
+    async function loadResourceData() {
+      const resources = await getResources();
+      if (!mounted) return;
       setAdminResources(resources);
     }
 
-    loadData();
-    const unsubscribe = subscribeContentUpdates(() => {
-      loadData();
+    Promise.all([loadMockTestsData(), loadResourceData()]);
+    const unsubscribe = subscribeContentUpdates((domain) => {
+      if (!domain || domain === 'mockTests') {
+        loadMockTestsData();
+      }
+      if (!domain || domain === 'resources') {
+        loadResourceData();
+      }
     }, ['mockTests', 'resources']);
 
     return () => {
@@ -310,17 +348,54 @@ export default function Resources() {
   const previousMockTests = useMemo(() => getPreviousMockTests(mockTests), [mockTests]);
 
   const mergedSchemes = useMemo(() => {
+    const moduleLookup = new Map();
+    schemes.forEach((scheme) => {
+      (scheme.semesters || []).forEach((semesterBlock) => {
+        (semesterBlock.subjects || []).forEach((subject) => {
+          const key = normalizeText(subject.name);
+          if (!key) return;
+          if (!moduleLookup.has(key)) moduleLookup.set(key, []);
+          moduleLookup.get(key).push({ schemeId: scheme.id, semester: semesterBlock.semester });
+        });
+      });
+    });
+
     const adminOnlyResources = adminResources.filter((item) => {
       const id = String(item?.id || '');
-      const moduleTitle = String(item?.moduleTitle || '').trim();
+      const moduleTitle = String(item?.moduleTitle || item?.description || '').trim();
       return !id.startsWith('site-') && Boolean(moduleTitle) && Boolean(item?.driveLink);
     });
 
     const moduleMap = adminOnlyResources.reduce((acc, item) => {
-      const key = normalizeText(item.moduleTitle);
+      const moduleTitle = String(item.moduleTitle || item.description || '').trim();
+      const key = normalizeText(moduleTitle);
       if (!key) return acc;
-      if (!acc.has(key)) acc.set(key, []);
-      acc.get(key).push({
+      const parsed = parseSchemeAndSemester(item.category);
+      let schemeId = parsed.schemeId;
+      let semester = parsed.semester;
+
+      if (!schemeId || !Number.isFinite(semester)) {
+        const lookup = moduleLookup.get(key) || [];
+        if (lookup.length > 0) {
+          schemeId = schemeId || lookup[0].schemeId;
+          semester = Number.isFinite(semester) ? semester : lookup[0].semester;
+        }
+      }
+
+      if (!schemeId || !Number.isFinite(semester)) return acc;
+
+      const groupKey = `${schemeId}::${semester}::${key}`;
+      if (!acc.has(groupKey)) {
+        acc.set(groupKey, {
+          schemeId,
+          semester,
+          moduleTitle,
+          key,
+          resources: [],
+        });
+      }
+
+      acc.get(groupKey).resources.push({
         type: mapFileTypeToResourceType(item.fileType),
         title: item.title,
         driveLink: item.driveLink,
@@ -329,34 +404,98 @@ export default function Resources() {
       return acc;
     }, new Map());
 
-    return schemes.map((scheme) => ({
-      ...scheme,
-      semesters: (scheme.semesters || []).map((semester) => ({
-        ...semester,
-        subjects: (semester.subjects || []).map((subject) => {
-          const key = normalizeText(subject.name);
-          const dynamicResources = moduleMap.get(key) || [];
-          if (dynamicResources.length === 0) return subject;
-          return {
+    return schemes.map((scheme) => {
+      const semesterMap = new Map();
+
+      (scheme.semesters || []).forEach((semester) => {
+        semesterMap.set(semester.semester, {
+          ...semester,
+          subjects: [...(semester.subjects || [])],
+        });
+      });
+
+      [...moduleMap.values()]
+        .filter((group) => group.schemeId === scheme.id)
+        .forEach((group) => {
+          if (!semesterMap.has(group.semester)) {
+            semesterMap.set(group.semester, {
+              semester: group.semester,
+              subjects: [],
+            });
+          }
+
+          const semesterBlock = semesterMap.get(group.semester);
+          const subjectIndex = (semesterBlock.subjects || []).findIndex(
+            (subject) => normalizeText(subject.name) === group.key,
+          );
+
+          if (subjectIndex === -1) {
+            semesterBlock.subjects.push({
+              id: `admin-${scheme.id}-s${group.semester}-${toSlug(group.moduleTitle)}`,
+              name: group.moduleTitle,
+              code: '',
+              isLab: false,
+              resources: group.resources,
+            });
+            return;
+          }
+
+          const subject = semesterBlock.subjects[subjectIndex];
+          const merged = [...(subject.resources || [])];
+          const seen = new Set(merged.map((res) => `${res.type}::${res.title}::${res.driveLink || res.youtubeLink || ''}`));
+          group.resources.forEach((res) => {
+            const key = `${res.type}::${res.title}::${res.driveLink || res.youtubeLink || ''}`;
+            if (!seen.has(key)) {
+              seen.add(key);
+              merged.push(res);
+            }
+          });
+          semesterBlock.subjects[subjectIndex] = {
             ...subject,
-            resources: [...(subject.resources || []), ...dynamicResources],
+            resources: merged,
           };
-        }),
-      })),
-    }));
+        });
+
+      return {
+        ...scheme,
+        semesters: [...semesterMap.values()].sort((a, b) => a.semester - b.semester),
+      };
+    });
   }, [adminResources]);
+
+  useEffect(() => {
+    if (!mergedSchemes.length) return;
+
+    const schemeExists = mergedSchemes.some((s) => s.id === selectedScheme);
+    const nextSchemeId = schemeExists
+      ? selectedScheme
+      : (mergedSchemes.find((s) => getSemestersWithContentFromScheme(s).length > 0)?.id || mergedSchemes[0].id);
+
+    if (nextSchemeId !== selectedScheme) {
+      setSelectedScheme(nextSchemeId);
+      return;
+    }
+
+    const activeScheme = mergedSchemes.find((s) => s.id === nextSchemeId);
+    const semesters = getSemestersWithContentFromScheme(activeScheme);
+    if (!semesters.length) return;
+    if (!semesters.includes(selectedSemester)) {
+      setSelectedSemester(semesters[0]);
+    }
+  }, [mergedSchemes, selectedScheme, selectedSemester]);
 
   // ── Derived data ──────────────────────────────────────────────────────
   const scheme = mergedSchemes.find((s) => s.id === selectedScheme);
   const availableSemesters = useMemo(
-    () => getSemestersWithContent(selectedScheme),
-    [selectedScheme],
+    () => getSemestersWithContentFromScheme(scheme),
+    [scheme],
   );
 
   // Reset semester when switching schemes
   const handleSchemeChange = (id) => {
     setSelectedScheme(id);
-    const sems = getSemestersWithContent(id);
+    const nextScheme = mergedSchemes.find((s) => s.id === id);
+    const sems = getSemestersWithContentFromScheme(nextScheme);
     setSelectedSemester(sems[0] ?? 1);
     setQuery('');
   };
@@ -433,8 +572,9 @@ export default function Resources() {
         {/* ═══════════════════════════════════════════════════════════════ */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-8">
           {schemes.map((s) => {
-            const count = getSubjectCount(s.id);
-            const semCount = getSemestersWithContent(s.id).length;
+            const displayScheme = mergedSchemes.find((item) => item.id === s.id) || s;
+            const count = getSubjectCountFromScheme(displayScheme);
+            const semCount = getSemestersWithContentFromScheme(displayScheme).length;
             const isSelected = s.id === selectedScheme;
 
             return (
