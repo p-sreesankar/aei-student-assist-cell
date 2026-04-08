@@ -38,7 +38,6 @@ const noticeCategories = ['academic', 'administrative', 'urgent', 'general'];
 const eventCategories = ['workshop', 'fest', 'seminar', 'competition', 'cultural', 'general'];
 const contactRoles = ['coordinator', 'advisor', 'faculty', 'student-rep'];
 const contactRoleOrder = ['coordinator', 'advisor', 'faculty', 'student-rep'];
-const mockDifficulties = ['easy', 'medium', 'hard'];
 
 const fieldReferenceByModule = {
   Notices: [
@@ -66,7 +65,6 @@ const fieldReferenceByModule = {
     'Contact ID',
     'Name',
     'Designation',
-    'Department',
     'Email',
     'Phone (Optional)',
     'Photo URL (Optional)',
@@ -76,24 +74,19 @@ const fieldReferenceByModule = {
     'Mock Test ID',
     'Title',
     'Subject',
-    'Scheme',
     'Semester',
     'Start Date',
     'End Date',
     'Duration (Minutes)',
-    'Total Marks',
-    'Difficulty',
   ],
   'Question Builder': [
     'Question ID',
-    'Question Type',
     'Question Text',
     'Option A',
     'Option B',
     'Option C (Optional)',
     'Option D (Optional)',
     'Correct Answer Index (0-based)',
-    'Explanation',
   ],
   Resources: [
     'Resource ID',
@@ -138,7 +131,6 @@ function emptyContact() {
     id: '',
     name: '',
     designation: '',
-    department: 'Applied Electronics and Instrumentation',
     email: '',
     phone: '',
     photoUrl: '',
@@ -151,13 +143,10 @@ function emptyMockTest() {
     id: '',
     title: '',
     subject: '',
-    scheme: '2024',
     semester: 1,
-    difficulty: 'medium',
     startDate: '',
     endDate: '',
     durationMinutes: 30,
-    totalMarks: 0,
     questions: [],
   };
 }
@@ -177,14 +166,12 @@ function emptyResource() {
 function emptyQuestion() {
   return {
     id: '',
-    type: 'mcq',
     question: '',
     optionA: '',
     optionB: '',
     optionC: '',
     optionD: '',
     correctAnswer: 0,
-    explanation: '',
   };
 }
 
@@ -533,7 +520,11 @@ export default function AdminDashboard() {
     notify('info', 'Saving contact...');
     try {
       const payload = {
-        ...contactForm,
+        id: contactForm.id,
+        name: contactForm.name,
+        designation: contactForm.designation,
+        email: contactForm.email,
+        role: contactForm.role,
         phone: contactForm.phone || null,
         photoUrl: contactForm.photoUrl || null,
       };
@@ -658,11 +649,9 @@ export default function AdminDashboard() {
 
     const nextQuestion = {
       id: questionForm.id,
-      type: questionForm.type,
       question: questionForm.question,
       options,
       correctAnswer: normalizedCorrect,
-      explanation: questionForm.explanation || '',
     };
 
     setMockTestForm((prev) => {
@@ -683,14 +672,12 @@ export default function AdminDashboard() {
   function editQuestion(q) {
     setQuestionForm({
       id: q.id,
-      type: q.type,
       question: q.question,
       optionA: q.options?.[0] || '',
       optionB: q.options?.[1] || '',
       optionC: q.options?.[2] || '',
       optionD: q.options?.[3] || '',
       correctAnswer: Number(q.correctAnswer) || 0,
-      explanation: q.explanation || '',
     });
   }
 
@@ -734,11 +721,6 @@ export default function AdminDashboard() {
       return;
     }
 
-    if (Number(mockTestForm.totalMarks) && !isPositiveInteger(mockTestForm.totalMarks)) {
-      notify('error', 'Total Marks must be a positive whole number.');
-      return;
-    }
-
     const questionValidationError = validateStagedQuestions(mockTestForm.questions);
     if (questionValidationError) {
       notify('error', questionValidationError);
@@ -749,10 +731,14 @@ export default function AdminDashboard() {
     notify('info', 'Saving mock test...');
     try {
       const payload = {
-        ...mockTestForm,
+        id: mockTestForm.id,
+        title: mockTestForm.title,
+        subject: mockTestForm.subject,
         semester: Number(mockTestForm.semester) || 1,
+        startDate: mockTestForm.startDate,
+        endDate: mockTestForm.endDate,
         durationMinutes: Number(mockTestForm.durationMinutes) || 30,
-        totalMarks: Number(mockTestForm.totalMarks) || mockTestForm.questions.length,
+        questions: mockTestForm.questions,
       };
       const updated = await upsertMockTest(payload);
       setMockTestList(updated);
@@ -977,9 +963,6 @@ export default function AdminDashboard() {
                   <Field label="Designation">
                     <input className={fieldClass} placeholder="Enter designation" value={contactForm.designation} onChange={(e) => setContactForm((p) => ({ ...p, designation: e.target.value }))} />
                   </Field>
-                  <Field label="Department">
-                    <input className={fieldClass} placeholder="Enter department" value={contactForm.department} onChange={(e) => setContactForm((p) => ({ ...p, department: e.target.value }))} />
-                  </Field>
                   <Field label="Email">
                     <input type="email" className={fieldClass} placeholder="name@example.com" value={contactForm.email} onChange={(e) => setContactForm((p) => ({ ...p, email: e.target.value }))} />
                   </Field>
@@ -1073,14 +1056,9 @@ export default function AdminDashboard() {
                     <Field label="Subject">
                       <input className={fieldClass} placeholder="Enter subject" value={mockTestForm.subject} onChange={(e) => setMockTestForm((p) => ({ ...p, subject: e.target.value }))} />
                     </Field>
-                    <div className="grid grid-cols-2 gap-2">
-                      <Field label="Scheme">
-                        <input className={fieldClass} placeholder="e.g. 2024" value={mockTestForm.scheme} onChange={(e) => setMockTestForm((p) => ({ ...p, scheme: e.target.value }))} />
-                      </Field>
-                      <Field label="Semester">
-                        <input type="number" min="1" className={fieldClass} placeholder="Enter semester" value={mockTestForm.semester} onChange={(e) => setMockTestForm((p) => ({ ...p, semester: e.target.value }))} />
-                      </Field>
-                    </div>
+                    <Field label="Semester">
+                      <input type="number" min="1" className={fieldClass} placeholder="Enter semester" value={mockTestForm.semester} onChange={(e) => setMockTestForm((p) => ({ ...p, semester: e.target.value }))} />
+                    </Field>
                     <div className="grid grid-cols-2 gap-2">
                       <Field label="Start Date">
                         <input type="date" className={fieldClass} value={mockTestForm.startDate} onChange={(e) => setMockTestForm((p) => ({ ...p, startDate: e.target.value }))} />
@@ -1093,15 +1071,10 @@ export default function AdminDashboard() {
                       <Field label="Duration (Minutes)">
                         <input type="number" min="1" className={fieldClass} placeholder="Enter duration" value={mockTestForm.durationMinutes} onChange={(e) => setMockTestForm((p) => ({ ...p, durationMinutes: e.target.value }))} />
                       </Field>
-                      <Field label="Total Marks">
-                        <input type="number" min="1" className={fieldClass} placeholder="Enter total marks" value={mockTestForm.totalMarks} onChange={(e) => setMockTestForm((p) => ({ ...p, totalMarks: e.target.value }))} />
-                      </Field>
+                      <div className="rounded-xl border border-dashed border-[#D0D5DD] bg-[#F9FAFB] p-3 text-xs text-[#667085]">
+                        Total marks are auto-calculated from staged questions.
+                      </div>
                     </div>
-                    <Field label="Difficulty">
-                      <select className={fieldClass} value={mockTestForm.difficulty} onChange={(e) => setMockTestForm((p) => ({ ...p, difficulty: e.target.value }))}>
-                        {mockDifficulties.map((d) => <option key={d} value={d}>{d}</option>)}
-                      </select>
-                    </Field>
                     <p className="text-xs text-[#667085]">Questions staged: {mockTestForm.questions.length}</p>
                     <div className="flex gap-2">
                       <Button type="submit" size="sm" className={buttonPrimaryClass} loading={saving}>Save Mock Test</Button>
@@ -1113,12 +1086,6 @@ export default function AdminDashboard() {
                     <h4 className="font-semibold text-[#101828]">Question Builder / Answer Key</h4>
                     <Field label="Question ID">
                       <input className={fieldClass} placeholder="e.g. q1" value={questionForm.id} onChange={(e) => setQuestionForm((p) => ({ ...p, id: e.target.value }))} />
-                    </Field>
-                    <Field label="Question Type">
-                      <select className={fieldClass} value={questionForm.type} onChange={(e) => setQuestionForm((p) => ({ ...p, type: e.target.value }))}>
-                        <option value="mcq">mcq</option>
-                        <option value="true-false">true-false</option>
-                      </select>
                     </Field>
                     <Field label="Question Text">
                       <textarea className={fieldClass} rows={3} placeholder="Enter question text" value={questionForm.question} onChange={(e) => setQuestionForm((p) => ({ ...p, question: e.target.value }))} />
@@ -1137,9 +1104,6 @@ export default function AdminDashboard() {
                     </Field>
                     <Field label="Correct Answer Index (0-based)">
                       <input type="number" min="0" className={fieldClass} placeholder="0 for first option" value={questionForm.correctAnswer} onChange={(e) => setQuestionForm((p) => ({ ...p, correctAnswer: e.target.value }))} />
-                    </Field>
-                    <Field label="Explanation">
-                      <textarea className={fieldClass} rows={2} placeholder="Optional explanation" value={questionForm.explanation} onChange={(e) => setQuestionForm((p) => ({ ...p, explanation: e.target.value }))} />
                     </Field>
                     <div className="flex gap-2">
                       <Button type="submit" size="sm" className={buttonPrimaryClass}>Stage Question</Button>
@@ -1169,7 +1133,7 @@ export default function AdminDashboard() {
                       <p className="text-sm text-[#667085]">No questions staged yet.</p>
                     ) : mockTestForm.questions.map((q) => (
                       <div key={q.id} className="rounded-xl border border-[#E4E7EC] bg-[#FCFCFD] p-3">
-                        <p className="text-sm font-semibold text-[#101828]">{q.id} · {q.type}</p>
+                        <p className="text-sm font-semibold text-[#101828]">{q.id}</p>
                         <p className="mt-1 line-clamp-2 text-xs text-[#475467]">{q.question}</p>
                         <p className="mt-1 text-xs text-[#667085]">Answer key index: {q.correctAnswer}</p>
                         <div className="mt-2 flex gap-2">
