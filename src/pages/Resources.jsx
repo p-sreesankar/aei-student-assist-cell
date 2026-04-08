@@ -10,7 +10,7 @@ import { schemes } from '@data/resources';
 import { getUpcomingMockTests, getPreviousMockTests } from '@utils/mock-tests';
 import { SectionWrapper } from '@components/layout';
 import { EmptyState, PageBanner, SectionHeader, Button, Card, Badge } from '@components/ui';
-import { getMockTests, subscribeContentUpdates } from '@lib/repositories/contentRepository';
+import { getMockTests, getResources, subscribeContentUpdates } from '@lib/repositories/contentRepository';
 import {
   getYoutubeThumbnail,
   getSubjectCount,
@@ -27,6 +27,20 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
   exit: { opacity: 0, y: -8, transition: { duration: 0.15 } },
 };
+
+function normalizeText(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function mapFileTypeToResourceType(fileType) {
+  const type = normalizeText(fileType);
+  if (!type) return 'notes';
+  if (type === 'formula') return 'formula';
+  if (type === 'answer-key') return 'answer-key';
+  if (type === 'question-paper' || type === 'qn-paper' || type === 'qn-papers') return 'qn-paper';
+  if (type === 'video') return 'video';
+  return 'notes';
+}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  PAPERS DROPDOWN — shows multiple papers with individual links
@@ -269,20 +283,22 @@ export default function Resources() {
   );
   const [query, setQuery] = useState('');
   const [mockTests, setMockTests] = useState([]);
+  const [adminResources, setAdminResources] = useState([]);
 
   useEffect(() => {
     let mounted = true;
 
     async function loadData() {
-      const tests = await getMockTests();
+      const [tests, resources] = await Promise.all([getMockTests(), getResources()]);
       if (!mounted) return;
       setMockTests(tests);
+      setAdminResources(resources);
     }
 
     loadData();
     const unsubscribe = subscribeContentUpdates(() => {
       loadData();
-    }, ['mockTests']);
+    }, ['mockTests', 'resources']);
 
     return () => {
       mounted = false;
@@ -293,8 +309,45 @@ export default function Resources() {
   const upcomingMockTests = useMemo(() => getUpcomingMockTests(mockTests), [mockTests]);
   const previousMockTests = useMemo(() => getPreviousMockTests(mockTests), [mockTests]);
 
+  const mergedSchemes = useMemo(() => {
+    const adminOnlyResources = adminResources.filter((item) => {
+      const id = String(item?.id || '');
+      const moduleTitle = String(item?.moduleTitle || '').trim();
+      return !id.startsWith('site-') && Boolean(moduleTitle) && Boolean(item?.driveLink);
+    });
+
+    const moduleMap = adminOnlyResources.reduce((acc, item) => {
+      const key = normalizeText(item.moduleTitle);
+      if (!key) return acc;
+      if (!acc.has(key)) acc.set(key, []);
+      acc.get(key).push({
+        type: mapFileTypeToResourceType(item.fileType),
+        title: item.title,
+        driveLink: item.driveLink,
+        youtubeLink: mapFileTypeToResourceType(item.fileType) === 'video' ? item.driveLink : undefined,
+      });
+      return acc;
+    }, new Map());
+
+    return schemes.map((scheme) => ({
+      ...scheme,
+      semesters: (scheme.semesters || []).map((semester) => ({
+        ...semester,
+        subjects: (semester.subjects || []).map((subject) => {
+          const key = normalizeText(subject.name);
+          const dynamicResources = moduleMap.get(key) || [];
+          if (dynamicResources.length === 0) return subject;
+          return {
+            ...subject,
+            resources: [...(subject.resources || []), ...dynamicResources],
+          };
+        }),
+      })),
+    }));
+  }, [adminResources]);
+
   // ── Derived data ──────────────────────────────────────────────────────
-  const scheme = schemes.find((s) => s.id === selectedScheme);
+  const scheme = mergedSchemes.find((s) => s.id === selectedScheme);
   const availableSemesters = useMemo(
     () => getSemestersWithContent(selectedScheme),
     [selectedScheme],
