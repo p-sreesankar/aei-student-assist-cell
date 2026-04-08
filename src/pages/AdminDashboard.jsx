@@ -162,6 +162,7 @@ function emptyResource() {
     fileType: 'pdf',
     driveLink: '',
     addedDate: new Date().toISOString().slice(0, 10),
+    bulkEntries: '',
   };
 }
 
@@ -208,6 +209,14 @@ function isValidUrl(value) {
 function isPositiveInteger(value) {
   const num = Number(value);
   return Number.isInteger(num) && num > 0;
+}
+
+function toValidIdPart(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 function getErrorMessage(error, fallback) {
@@ -582,46 +591,112 @@ export default function AdminDashboard() {
     setResourceForm({
       ...item,
       moduleTitle: item.moduleTitle || item.description || item.category || item.title || '',
+      bulkEntries: '',
     });
     setActiveTab('resources');
   }
 
   async function saveResource(e) {
     e.preventDefault();
-    if (!resourceForm.id || !resourceForm.moduleTitle || !resourceForm.title || !resourceForm.driveLink || !resourceForm.addedDate) {
-      notify('error', 'Resource requires Resource ID, Module Title, Resource Title, Drive Link, and Added Date.');
+    const baseId = String(resourceForm.id || '').trim();
+    const moduleTitle = String(resourceForm.moduleTitle || '').trim();
+    const addedDate = String(resourceForm.addedDate || '').trim();
+    const bulkLines = String(resourceForm.bulkEntries || '')
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    if (!baseId || !moduleTitle || !addedDate) {
+      notify('error', 'Resource requires Resource ID (base), Module Title, and Added Date.');
       return;
     }
 
-    if (!isValidId(resourceForm.id)) {
+    if (!isValidId(baseId)) {
       notify('error', 'Resource ID format is invalid. Use lowercase letters, numbers, and hyphens only.');
       return;
     }
 
-    if (!isValidUrl(resourceForm.driveLink)) {
-      notify('error', 'Drive Link is invalid. Use a full http/https URL.');
+    if (!isValidDate(addedDate)) {
+      notify('error', 'Added Date format is invalid. Use YYYY-MM-DD.');
       return;
     }
 
-    if (!isValidDate(resourceForm.addedDate)) {
-      notify('error', 'Added Date format is invalid. Use YYYY-MM-DD.');
-      return;
+    const payloads = [];
+
+    if (bulkLines.length > 0) {
+      for (let i = 0; i < bulkLines.length; i += 1) {
+        const line = bulkLines[i];
+        const [titleRaw, linkRaw, typeRaw, categoryRaw] = line.split('|').map((part) => String(part || '').trim());
+        const rowNumber = i + 1;
+        const resourceTitle = titleRaw;
+        const driveLink = linkRaw;
+        const rowFileType = typeRaw || resourceForm.fileType || 'pdf';
+        const rowCategory = categoryRaw || resourceForm.category || 'General';
+
+        if (!resourceTitle || !driveLink) {
+          notify('error', `Bulk row ${rowNumber} is invalid. Use: Resource Title | Link | File Type (optional) | Category (optional).`);
+          return;
+        }
+
+        if (!isValidUrl(driveLink)) {
+          notify('error', `Bulk row ${rowNumber} has invalid URL.`);
+          return;
+        }
+
+        const titleIdPart = toValidIdPart(resourceTitle) || `item-${rowNumber}`;
+        const itemId = `${baseId}-${titleIdPart}`;
+        if (!isValidId(itemId)) {
+          notify('error', `Generated Resource ID is invalid for row ${rowNumber}: ${itemId}`);
+          return;
+        }
+
+        payloads.push({
+          id: itemId,
+          moduleTitle,
+          title: resourceTitle,
+          description: resourceForm.description || moduleTitle,
+          category: rowCategory,
+          fileType: rowFileType,
+          driveLink,
+          addedDate,
+        });
+      }
+    } else {
+      const singleTitle = String(resourceForm.title || '').trim();
+      const singleDriveLink = String(resourceForm.driveLink || '').trim();
+      if (!singleTitle || !singleDriveLink) {
+        notify('error', 'Add single Resource Title + Drive Link, or use Bulk Module Entries.');
+        return;
+      }
+
+      if (!isValidUrl(singleDriveLink)) {
+        notify('error', 'Drive Link is invalid. Use a full http/https URL.');
+        return;
+      }
+
+      payloads.push({
+        id: baseId,
+        moduleTitle,
+        title: singleTitle,
+        description: resourceForm.description || moduleTitle,
+        category: resourceForm.category || 'General',
+        fileType: resourceForm.fileType || 'pdf',
+        driveLink: singleDriveLink,
+        addedDate,
+      });
     }
 
     setSaving(true);
     notify('info', 'Saving resource...');
     try {
-      const payload = {
-        ...resourceForm,
-        moduleTitle: resourceForm.moduleTitle,
-        description: resourceForm.description || resourceForm.moduleTitle,
-        category: resourceForm.category || 'General',
-        fileType: resourceForm.fileType || 'pdf',
-      };
-      const updated = await upsertResource(payload);
+      let updated = resourceList;
+      for (const payload of payloads) {
+        // Sequential writes keep behavior consistent for local and cloud sync.
+        updated = await upsertResource(payload);
+      }
       setResourceList(updated);
       setResourceForm(emptyResource());
-      notify('success', 'Resource saved successfully.');
+      notify('success', `${payloads.length} resource${payloads.length !== 1 ? 's' : ''} saved successfully.`);
     } catch (error) {
       notify('error', getErrorMessage(error, 'Failed to save resource.'));
     } finally {
@@ -1028,7 +1103,7 @@ export default function AdminDashboard() {
                 <form onSubmit={saveResource} className={`${panelClass} space-y-3`}>
                   <h4 className="font-semibold text-[#101828]">Create / Update Resource</h4>
                   <Field label="Resource ID">
-                    <input className={fieldClass} placeholder="e.g. resource-2026-01" value={resourceForm.id} onChange={(e) => setResourceForm((p) => ({ ...p, id: e.target.value }))} />
+                    <input className={fieldClass} placeholder="e.g. process-dynamics-control" value={resourceForm.id} onChange={(e) => setResourceForm((p) => ({ ...p, id: e.target.value }))} />
                   </Field>
                   <Field label="Module Title">
                     <>
@@ -1048,6 +1123,19 @@ export default function AdminDashboard() {
                   </Field>
                   <Field label="Resource Title">
                     <input className={fieldClass} placeholder="e.g. Module 1 Notes" value={resourceForm.title} onChange={(e) => setResourceForm((p) => ({ ...p, title: e.target.value }))} />
+                  </Field>
+                  <Field label="Bulk Module Entries (Optional)">
+                    <textarea
+                      className={fieldClass}
+                      rows={5}
+                      placeholder={[
+                        'One per line:',
+                        'Module 1 | https://drive.google.com/... | notes | 2019 Scheme S5',
+                        'Module 2 | https://drive.google.com/... | notes | 2019 Scheme S5',
+                      ].join('\n')}
+                      value={resourceForm.bulkEntries}
+                      onChange={(e) => setResourceForm((p) => ({ ...p, bulkEntries: e.target.value }))}
+                    />
                   </Field>
                   <Field label="Description (Optional)">
                     <textarea className={fieldClass} rows={3} placeholder="Enter description" value={resourceForm.description} onChange={(e) => setResourceForm((p) => ({ ...p, description: e.target.value }))} />
