@@ -37,6 +37,63 @@ const contactRoles = ['coordinator', 'advisor', 'faculty', 'student-rep'];
 const contactRoleOrder = ['coordinator', 'advisor', 'faculty', 'student-rep'];
 const mockDifficulties = ['easy', 'medium', 'hard'];
 
+const fieldReferenceByModule = {
+  Notices: [
+    'Notice ID',
+    'Title',
+    'Category',
+    'Date',
+    'Description',
+    'Attachment URL (Optional)',
+    'Pinned',
+  ],
+  Events: [
+    'Event ID',
+    'Title',
+    'Start Date',
+    'End Date (Optional)',
+    'Venue',
+    'Category',
+    'Time (Optional)',
+    'Description',
+    'Image URL (Optional)',
+    'Registration URL (Optional)',
+  ],
+  Contacts: [
+    'Contact ID',
+    'Name',
+    'Designation',
+    'Department',
+    'Email',
+    'Phone (Optional)',
+    'Photo URL (Optional)',
+    'Role',
+  ],
+  'Mock Tests': [
+    'Mock Test ID',
+    'Title',
+    'Subject',
+    'Scheme',
+    'Semester',
+    'Start Date',
+    'End Date',
+    'Duration (Minutes)',
+    'Total Marks',
+    'Difficulty',
+  ],
+  'Question Builder': [
+    'Question ID',
+    'Question Type',
+    'Question Text',
+    'Option A',
+    'Option B',
+    'Option C (Optional)',
+    'Option D (Optional)',
+    'Correct Answer Index (0-based)',
+    'Explanation',
+  ],
+};
+
 function emptyNotice() {
   return {
     id: '',
@@ -824,6 +881,22 @@ export default function AdminDashboard() {
                   <p className="text-sm text-[#475467]">{status}</p>
                 </div>
               )}
+
+              <div className="rounded-xl border border-[#E4E7EC] bg-[#FCFCFD] p-3">
+                <p className="mb-2 text-xs text-[#667085]">Field Names Reference</p>
+                <div className="max-h-72 space-y-2 overflow-auto pr-1">
+                  {Object.entries(fieldReferenceByModule).map(([moduleName, fields]) => (
+                    <div key={moduleName}>
+                      <p className="text-xs font-semibold text-[#344054]">{moduleName}</p>
+                      {fields.map((fieldName) => (
+                        <p key={`${moduleName}-${fieldName}`} className="text-xs text-[#475467]">
+                          Field Name: {fieldName}
+                        </p>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
 
               <div className="rounded-xl border border-[#E4E7EC] bg-[#FCFCFD] p-3">
                 <p className="mb-2 text-xs text-[#667085]">Next modules</p>
