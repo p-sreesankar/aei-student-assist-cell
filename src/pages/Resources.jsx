@@ -64,16 +64,18 @@ function parseSchemeAndSemester(category) {
 
 function inferSchemeAndSemester(item, schemesList) {
   const primary = parseSchemeAndSemester(item?.category);
+  const fromFileType = parseSchemeAndSemester(item?.fileType);
   const fallbackText = [
     item?.moduleTitle,
     item?.title,
     item?.id,
     item?.description,
+    item?.fileType,
   ].filter(Boolean).join(' ');
   const secondary = parseSchemeAndSemester(fallbackText);
 
-  const semester = primary.semester ?? secondary.semester;
-  let schemeId = primary.schemeId || secondary.schemeId;
+  const semester = primary.semester ?? fromFileType.semester ?? secondary.semester;
+  let schemeId = primary.schemeId || fromFileType.schemeId || secondary.schemeId;
 
   if (!schemeId && Number.isFinite(semester)) {
     const candidates = schemesList.filter((scheme) =>
