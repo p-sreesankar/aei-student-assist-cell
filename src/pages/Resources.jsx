@@ -51,7 +51,9 @@ function toSlug(value) {
 function parseSchemeAndSemester(category) {
   const text = String(category || '');
   const schemeMatch = text.match(/\b(20\d{2})(?:\s*scheme)?\b/i);
-  const semesterMatch = text.match(/\b(?:S\s*|Semester\s*)(\d{1,2})\b/i);
+  const semesterMatch =
+    text.match(/\b(?:s|sem|semester)\s*[-:]?\s*(\d{1,2})\b/i)
+    || text.match(/\b(\d{1,2})(?:st|nd|rd|th)?\s*(?:sem|semester)\b/i);
   const schemeId = schemeMatch?.[1] || '';
   const semester = semesterMatch ? Number(semesterMatch[1]) : NaN;
   return {
@@ -87,6 +89,23 @@ function inferSchemeAndSemester(item, schemesList) {
     schemeId,
     semester,
   };
+}
+
+function resolveSemesterFallback(schemeId, schemesList) {
+  const scheme = schemesList.find((item) => item.id === schemeId);
+  if (!scheme) return null;
+
+  const semesters = (scheme.semesters || []).map((semesterBlock) => Number(semesterBlock?.semester)).filter(Number.isFinite);
+  if (!semesters.length) return null;
+
+  const emptySemester = (scheme.semesters || [])
+    .find((semesterBlock) => !Array.isArray(semesterBlock.subjects) || semesterBlock.subjects.length === 0);
+
+  if (emptySemester && Number.isFinite(Number(emptySemester.semester))) {
+    return Number(emptySemester.semester);
+  }
+
+  return semesters.sort((a, b) => a - b)[0];
 }
 
 function getSemestersWithContentFromScheme(scheme) {
@@ -409,6 +428,10 @@ export default function Resources() {
           schemeId = schemeId || lookup[0].schemeId;
           semester = Number.isFinite(semester) ? semester : lookup[0].semester;
         }
+      }
+
+      if (schemeId && !Number.isFinite(semester)) {
+        semester = resolveSemesterFallback(schemeId, schemes);
       }
 
       if (!schemeId || !Number.isFinite(semester)) return acc;
