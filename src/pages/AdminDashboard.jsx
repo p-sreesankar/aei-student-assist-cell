@@ -107,6 +107,15 @@ function emptyQuestion() {
   };
 }
 
+function Field({ label, children }) {
+  return (
+    <label className="block space-y-1">
+      <span className="text-sm font-medium text-[#344054]">{label}</span>
+      {children}
+    </label>
+  );
+}
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('notices');
@@ -522,14 +531,26 @@ export default function AdminDashboard() {
               <div className="grid gap-4 lg:grid-cols-2">
                 <form onSubmit={saveNotice} className={`${panelClass} space-y-3`}>
                   <h4 className="font-semibold text-[#101828]">Create / Update Notice</h4>
-                  <input className={fieldClass} placeholder="id" value={noticeForm.id} onChange={(e) => setNoticeForm((p) => ({ ...p, id: e.target.value }))} />
-                  <input className={fieldClass} placeholder="title" value={noticeForm.title} onChange={(e) => setNoticeForm((p) => ({ ...p, title: e.target.value }))} />
-                  <select className={fieldClass} value={noticeForm.category} onChange={(e) => setNoticeForm((p) => ({ ...p, category: e.target.value }))}>
-                    {noticeCategories.map((c) => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                  <input type="date" className={fieldClass} value={noticeForm.date} onChange={(e) => setNoticeForm((p) => ({ ...p, date: e.target.value }))} />
-                  <textarea className={fieldClass} rows={4} placeholder="description" value={noticeForm.description} onChange={(e) => setNoticeForm((p) => ({ ...p, description: e.target.value }))} />
-                  <input className={fieldClass} placeholder="attachment url (optional)" value={noticeForm.attachmentUrl} onChange={(e) => setNoticeForm((p) => ({ ...p, attachmentUrl: e.target.value }))} />
+                  <Field label="Notice ID">
+                    <input className={fieldClass} placeholder="e.g. notice-2026-01" value={noticeForm.id} onChange={(e) => setNoticeForm((p) => ({ ...p, id: e.target.value }))} />
+                  </Field>
+                  <Field label="Title">
+                    <input className={fieldClass} placeholder="Enter notice title" value={noticeForm.title} onChange={(e) => setNoticeForm((p) => ({ ...p, title: e.target.value }))} />
+                  </Field>
+                  <Field label="Category">
+                    <select className={fieldClass} value={noticeForm.category} onChange={(e) => setNoticeForm((p) => ({ ...p, category: e.target.value }))}>
+                      {noticeCategories.map((c) => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </Field>
+                  <Field label="Date">
+                    <input type="date" className={fieldClass} value={noticeForm.date} onChange={(e) => setNoticeForm((p) => ({ ...p, date: e.target.value }))} />
+                  </Field>
+                  <Field label="Description">
+                    <textarea className={fieldClass} rows={4} placeholder="Enter notice description" value={noticeForm.description} onChange={(e) => setNoticeForm((p) => ({ ...p, description: e.target.value }))} />
+                  </Field>
+                  <Field label="Attachment URL (Optional)">
+                    <input className={fieldClass} placeholder="https://..." value={noticeForm.attachmentUrl} onChange={(e) => setNoticeForm((p) => ({ ...p, attachmentUrl: e.target.value }))} />
+                  </Field>
                   <label className="inline-flex items-center gap-2 text-sm text-[#475467]">
                     <input type="checkbox" checked={noticeForm.pinned} onChange={(e) => setNoticeForm((p) => ({ ...p, pinned: e.target.checked }))} />
                     Pinned
@@ -557,20 +578,40 @@ export default function AdminDashboard() {
               <div className="grid gap-4 lg:grid-cols-2">
                 <form onSubmit={saveEvent} className={`${panelClass} space-y-3`}>
                   <h4 className="font-semibold text-[#101828]">Create / Update Event</h4>
-                  <input className={fieldClass} placeholder="id" value={eventForm.id} onChange={(e) => setEventForm((p) => ({ ...p, id: e.target.value }))} />
-                  <input className={fieldClass} placeholder="title" value={eventForm.title} onChange={(e) => setEventForm((p) => ({ ...p, title: e.target.value }))} />
+                  <Field label="Event ID">
+                    <input className={fieldClass} placeholder="e.g. event-2026-01" value={eventForm.id} onChange={(e) => setEventForm((p) => ({ ...p, id: e.target.value }))} />
+                  </Field>
+                  <Field label="Title">
+                    <input className={fieldClass} placeholder="Enter event title" value={eventForm.title} onChange={(e) => setEventForm((p) => ({ ...p, title: e.target.value }))} />
+                  </Field>
                   <div className="grid grid-cols-2 gap-2">
-                    <input type="date" className={fieldClass} value={eventForm.date} onChange={(e) => setEventForm((p) => ({ ...p, date: e.target.value }))} />
-                    <input type="date" className={fieldClass} value={eventForm.endDate} onChange={(e) => setEventForm((p) => ({ ...p, endDate: e.target.value }))} />
+                    <Field label="Start Date">
+                      <input type="date" className={fieldClass} value={eventForm.date} onChange={(e) => setEventForm((p) => ({ ...p, date: e.target.value }))} />
+                    </Field>
+                    <Field label="End Date (Optional)">
+                      <input type="date" className={fieldClass} value={eventForm.endDate} onChange={(e) => setEventForm((p) => ({ ...p, endDate: e.target.value }))} />
+                    </Field>
                   </div>
-                  <input className={fieldClass} placeholder="venue" value={eventForm.venue} onChange={(e) => setEventForm((p) => ({ ...p, venue: e.target.value }))} />
-                  <select className={fieldClass} value={eventForm.category} onChange={(e) => setEventForm((p) => ({ ...p, category: e.target.value }))}>
-                    {eventCategories.map((c) => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                  <input className={fieldClass} placeholder="time (optional)" value={eventForm.time} onChange={(e) => setEventForm((p) => ({ ...p, time: e.target.value }))} />
-                  <textarea className={fieldClass} rows={4} placeholder="description" value={eventForm.description} onChange={(e) => setEventForm((p) => ({ ...p, description: e.target.value }))} />
-                  <input className={fieldClass} placeholder="image url (optional)" value={eventForm.image} onChange={(e) => setEventForm((p) => ({ ...p, image: e.target.value }))} />
-                  <input className={fieldClass} placeholder="registration url (optional)" value={eventForm.registrationUrl} onChange={(e) => setEventForm((p) => ({ ...p, registrationUrl: e.target.value }))} />
+                  <Field label="Venue">
+                    <input className={fieldClass} placeholder="Enter venue" value={eventForm.venue} onChange={(e) => setEventForm((p) => ({ ...p, venue: e.target.value }))} />
+                  </Field>
+                  <Field label="Category">
+                    <select className={fieldClass} value={eventForm.category} onChange={(e) => setEventForm((p) => ({ ...p, category: e.target.value }))}>
+                      {eventCategories.map((c) => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </Field>
+                  <Field label="Time (Optional)">
+                    <input className={fieldClass} placeholder="e.g. 10:00 AM" value={eventForm.time} onChange={(e) => setEventForm((p) => ({ ...p, time: e.target.value }))} />
+                  </Field>
+                  <Field label="Description">
+                    <textarea className={fieldClass} rows={4} placeholder="Enter event description" value={eventForm.description} onChange={(e) => setEventForm((p) => ({ ...p, description: e.target.value }))} />
+                  </Field>
+                  <Field label="Image URL (Optional)">
+                    <input className={fieldClass} placeholder="https://..." value={eventForm.image} onChange={(e) => setEventForm((p) => ({ ...p, image: e.target.value }))} />
+                  </Field>
+                  <Field label="Registration URL (Optional)">
+                    <input className={fieldClass} placeholder="https://..." value={eventForm.registrationUrl} onChange={(e) => setEventForm((p) => ({ ...p, registrationUrl: e.target.value }))} />
+                  </Field>
                   <div className="flex gap-2">
                     <Button type="submit" size="sm" className={buttonPrimaryClass} loading={saving}>Save Event</Button>
                     <Button type="button" size="sm" variant="ghost" className={buttonGhostClass} onClick={() => setEventForm(emptyEvent())}>Clear</Button>
@@ -594,16 +635,32 @@ export default function AdminDashboard() {
               <div className="grid gap-4 lg:grid-cols-2">
                 <form onSubmit={saveContact} className={`${panelClass} space-y-3`}>
                   <h4 className="font-semibold text-[#101828]">Create / Update Contact</h4>
-                  <input className={fieldClass} placeholder="id" value={contactForm.id} onChange={(e) => setContactForm((p) => ({ ...p, id: e.target.value }))} />
-                  <input className={fieldClass} placeholder="name" value={contactForm.name} onChange={(e) => setContactForm((p) => ({ ...p, name: e.target.value }))} />
-                  <input className={fieldClass} placeholder="designation" value={contactForm.designation} onChange={(e) => setContactForm((p) => ({ ...p, designation: e.target.value }))} />
-                  <input className={fieldClass} placeholder="department" value={contactForm.department} onChange={(e) => setContactForm((p) => ({ ...p, department: e.target.value }))} />
-                  <input type="email" className={fieldClass} placeholder="email" value={contactForm.email} onChange={(e) => setContactForm((p) => ({ ...p, email: e.target.value }))} />
-                  <input className={fieldClass} placeholder="phone (optional)" value={contactForm.phone} onChange={(e) => setContactForm((p) => ({ ...p, phone: e.target.value }))} />
-                  <input className={fieldClass} placeholder="photo url (optional)" value={contactForm.photoUrl} onChange={(e) => setContactForm((p) => ({ ...p, photoUrl: e.target.value }))} />
-                  <select className={fieldClass} value={contactForm.role} onChange={(e) => setContactForm((p) => ({ ...p, role: e.target.value }))}>
-                    {contactRoles.map((role) => <option key={role} value={role}>{role}</option>)}
-                  </select>
+                  <Field label="Contact ID">
+                    <input className={fieldClass} placeholder="e.g. contact-2026-01" value={contactForm.id} onChange={(e) => setContactForm((p) => ({ ...p, id: e.target.value }))} />
+                  </Field>
+                  <Field label="Name">
+                    <input className={fieldClass} placeholder="Enter full name" value={contactForm.name} onChange={(e) => setContactForm((p) => ({ ...p, name: e.target.value }))} />
+                  </Field>
+                  <Field label="Designation">
+                    <input className={fieldClass} placeholder="Enter designation" value={contactForm.designation} onChange={(e) => setContactForm((p) => ({ ...p, designation: e.target.value }))} />
+                  </Field>
+                  <Field label="Department">
+                    <input className={fieldClass} placeholder="Enter department" value={contactForm.department} onChange={(e) => setContactForm((p) => ({ ...p, department: e.target.value }))} />
+                  </Field>
+                  <Field label="Email">
+                    <input type="email" className={fieldClass} placeholder="name@example.com" value={contactForm.email} onChange={(e) => setContactForm((p) => ({ ...p, email: e.target.value }))} />
+                  </Field>
+                  <Field label="Phone (Optional)">
+                    <input className={fieldClass} placeholder="Enter phone number" value={contactForm.phone} onChange={(e) => setContactForm((p) => ({ ...p, phone: e.target.value }))} />
+                  </Field>
+                  <Field label="Photo URL (Optional)">
+                    <input className={fieldClass} placeholder="https://..." value={contactForm.photoUrl} onChange={(e) => setContactForm((p) => ({ ...p, photoUrl: e.target.value }))} />
+                  </Field>
+                  <Field label="Role">
+                    <select className={fieldClass} value={contactForm.role} onChange={(e) => setContactForm((p) => ({ ...p, role: e.target.value }))}>
+                      {contactRoles.map((role) => <option key={role} value={role}>{role}</option>)}
+                    </select>
+                  </Field>
                   <div className="flex gap-2">
                     <Button type="submit" size="sm" className={buttonPrimaryClass} loading={saving}>Save Contact</Button>
                     <Button type="button" size="sm" variant="ghost" className={buttonGhostClass} onClick={() => setContactForm(emptyContact())}>Clear</Button>
@@ -628,24 +685,44 @@ export default function AdminDashboard() {
                 <div className="space-y-4">
                   <form onSubmit={saveMockTest} className={`${panelClass} space-y-3`}>
                     <h4 className="font-semibold text-[#101828]">Create / Update Mock Test</h4>
-                    <input className={fieldClass} placeholder="id" value={mockTestForm.id} onChange={(e) => setMockTestForm((p) => ({ ...p, id: e.target.value }))} />
-                    <input className={fieldClass} placeholder="title" value={mockTestForm.title} onChange={(e) => setMockTestForm((p) => ({ ...p, title: e.target.value }))} />
-                    <input className={fieldClass} placeholder="subject" value={mockTestForm.subject} onChange={(e) => setMockTestForm((p) => ({ ...p, subject: e.target.value }))} />
+                    <Field label="Mock Test ID">
+                      <input className={fieldClass} placeholder="e.g. test-2026-01" value={mockTestForm.id} onChange={(e) => setMockTestForm((p) => ({ ...p, id: e.target.value }))} />
+                    </Field>
+                    <Field label="Title">
+                      <input className={fieldClass} placeholder="Enter test title" value={mockTestForm.title} onChange={(e) => setMockTestForm((p) => ({ ...p, title: e.target.value }))} />
+                    </Field>
+                    <Field label="Subject">
+                      <input className={fieldClass} placeholder="Enter subject" value={mockTestForm.subject} onChange={(e) => setMockTestForm((p) => ({ ...p, subject: e.target.value }))} />
+                    </Field>
                     <div className="grid grid-cols-2 gap-2">
-                      <input className={fieldClass} placeholder="scheme" value={mockTestForm.scheme} onChange={(e) => setMockTestForm((p) => ({ ...p, scheme: e.target.value }))} />
-                      <input type="number" min="1" className={fieldClass} placeholder="semester" value={mockTestForm.semester} onChange={(e) => setMockTestForm((p) => ({ ...p, semester: e.target.value }))} />
+                      <Field label="Scheme">
+                        <input className={fieldClass} placeholder="e.g. 2024" value={mockTestForm.scheme} onChange={(e) => setMockTestForm((p) => ({ ...p, scheme: e.target.value }))} />
+                      </Field>
+                      <Field label="Semester">
+                        <input type="number" min="1" className={fieldClass} placeholder="Enter semester" value={mockTestForm.semester} onChange={(e) => setMockTestForm((p) => ({ ...p, semester: e.target.value }))} />
+                      </Field>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <input type="date" className={fieldClass} value={mockTestForm.startDate} onChange={(e) => setMockTestForm((p) => ({ ...p, startDate: e.target.value }))} />
-                      <input type="date" className={fieldClass} value={mockTestForm.endDate} onChange={(e) => setMockTestForm((p) => ({ ...p, endDate: e.target.value }))} />
+                      <Field label="Start Date">
+                        <input type="date" className={fieldClass} value={mockTestForm.startDate} onChange={(e) => setMockTestForm((p) => ({ ...p, startDate: e.target.value }))} />
+                      </Field>
+                      <Field label="End Date">
+                        <input type="date" className={fieldClass} value={mockTestForm.endDate} onChange={(e) => setMockTestForm((p) => ({ ...p, endDate: e.target.value }))} />
+                      </Field>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <input type="number" min="1" className={fieldClass} placeholder="duration minutes" value={mockTestForm.durationMinutes} onChange={(e) => setMockTestForm((p) => ({ ...p, durationMinutes: e.target.value }))} />
-                      <input type="number" min="1" className={fieldClass} placeholder="total marks" value={mockTestForm.totalMarks} onChange={(e) => setMockTestForm((p) => ({ ...p, totalMarks: e.target.value }))} />
+                      <Field label="Duration (Minutes)">
+                        <input type="number" min="1" className={fieldClass} placeholder="Enter duration" value={mockTestForm.durationMinutes} onChange={(e) => setMockTestForm((p) => ({ ...p, durationMinutes: e.target.value }))} />
+                      </Field>
+                      <Field label="Total Marks">
+                        <input type="number" min="1" className={fieldClass} placeholder="Enter total marks" value={mockTestForm.totalMarks} onChange={(e) => setMockTestForm((p) => ({ ...p, totalMarks: e.target.value }))} />
+                      </Field>
                     </div>
-                    <select className={fieldClass} value={mockTestForm.difficulty} onChange={(e) => setMockTestForm((p) => ({ ...p, difficulty: e.target.value }))}>
-                      {mockDifficulties.map((d) => <option key={d} value={d}>{d}</option>)}
-                    </select>
+                    <Field label="Difficulty">
+                      <select className={fieldClass} value={mockTestForm.difficulty} onChange={(e) => setMockTestForm((p) => ({ ...p, difficulty: e.target.value }))}>
+                        {mockDifficulties.map((d) => <option key={d} value={d}>{d}</option>)}
+                      </select>
+                    </Field>
                     <p className="text-xs text-[#667085]">Questions staged: {mockTestForm.questions.length}</p>
                     <div className="flex gap-2">
                       <Button type="submit" size="sm" className={buttonPrimaryClass} loading={saving}>Save Mock Test</Button>
@@ -655,18 +732,36 @@ export default function AdminDashboard() {
 
                   <form onSubmit={addQuestionToForm} className={`${panelClass} space-y-3`}>
                     <h4 className="font-semibold text-[#101828]">Question Builder / Answer Key</h4>
-                    <input className={fieldClass} placeholder="question id" value={questionForm.id} onChange={(e) => setQuestionForm((p) => ({ ...p, id: e.target.value }))} />
-                    <select className={fieldClass} value={questionForm.type} onChange={(e) => setQuestionForm((p) => ({ ...p, type: e.target.value }))}>
-                      <option value="mcq">mcq</option>
-                      <option value="true-false">true-false</option>
-                    </select>
-                    <textarea className={fieldClass} rows={3} placeholder="question" value={questionForm.question} onChange={(e) => setQuestionForm((p) => ({ ...p, question: e.target.value }))} />
-                    <input className={fieldClass} placeholder="option A" value={questionForm.optionA} onChange={(e) => setQuestionForm((p) => ({ ...p, optionA: e.target.value }))} />
-                    <input className={fieldClass} placeholder="option B" value={questionForm.optionB} onChange={(e) => setQuestionForm((p) => ({ ...p, optionB: e.target.value }))} />
-                    <input className={fieldClass} placeholder="option C (optional)" value={questionForm.optionC} onChange={(e) => setQuestionForm((p) => ({ ...p, optionC: e.target.value }))} />
-                    <input className={fieldClass} placeholder="option D (optional)" value={questionForm.optionD} onChange={(e) => setQuestionForm((p) => ({ ...p, optionD: e.target.value }))} />
-                    <input type="number" min="0" className={fieldClass} placeholder="correct answer index (0-based)" value={questionForm.correctAnswer} onChange={(e) => setQuestionForm((p) => ({ ...p, correctAnswer: e.target.value }))} />
-                    <textarea className={fieldClass} rows={2} placeholder="explanation" value={questionForm.explanation} onChange={(e) => setQuestionForm((p) => ({ ...p, explanation: e.target.value }))} />
+                    <Field label="Question ID">
+                      <input className={fieldClass} placeholder="e.g. q1" value={questionForm.id} onChange={(e) => setQuestionForm((p) => ({ ...p, id: e.target.value }))} />
+                    </Field>
+                    <Field label="Question Type">
+                      <select className={fieldClass} value={questionForm.type} onChange={(e) => setQuestionForm((p) => ({ ...p, type: e.target.value }))}>
+                        <option value="mcq">mcq</option>
+                        <option value="true-false">true-false</option>
+                      </select>
+                    </Field>
+                    <Field label="Question Text">
+                      <textarea className={fieldClass} rows={3} placeholder="Enter question text" value={questionForm.question} onChange={(e) => setQuestionForm((p) => ({ ...p, question: e.target.value }))} />
+                    </Field>
+                    <Field label="Option A">
+                      <input className={fieldClass} placeholder="Enter option A" value={questionForm.optionA} onChange={(e) => setQuestionForm((p) => ({ ...p, optionA: e.target.value }))} />
+                    </Field>
+                    <Field label="Option B">
+                      <input className={fieldClass} placeholder="Enter option B" value={questionForm.optionB} onChange={(e) => setQuestionForm((p) => ({ ...p, optionB: e.target.value }))} />
+                    </Field>
+                    <Field label="Option C (Optional)">
+                      <input className={fieldClass} placeholder="Enter option C" value={questionForm.optionC} onChange={(e) => setQuestionForm((p) => ({ ...p, optionC: e.target.value }))} />
+                    </Field>
+                    <Field label="Option D (Optional)">
+                      <input className={fieldClass} placeholder="Enter option D" value={questionForm.optionD} onChange={(e) => setQuestionForm((p) => ({ ...p, optionD: e.target.value }))} />
+                    </Field>
+                    <Field label="Correct Answer Index (0-based)">
+                      <input type="number" min="0" className={fieldClass} placeholder="0 for first option" value={questionForm.correctAnswer} onChange={(e) => setQuestionForm((p) => ({ ...p, correctAnswer: e.target.value }))} />
+                    </Field>
+                    <Field label="Explanation">
+                      <textarea className={fieldClass} rows={2} placeholder="Optional explanation" value={questionForm.explanation} onChange={(e) => setQuestionForm((p) => ({ ...p, explanation: e.target.value }))} />
+                    </Field>
                     <div className="flex gap-2">
                       <Button type="submit" size="sm" className={buttonPrimaryClass}>Stage Question</Button>
                       <Button type="button" size="sm" variant="ghost" className={buttonGhostClass} onClick={() => setQuestionForm(emptyQuestion())}>Clear Question</Button>
