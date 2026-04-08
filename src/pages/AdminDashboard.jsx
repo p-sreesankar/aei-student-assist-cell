@@ -90,8 +90,9 @@ const fieldReferenceByModule = {
   ],
   Resources: [
     'Resource ID',
-    'Title',
-    'Description',
+    'Module Title',
+    'Resource Title',
+    'Description (Optional)',
     'Category',
     'File Type',
     'Drive Link',
@@ -154,6 +155,7 @@ function emptyMockTest() {
 function emptyResource() {
   return {
     id: '',
+    moduleTitle: '',
     title: '',
     description: '',
     category: '',
@@ -304,6 +306,27 @@ export default function AdminDashboard() {
     () => [...resourceList].sort((a, b) => new Date(b.addedDate) - new Date(a.addedDate)),
     [resourceList],
   );
+
+  const groupedResources = useMemo(() => {
+    const groups = new Map();
+
+    sortedResources.forEach((item) => {
+      const moduleTitle = String(item.moduleTitle || item.description || item.category || item.title || 'Untitled Module').trim();
+      if (!groups.has(moduleTitle)) {
+        groups.set(moduleTitle, []);
+      }
+      groups.get(moduleTitle).push(item);
+    });
+
+    return [...groups.entries()]
+      .map(([moduleTitle, items]) => ({ moduleTitle, items }))
+      .sort((a, b) => a.moduleTitle.localeCompare(b.moduleTitle));
+  }, [sortedResources]);
+
+  const knownModuleTitles = useMemo(() => {
+    return [...new Set(groupedResources.map((group) => group.moduleTitle).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b));
+  }, [groupedResources]);
 
   useEffect(() => {
     let mounted = true;
@@ -556,14 +579,17 @@ export default function AdminDashboard() {
   }
 
   function editResource(item) {
-    setResourceForm({ ...item });
+    setResourceForm({
+      ...item,
+      moduleTitle: item.moduleTitle || item.description || item.category || item.title || '',
+    });
     setActiveTab('resources');
   }
 
   async function saveResource(e) {
     e.preventDefault();
-    if (!resourceForm.id || !resourceForm.title || !resourceForm.driveLink || !resourceForm.addedDate) {
-      notify('error', 'Resource requires Resource ID, Title, Drive Link, and Added Date.');
+    if (!resourceForm.id || !resourceForm.moduleTitle || !resourceForm.title || !resourceForm.driveLink || !resourceForm.addedDate) {
+      notify('error', 'Resource requires Resource ID, Module Title, Resource Title, Drive Link, and Added Date.');
       return;
     }
 
@@ -587,7 +613,8 @@ export default function AdminDashboard() {
     try {
       const payload = {
         ...resourceForm,
-        description: resourceForm.description || '',
+        moduleTitle: resourceForm.moduleTitle,
+        description: resourceForm.description || resourceForm.moduleTitle,
         category: resourceForm.category || 'General',
         fileType: resourceForm.fileType || 'pdf',
       };
@@ -1003,10 +1030,26 @@ export default function AdminDashboard() {
                   <Field label="Resource ID">
                     <input className={fieldClass} placeholder="e.g. resource-2026-01" value={resourceForm.id} onChange={(e) => setResourceForm((p) => ({ ...p, id: e.target.value }))} />
                   </Field>
-                  <Field label="Title">
-                    <input className={fieldClass} placeholder="Enter resource title" value={resourceForm.title} onChange={(e) => setResourceForm((p) => ({ ...p, title: e.target.value }))} />
+                  <Field label="Module Title">
+                    <>
+                      <input
+                        className={fieldClass}
+                        list="resource-module-titles"
+                        placeholder="e.g. Process Dynamics & Control"
+                        value={resourceForm.moduleTitle}
+                        onChange={(e) => setResourceForm((p) => ({ ...p, moduleTitle: e.target.value }))}
+                      />
+                      <datalist id="resource-module-titles">
+                        {knownModuleTitles.map((title) => (
+                          <option key={title} value={title} />
+                        ))}
+                      </datalist>
+                    </>
                   </Field>
-                  <Field label="Description">
+                  <Field label="Resource Title">
+                    <input className={fieldClass} placeholder="e.g. Module 1 Notes" value={resourceForm.title} onChange={(e) => setResourceForm((p) => ({ ...p, title: e.target.value }))} />
+                  </Field>
+                  <Field label="Description (Optional)">
                     <textarea className={fieldClass} rows={3} placeholder="Enter description" value={resourceForm.description} onChange={(e) => setResourceForm((p) => ({ ...p, description: e.target.value }))} />
                   </Field>
                   <div className="grid grid-cols-2 gap-2">
@@ -1030,13 +1073,23 @@ export default function AdminDashboard() {
                 </form>
 
                 <div className="space-y-2 max-h-[28rem] overflow-auto pr-1">
-                  {sortedResources.map((item) => (
-                    <div key={item.id} className={panelClass}>
-                      <p className="font-semibold text-[#101828] line-clamp-1">{item.title}</p>
-                      <p className="text-xs text-[#667085]">{item.category || 'General'} · {item.fileType || 'file'} · {item.addedDate}</p>
-                      <div className="mt-2 flex gap-2">
-                        <Button size="sm" variant="secondary" className={buttonSoftClass} onClick={() => editResource(item)}>Edit</Button>
-                        <Button size="sm" variant="ghost" className={buttonGhostClass} onClick={() => removeResource(item.id)}>Delete</Button>
+                  {groupedResources.map((group) => (
+                    <div key={group.moduleTitle} className={panelClass}>
+                      <div className="mb-3 border-b border-[#E4E7EC] pb-2">
+                        <p className="font-semibold text-[#101828]">{group.moduleTitle}</p>
+                        <p className="text-xs text-[#667085]">{group.items.length} resource{group.items.length !== 1 ? 's' : ''}</p>
+                      </div>
+                      <div className="space-y-2">
+                        {group.items.map((item) => (
+                          <div key={item.id} className="rounded-xl border border-[#E4E7EC] bg-[#FCFCFD] p-3">
+                            <p className="font-medium text-[#101828] line-clamp-1">{item.title}</p>
+                            <p className="text-xs text-[#667085]">{item.category || 'General'} · {item.fileType || 'file'} · {item.addedDate}</p>
+                            <div className="mt-2 flex gap-2">
+                              <Button size="sm" variant="secondary" className={buttonSoftClass} onClick={() => editResource(item)}>Edit</Button>
+                              <Button size="sm" variant="ghost" className={buttonGhostClass} onClick={() => removeResource(item.id)}>Delete</Button>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ))}
