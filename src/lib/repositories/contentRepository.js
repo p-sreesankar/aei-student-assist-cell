@@ -63,24 +63,25 @@ async function writeDomain(domain, items) {
     throw new Error('Admin session required for write operation.');
   }
 
-  if (hasFirebaseConfig && auth) {
-    if (!auth.currentUser) {
-      throw new Error('Firebase admin authentication required.');
-    }
-
-    const tokenResult = await auth.currentUser.getIdTokenResult(true);
-    if (!tokenResult?.claims?.admin) {
-      throw new Error('Firebase admin claim required for write operation.');
-    }
-  }
-
   const cleanItems = Array.isArray(items) ? items : [];
   writeLocal(domain, cleanItems);
 
   if (!hasFirebaseConfig || !db) return cleanItems;
 
-  const ref = doc(db, COLLECTION, domain);
-  await setDoc(ref, { items: cleanItems, updatedAt: Date.now() }, { merge: true });
+  // With PIN-only admin mode, Firebase sync is best-effort.
+  // Sync only when a Firebase admin session is active; otherwise keep local write only.
+  if (!auth?.currentUser) return cleanItems;
+
+  const tokenResult = await auth.currentUser.getIdTokenResult(true);
+  if (!tokenResult?.claims?.admin) return cleanItems;
+
+  try {
+    const ref = doc(db, COLLECTION, domain);
+    await setDoc(ref, { items: cleanItems, updatedAt: Date.now() }, { merge: true });
+  } catch {
+    // Keep local data as source of truth when cloud write fails.
+  }
+
   return cleanItems;
 }
 
