@@ -4,7 +4,7 @@ import { NOTICES as defaultNotices } from '@data/notices';
 import { EVENTS as defaultEvents } from '@data/events';
 import { FACULTY as defaultContacts } from '@data/faculty';
 import { MOCK_TESTS as defaultMockTests } from '@data/mock-tests';
-import { RESOURCES as defaultResources } from '@data/resources';
+import { RESOURCES as legacyDefaultResources, schemes } from '@data/resources';
 import { isAdminAuthenticated } from '@utils/adminAuth';
 
 const COLLECTION = 'content';
@@ -24,6 +24,97 @@ const LS_KEY_TO_DOMAIN = Object.entries(LS_KEYS).reduce((acc, [domain, key]) => 
 
 function clone(items) {
   return JSON.parse(JSON.stringify(items));
+}
+
+function slugify(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function inferFileType(resourceType, link) {
+  if (resourceType === 'video') return 'video';
+  if (/youtube\.com|youtu\.be/i.test(String(link || ''))) return 'video';
+  if (resourceType === 'formula') return 'formula';
+  if (resourceType === 'answer-key') return 'answer-key';
+  if (resourceType === 'qn-paper' || resourceType === 'qn-papers' || resourceType === 'question-paper') {
+    return 'question-paper';
+  }
+  return 'pdf';
+}
+
+function buildResourcesFromSchemes() {
+  const items = [];
+
+  schemes.forEach((scheme) => {
+    const schemeId = String(scheme?.id || '').trim();
+    const schemeLabel = String(scheme?.label || '').trim() || `${schemeId} Scheme`;
+    const semesters = Array.isArray(scheme?.semesters) ? scheme.semesters : [];
+
+    semesters.forEach((semesterBlock) => {
+      const semester = Number(semesterBlock?.semester);
+      const semesterLabel = Number.isFinite(semester) ? `S${semester}` : 'General';
+      const subjects = Array.isArray(semesterBlock?.subjects) ? semesterBlock.subjects : [];
+
+      subjects.forEach((subject) => {
+        const subjectId = String(subject?.id || '').trim();
+        const subjectName = String(subject?.name || '').trim();
+        const subjectCode = String(subject?.code || '').trim();
+        const resources = Array.isArray(subject?.resources) ? subject.resources : [];
+
+        resources.forEach((resource, index) => {
+          const link = String(resource?.driveLink || resource?.youtubeLink || '').trim();
+          if (!link) return;
+
+          const resourceType = String(resource?.type || '').trim().toLowerCase();
+          const title = String(resource?.title || '').trim() || 'Resource';
+          const normalizedSubject = slugify(subjectName || subjectId || `subject-${index + 1}`);
+          const normalizedType = slugify(resourceType || 'resource');
+          const normalizedTitle = slugify(title) || `item-${index + 1}`;
+
+          items.push({
+            id: `site-${schemeId}-${semesterLabel.toLowerCase()}-${normalizedSubject}-${normalizedType}-${normalizedTitle}`,
+            title,
+            description: `${subjectName}${subjectCode ? ` (${subjectCode})` : ''}`,
+            category: `${schemeLabel} ${semesterLabel}`,
+            fileType: inferFileType(resourceType, link),
+            driveLink: link,
+            addedDate: '2026-04-08',
+          });
+        });
+      });
+    });
+  });
+
+  return items;
+}
+
+function dedupeResources(items) {
+  const seen = new Set();
+  const deduped = [];
+
+  items.forEach((item) => {
+    const id = String(item?.id || '').trim();
+    const title = String(item?.title || '').trim();
+    const link = String(item?.driveLink || '').trim();
+    if (!link) return;
+
+    const key = id || `${title}::${link}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    deduped.push(item);
+  });
+
+  return deduped;
+}
+
+const websiteResources = buildResourcesFromSchemes();
+const defaultResources = dedupeResources([...websiteResources, ...legacyDefaultResources]);
+
+function mergeWithSeedResources(items) {
+  return dedupeResources([...(Array.isArray(items) ? items : []), ...websiteResources]);
 }
 
 function readLocal(domain, fallback) {
@@ -91,12 +182,27 @@ async function hasFirebaseAdminSession() {
 
 async function readDomain(domain, fallback) {
   if (!hasFirebaseConfig || !db) {
-    return readLocal(domain, fallback);
+    const localItems = readLocal(domain, fallback);
+    if (domain !== 'resources') {
+      return localItems;
+    }
+
+    const mergedLocal = mergeWithSeedResources(localItems);
+    if (mergedLocal.length !== localItems.length) {
+      writeLocal(domain, mergedLocal);
+    }
+
+    return mergedLocal;
   }
 
-  const localItems = readLocal(domain, fallback);
+  const localItems = domain === 'resources'
+    ? mergeWithSeedResources(readLocal(domain, fallback))
+    : readLocal(domain, fallback);
   const canUseCloud = await hasFirebaseAdminSession();
   if (!canUseCloud) {
+    if (domain === 'resources') {
+      writeLocal(domain, localItems);
+    }
     return localItems;
   }
 
@@ -111,8 +217,17 @@ async function readDomain(domain, fallback) {
 
     const data = snap.data();
     const items = Array.isArray(data?.items) ? data.items : localItems;
-    writeLocal(domain, items);
-    return items;
+    if (domain !== 'resources') {
+      writeLocal(domain, items);
+      return items;
+    }
+
+    const mergedItems = mergeWithSeedResources(items);
+    writeLocal(domain, mergedItems);
+    if (mergedItems.length !== items.length) {
+      await setDoc(ref, { items: mergedItems, updatedAt: Date.now() }, { merge: true });
+    }
+    return mergedItems;
   } catch {
     return localItems;
   }
