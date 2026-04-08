@@ -50,13 +50,42 @@ function toSlug(value) {
 
 function parseSchemeAndSemester(category) {
   const text = String(category || '');
-  const schemeMatch = text.match(/(20\d{2})\s*scheme/i);
-  const semesterMatch = text.match(/\bS\s*(\d{1,2})\b/i);
+  const schemeMatch = text.match(/\b(20\d{2})(?:\s*scheme)?\b/i);
+  const semesterMatch = text.match(/\b(?:S\s*|Semester\s*)(\d{1,2})\b/i);
   const schemeId = schemeMatch?.[1] || '';
   const semester = semesterMatch ? Number(semesterMatch[1]) : NaN;
   return {
     schemeId,
     semester: Number.isFinite(semester) ? semester : null,
+  };
+}
+
+function inferSchemeAndSemester(item, schemesList) {
+  const primary = parseSchemeAndSemester(item?.category);
+  const fallbackText = [
+    item?.moduleTitle,
+    item?.title,
+    item?.id,
+    item?.description,
+  ].filter(Boolean).join(' ');
+  const secondary = parseSchemeAndSemester(fallbackText);
+
+  const semester = primary.semester ?? secondary.semester;
+  let schemeId = primary.schemeId || secondary.schemeId;
+
+  if (!schemeId && Number.isFinite(semester)) {
+    const candidates = schemesList.filter((scheme) =>
+      (scheme.semesters || []).some((semesterBlock) => Number(semesterBlock?.semester) === semester),
+    );
+
+    if (candidates.length === 1) {
+      schemeId = candidates[0].id;
+    }
+  }
+
+  return {
+    schemeId,
+    semester,
   };
 }
 
@@ -370,7 +399,7 @@ export default function Resources() {
       const moduleTitle = String(item.moduleTitle || item.description || '').trim();
       const key = normalizeText(moduleTitle);
       if (!key) return acc;
-      const parsed = parseSchemeAndSemester(item.category);
+      const parsed = inferSchemeAndSemester(item, schemes);
       let schemeId = parsed.schemeId;
       let semester = parsed.semester;
 
