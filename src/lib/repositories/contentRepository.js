@@ -131,7 +131,12 @@ function readLocal(domain, fallback) {
 }
 
 function writeLocal(domain, items) {
-  localStorage.setItem(LS_KEYS[domain], JSON.stringify(items));
+  const key = LS_KEYS[domain];
+  const serialized = JSON.stringify(items);
+  const previous = localStorage.getItem(key);
+  if (previous === serialized) return;
+
+  localStorage.setItem(key, serialized);
 
   if (typeof window !== 'undefined') {
     window.dispatchEvent(new CustomEvent(CONTENT_UPDATED_EVENT, { detail: { domain } }));
