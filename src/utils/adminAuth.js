@@ -5,7 +5,7 @@ const ADMIN_BACKDOOR_PATH = '/portal-2741';
 const ADMIN_SESSION_KEY = 'aei:admin:session';
 const ADMIN_FAILED_ATTEMPTS_KEY = 'aei:admin:attempts';
 const ADMIN_LOCK_UNTIL_KEY = 'aei:admin:lock-until';
-const ADMIN_PIN_HASH = '6dba77308243555a9aa265b68f884ed5e51a46beb48d07fdf5fdba47f20e728a'; // SHA-256 for PIN 2741
+const ADMIN_PIN_HASH = 'e56ae9ee21661d3febabe8d1e03ee82d02466a5d405e89f2acf449cd6a6240b8'; // SHA-256 for PIN 1472
 
 const MAX_ATTEMPTS = 5;
 const LOCK_TIME_MS = 5 * 60 * 1000;
@@ -68,10 +68,6 @@ export function isAdminAuthenticated() {
     const session = JSON.parse(raw);
     if (!session?.expiresAt || session.expiresAt < Date.now()) {
       localStorage.removeItem(ADMIN_SESSION_KEY);
-      return false;
-    }
-
-    if (hasFirebaseConfig && auth && !auth.currentUser) {
       return false;
     }
 
