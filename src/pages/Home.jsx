@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { motion } from 'framer-motion';
 import {
@@ -7,12 +8,11 @@ import {
 } from 'lucide-react';
 import SEO from '@components/SEO';
 import { SITE_CONFIG, SECTIONS } from '@data/site-config';
-import { NOTICES } from '@data/notices';
-import { EVENTS } from '@data/events';
 import { ABOUT } from '@data/about';
 import { SectionWrapper } from '@components/layout';
 import { Badge, Button, Card, EmptyState, SectionHeader, Ticker } from '@components/ui';
 import { formatDate, isUpcoming } from '@utils/date';
+import { getNotices, getEvents, subscribeContentUpdates } from '@lib/repositories/contentRepository';
 
 // ── Hero Theme ───────────────────────────────────────────────────────────
 // Swap the comment to switch hero theme instantly:
@@ -76,21 +76,6 @@ const quickLinks = [
 //  DATA HELPERS
 // ══════════════════════════════════════════════════════════════════════════════
 
-// 3 most recent notices (pinned first, then by date)
-const latestNotices = [...NOTICES]
-  .sort((a, b) => {
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    return new Date(b.date) - new Date(a.date);
-  })
-  .slice(0, 3);
-
-// 2 nearest upcoming events (sorted by date ascending)
-const upcomingEvents = [...EVENTS]
-  .filter((e) => isUpcoming(e.date))
-  .sort((a, b) => new Date(a.date) - new Date(b.date))
-  .slice(0, 2);
-
 // ══════════════════════════════════════════════════════════════════════════════
 //  ANIMATION VARIANTS
 // ══════════════════════════════════════════════════════════════════════════════
@@ -115,6 +100,51 @@ const staggerItem = {
 // ══════════════════════════════════════════════════════════════════════════════
 
 export default function Home() {
+  const [notices, setNotices] = useState([]);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function load() {
+      const [noticeItems, eventItems] = await Promise.all([getNotices(), getEvents()]);
+      if (!mounted) return;
+      setNotices(noticeItems);
+      setEvents(eventItems);
+    }
+
+    load();
+    const unsubscribe = subscribeContentUpdates(() => {
+      load();
+    }, ['notices', 'events']);
+
+    return () => {
+      mounted = false;
+      unsubscribe();
+    };
+  }, []);
+
+  const latestNotices = useMemo(
+    () =>
+      [...notices]
+        .sort((a, b) => {
+          if (a.pinned && !b.pinned) return -1;
+          if (!a.pinned && b.pinned) return 1;
+          return new Date(b.date) - new Date(a.date);
+        })
+        .slice(0, 3),
+    [notices],
+  );
+
+  const upcomingEvents = useMemo(
+    () =>
+      [...events]
+        .filter((e) => isUpcoming(e.date))
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(0, 2),
+    [events],
+  );
+
   return (
     <>
       <SEO description="Your one-stop hub for notices, events, resources & support — AEI Department, College of Engineering Trivandrum." />

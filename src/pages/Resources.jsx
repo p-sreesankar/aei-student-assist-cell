@@ -10,7 +10,7 @@ import { schemes } from '@data/resources';
 import { getUpcomingMockTests, getPreviousMockTests } from '@utils/mock-tests';
 import { SectionWrapper } from '@components/layout';
 import { EmptyState, PageBanner, SectionHeader, Button, Card, Badge } from '@components/ui';
-import { getMockTests } from '@lib/repositories/contentRepository';
+import { getMockTests, getResources, subscribeContentUpdates } from '@lib/repositories/contentRepository';
 import {
   getYoutubeThumbnail,
   getSubjectCount,
@@ -269,18 +269,26 @@ export default function Resources() {
   );
   const [query, setQuery] = useState('');
   const [mockTests, setMockTests] = useState([]);
+  const [adminResources, setAdminResources] = useState([]);
 
   useEffect(() => {
     let mounted = true;
 
-    async function loadMockTests() {
-      const items = await getMockTests();
-      if (mounted) setMockTests(items);
+    async function loadData() {
+      const [tests, resources] = await Promise.all([getMockTests(), getResources()]);
+      if (!mounted) return;
+      setMockTests(tests);
+      setAdminResources(resources);
     }
 
-    loadMockTests();
+    loadData();
+    const unsubscribe = subscribeContentUpdates(() => {
+      loadData();
+    }, ['mockTests', 'resources']);
+
     return () => {
       mounted = false;
+      unsubscribe();
     };
   }, []);
 
@@ -318,6 +326,17 @@ export default function Resources() {
         (s.code && s.code.toLowerCase().includes(q)),
     );
   }, [allSubjects, query]);
+
+  const filteredAdminResources = useMemo(() => {
+    if (!query.trim()) return adminResources;
+    const q = query.toLowerCase();
+    return adminResources.filter((item) => {
+      const title = String(item.title || '').toLowerCase();
+      const category = String(item.category || '').toLowerCase();
+      const description = String(item.description || '').toLowerCase();
+      return title.includes(q) || category.includes(q) || description.includes(q);
+    });
+  }, [adminResources, query]);
 
   return (
     <>
@@ -367,6 +386,35 @@ export default function Resources() {
               <p className="text-body-sm text-text-primary font-semibold">{upcomingMockTests[0].title}</p>
             </div>
           )}
+
+          <Card className="mt-4">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <div>
+                <h3 className="font-heading font-semibold text-h4 text-text-primary">Admin Resource Library</h3>
+                <p className="text-body-sm text-text-secondary mt-1">Latest resources managed from admin dashboard.</p>
+              </div>
+              <Badge variant="muted">{filteredAdminResources.length} items</Badge>
+            </div>
+
+            {filteredAdminResources.length === 0 ? (
+              <p className="text-body-sm text-text-muted">No resources found for this search.</p>
+            ) : (
+              <div className="grid gap-3 md:grid-cols-2">
+                {filteredAdminResources.slice(0, 8).map((item) => (
+                  <a
+                    key={item.id}
+                    href={item.driveLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-xl border border-border bg-surface2 p-3 transition-colors hover:bg-surface3"
+                  >
+                    <p className="text-body-sm font-semibold text-text-primary line-clamp-1">{item.title}</p>
+                    <p className="mt-1 text-caption text-text-muted">{item.category || 'General'} · {item.fileType || 'file'} · {item.addedDate}</p>
+                  </a>
+                ))}
+              </div>
+            )}
+          </Card>
         </Card>
 
         {/* ═══════════════════════════════════════════════════════════════ */}

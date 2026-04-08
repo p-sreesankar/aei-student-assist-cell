@@ -4,15 +4,23 @@ import { NOTICES as defaultNotices } from '@data/notices';
 import { EVENTS as defaultEvents } from '@data/events';
 import { FACULTY as defaultContacts } from '@data/faculty';
 import { MOCK_TESTS as defaultMockTests } from '@data/mock-tests';
+import { RESOURCES as defaultResources } from '@data/resources';
 import { isAdminAuthenticated } from '@utils/adminAuth';
 
 const COLLECTION = 'content';
+export const CONTENT_UPDATED_EVENT = 'aei:content:updated';
 const LS_KEYS = {
   notices: 'aei:content:notices',
   events: 'aei:content:events',
   contacts: 'aei:content:contacts',
   mockTests: 'aei:content:mock-tests',
+  resources: 'aei:content:resources',
 };
+
+const LS_KEY_TO_DOMAIN = Object.entries(LS_KEYS).reduce((acc, [domain, key]) => {
+  acc[key] = domain;
+  return acc;
+}, {});
 
 function clone(items) {
   return JSON.parse(JSON.stringify(items));
@@ -33,6 +41,52 @@ function readLocal(domain, fallback) {
 
 function writeLocal(domain, items) {
   localStorage.setItem(LS_KEYS[domain], JSON.stringify(items));
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent(CONTENT_UPDATED_EVENT, { detail: { domain } }));
+  }
+}
+
+export function subscribeContentUpdates(onUpdate, domains = []) {
+  if (typeof window === 'undefined' || typeof onUpdate !== 'function') {
+    return () => {};
+  }
+
+  const domainSet = new Set(domains);
+  const isTracked = (domain) => domainSet.size === 0 || domainSet.has(domain);
+
+  const onCustomUpdate = (event) => {
+    const domain = event?.detail?.domain;
+    if (!domain || isTracked(domain)) {
+      onUpdate(domain || null);
+    }
+  };
+
+  const onStorageUpdate = (event) => {
+    const domain = LS_KEY_TO_DOMAIN[event.key];
+    if (domain && isTracked(domain)) {
+      onUpdate(domain);
+    }
+  };
+
+  window.addEventListener(CONTENT_UPDATED_EVENT, onCustomUpdate);
+  window.addEventListener('storage', onStorageUpdate);
+
+  return () => {
+    window.removeEventListener(CONTENT_UPDATED_EVENT, onCustomUpdate);
+    window.removeEventListener('storage', onStorageUpdate);
+  };
+}
+
+async function hasFirebaseAdminSession() {
+  if (!hasFirebaseConfig || !auth?.currentUser) return false;
+
+  try {
+    const tokenResult = await auth.currentUser.getIdTokenResult();
+    return Boolean(tokenResult?.claims?.admin);
+  } catch {
+    return false;
+  }
 }
 
 async function readDomain(domain, fallback) {
@@ -40,21 +94,27 @@ async function readDomain(domain, fallback) {
     return readLocal(domain, fallback);
   }
 
+  const localItems = readLocal(domain, fallback);
+  const canUseCloud = await hasFirebaseAdminSession();
+  if (!canUseCloud) {
+    return localItems;
+  }
+
   try {
     const ref = doc(db, COLLECTION, domain);
     const snap = await getDoc(ref);
     if (!snap.exists()) {
-      const seeded = readLocal(domain, fallback);
+      const seeded = localItems;
       await setDoc(ref, { items: seeded, updatedAt: Date.now() }, { merge: true });
       return seeded;
     }
 
     const data = snap.data();
-    const items = Array.isArray(data?.items) ? data.items : readLocal(domain, fallback);
+    const items = Array.isArray(data?.items) ? data.items : localItems;
     writeLocal(domain, items);
     return items;
   } catch {
-    return readLocal(domain, fallback);
+    return localItems;
   }
 }
 
@@ -68,12 +128,9 @@ async function writeDomain(domain, items) {
 
   if (!hasFirebaseConfig || !db) return cleanItems;
 
-  // With PIN-only admin mode, Firebase sync is best-effort.
-  // Sync only when a Firebase admin session is active; otherwise keep local write only.
-  if (!auth?.currentUser) return cleanItems;
-
-  const tokenResult = await auth.currentUser.getIdTokenResult(true);
-  if (!tokenResult?.claims?.admin) return cleanItems;
+  // In PIN-only mode, keep local writes as source of truth unless a Firebase admin session exists.
+  const canUseCloud = await hasFirebaseAdminSession();
+  if (!canUseCloud) return cleanItems;
 
   try {
     const ref = doc(db, COLLECTION, domain);
@@ -155,6 +212,30 @@ export async function deleteContact(contactId) {
   const current = await getContacts();
   const next = current.filter((c) => c.id !== contactId);
   return writeDomain('contacts', next);
+}
+
+export async function getResources() {
+  const items = await readDomain('resources', defaultResources);
+  return items.sort((a, b) => new Date(b.addedDate) - new Date(a.addedDate));
+}
+
+export async function upsertResource(resource) {
+  const current = await getResources();
+  const existingIndex = current.findIndex((r) => r.id === resource.id);
+
+  if (existingIndex === -1) {
+    current.unshift(resource);
+  } else {
+    current[existingIndex] = resource;
+  }
+
+  return writeDomain('resources', current);
+}
+
+export async function deleteResource(resourceId) {
+  const current = await getResources();
+  const next = current.filter((r) => r.id !== resourceId);
+  return writeDomain('resources', next);
 }
 
 export async function getMockTests() {

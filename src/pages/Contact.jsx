@@ -8,7 +8,7 @@ import SEO from '@components/SEO';
 import { SITE_CONFIG } from '@data/site-config';
 import { SectionWrapper } from '@components/layout';
 import { Card, EmptyState, PageBanner, SectionHeader } from '@components/ui';
-import { getContacts } from '@lib/repositories/contentRepository';
+import { getContacts, subscribeContentUpdates } from '@lib/repositories/contentRepository';
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  CONSTANTS
@@ -175,9 +175,13 @@ export default function Contact() {
     }
 
     loadContacts();
+    const unsubscribe = subscribeContentUpdates(() => {
+      loadContacts();
+    }, ['contacts']);
 
     return () => {
       mounted = false;
+      unsubscribe();
     };
   }, []);
 

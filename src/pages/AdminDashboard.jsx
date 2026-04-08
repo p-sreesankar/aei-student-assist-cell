@@ -18,6 +18,9 @@ import {
   getMockTests,
   upsertMockTest,
   deleteMockTest,
+  getResources,
+  upsertResource,
+  deleteResource,
 } from '@lib/repositories/contentRepository';
 
 const adminSections = [
@@ -92,6 +95,15 @@ const fieldReferenceByModule = {
     'Correct Answer Index (0-based)',
     'Explanation',
   ],
+  Resources: [
+    'Resource ID',
+    'Title',
+    'Description',
+    'Category',
+    'File Type',
+    'Drive Link',
+    'Added Date',
+  ],
 };
 
 function emptyNotice() {
@@ -150,6 +162,18 @@ function emptyMockTest() {
   };
 }
 
+function emptyResource() {
+  return {
+    id: '',
+    title: '',
+    description: '',
+    category: '',
+    fileType: 'pdf',
+    driveLink: '',
+    addedDate: new Date().toISOString().slice(0, 10),
+  };
+}
+
 function emptyQuestion() {
   return {
     id: '',
@@ -173,6 +197,69 @@ function Field({ label, children }) {
   );
 }
 
+function isValidId(value) {
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(value || '').trim());
+}
+
+function isValidDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(value || ''))) return false;
+  const date = new Date(value);
+  return !Number.isNaN(date.getTime());
+}
+
+function isValidUrl(value) {
+  try {
+    const url = new URL(String(value || '').trim());
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+function isPositiveInteger(value) {
+  const num = Number(value);
+  return Number.isInteger(num) && num > 0;
+}
+
+function getErrorMessage(error, fallback) {
+  if (error instanceof Error && error.message) return error.message;
+  return fallback;
+}
+
+function validateStagedQuestions(questions) {
+  if (!Array.isArray(questions) || questions.length === 0) {
+    return 'Add at least one staged question before saving the mock test.';
+  }
+
+  const ids = new Set();
+
+  for (let i = 0; i < questions.length; i += 1) {
+    const q = questions[i];
+    const n = i + 1;
+    const qid = String(q?.id || '').trim();
+
+    if (!qid) return `Question ${n} must have a Question ID.`;
+    if (!isValidId(qid)) return `Question ${n} ID must be lowercase letters, numbers, and hyphens only.`;
+    if (ids.has(qid)) return `Duplicate Question ID found: ${qid}.`;
+    ids.add(qid);
+
+    const text = String(q?.question || '').trim();
+    if (!text) return `Question ${n} must include question text.`;
+
+    const options = Array.isArray(q?.options)
+      ? q.options.map((opt) => String(opt || '').trim()).filter(Boolean)
+      : [];
+    if (options.length < 2) return `Question ${n} must have at least 2 options.`;
+
+    const correct = Number(q?.correctAnswer);
+    if (!Number.isInteger(correct) || correct < 0 || correct >= options.length) {
+      return `Question ${n} has an invalid correct answer index.`;
+    }
+  }
+
+  return null;
+}
+
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('notices');
@@ -180,13 +267,26 @@ export default function AdminDashboard() {
   const [eventList, setEventList] = useState([]);
   const [contactList, setContactList] = useState([]);
   const [mockTestList, setMockTestList] = useState([]);
+  const [resourceList, setResourceList] = useState([]);
   const [noticeForm, setNoticeForm] = useState(emptyNotice());
   const [eventForm, setEventForm] = useState(emptyEvent());
   const [contactForm, setContactForm] = useState(emptyContact());
   const [mockTestForm, setMockTestForm] = useState(emptyMockTest());
+  const [resourceForm, setResourceForm] = useState(emptyResource());
   const [questionForm, setQuestionForm] = useState(emptyQuestion());
   const [saving, setSaving] = useState(false);
-  const [status, setStatus] = useState('');
+  const [flash, setFlash] = useState(null);
+
+  function notify(type, message) {
+    setFlash({ type, message, id: Date.now() });
+  }
+
+  useEffect(() => {
+    if (!flash) return;
+    const timeoutMs = flash.type === 'error' ? 5000 : 2800;
+    const timeout = setTimeout(() => setFlash(null), timeoutMs);
+    return () => clearTimeout(timeout);
+  }, [flash]);
 
   const sortedNotices = useMemo(
     () => [...noticeList].sort((a, b) => new Date(b.date) - new Date(a.date)),
@@ -213,21 +313,28 @@ export default function AdminDashboard() {
     [mockTestList],
   );
 
+  const sortedResources = useMemo(
+    () => [...resourceList].sort((a, b) => new Date(b.addedDate) - new Date(a.addedDate)),
+    [resourceList],
+  );
+
   useEffect(() => {
     let mounted = true;
 
     async function load() {
-      const [notices, events, contacts, mockTests] = await Promise.all([
+      const [notices, events, contacts, mockTests, resources] = await Promise.all([
         getNotices(),
         getEvents(),
         getContacts(),
         getMockTests(),
+        getResources(),
       ]);
       if (!mounted) return;
       setNoticeList(notices);
       setEventList(events);
       setContactList(contacts);
       setMockTestList(mockTests);
+      setResourceList(resources);
     }
 
     load();
@@ -252,12 +359,27 @@ export default function AdminDashboard() {
   async function saveNotice(e) {
     e.preventDefault();
     if (!noticeForm.id || !noticeForm.title || !noticeForm.date || !noticeForm.description) {
-      setStatus('Notice requires id, title, date, and description.');
+      notify('error', 'Notice requires Notice ID, Title, Date, and Description.');
+      return;
+    }
+
+    if (!isValidId(noticeForm.id)) {
+      notify('error', 'Notice ID format is invalid. Use lowercase letters, numbers, and hyphens only.');
+      return;
+    }
+
+    if (!isValidDate(noticeForm.date)) {
+      notify('error', 'Notice Date format is invalid. Use YYYY-MM-DD.');
+      return;
+    }
+
+    if (noticeForm.attachmentUrl && !isValidUrl(noticeForm.attachmentUrl)) {
+      notify('error', 'Attachment URL is invalid. Use a full http/https URL.');
       return;
     }
 
     setSaving(true);
-    setStatus('Saving notice...');
+    notify('info', 'Saving notice...');
     try {
       const payload = {
         ...noticeForm,
@@ -266,9 +388,9 @@ export default function AdminDashboard() {
       const updated = await upsertNotice(payload);
       setNoticeList(updated);
       setNoticeForm(emptyNotice());
-      setStatus('Notice saved successfully.');
-    } catch {
-      setStatus('Failed to save notice.');
+      notify('success', 'Notice saved successfully.');
+    } catch (error) {
+      notify('error', getErrorMessage(error, 'Failed to save notice.'));
     } finally {
       setSaving(false);
     }
@@ -277,14 +399,14 @@ export default function AdminDashboard() {
   async function removeNotice(id) {
     if (!confirm('Delete this notice?')) return;
     setSaving(true);
-    setStatus('Deleting notice...');
+    notify('info', 'Deleting notice...');
     try {
       const updated = await deleteNotice(id);
       setNoticeList(updated);
       if (noticeForm.id === id) setNoticeForm(emptyNotice());
-      setStatus('Notice deleted.');
-    } catch {
-      setStatus('Failed to delete notice.');
+      notify('success', 'Notice deleted.');
+    } catch (error) {
+      notify('error', getErrorMessage(error, 'Failed to delete notice.'));
     } finally {
       setSaving(false);
     }
@@ -304,12 +426,43 @@ export default function AdminDashboard() {
   async function saveEvent(e) {
     e.preventDefault();
     if (!eventForm.id || !eventForm.title || !eventForm.date || !eventForm.venue || !eventForm.description) {
-      setStatus('Event requires id, title, date, venue, and description.');
+      notify('error', 'Event requires Event ID, Title, Start Date, Venue, and Description.');
+      return;
+    }
+
+    if (!isValidId(eventForm.id)) {
+      notify('error', 'Event ID format is invalid. Use lowercase letters, numbers, and hyphens only.');
+      return;
+    }
+
+    if (!isValidDate(eventForm.date)) {
+      notify('error', 'Start Date format is invalid. Use YYYY-MM-DD.');
+      return;
+    }
+
+    if (eventForm.endDate) {
+      if (!isValidDate(eventForm.endDate)) {
+        notify('error', 'End Date format is invalid. Use YYYY-MM-DD.');
+        return;
+      }
+      if (new Date(eventForm.endDate) < new Date(eventForm.date)) {
+        notify('error', 'End Date cannot be earlier than Start Date.');
+        return;
+      }
+    }
+
+    if (eventForm.image && !isValidUrl(eventForm.image)) {
+      notify('error', 'Image URL is invalid. Use a full http/https URL.');
+      return;
+    }
+
+    if (eventForm.registrationUrl && !isValidUrl(eventForm.registrationUrl)) {
+      notify('error', 'Registration URL is invalid. Use a full http/https URL.');
       return;
     }
 
     setSaving(true);
-    setStatus('Saving event...');
+    notify('info', 'Saving event...');
     try {
       const payload = {
         ...eventForm,
@@ -321,9 +474,9 @@ export default function AdminDashboard() {
       const updated = await upsertEvent(payload);
       setEventList(updated);
       setEventForm(emptyEvent());
-      setStatus('Event saved successfully.');
-    } catch {
-      setStatus('Failed to save event.');
+      notify('success', 'Event saved successfully.');
+    } catch (error) {
+      notify('error', getErrorMessage(error, 'Failed to save event.'));
     } finally {
       setSaving(false);
     }
@@ -332,14 +485,14 @@ export default function AdminDashboard() {
   async function removeEvent(id) {
     if (!confirm('Delete this event?')) return;
     setSaving(true);
-    setStatus('Deleting event...');
+    notify('info', 'Deleting event...');
     try {
       const updated = await deleteEvent(id);
       setEventList(updated);
       if (eventForm.id === id) setEventForm(emptyEvent());
-      setStatus('Event deleted.');
-    } catch {
-      setStatus('Failed to delete event.');
+      notify('success', 'Event deleted.');
+    } catch (error) {
+      notify('error', getErrorMessage(error, 'Failed to delete event.'));
     } finally {
       setSaving(false);
     }
@@ -357,12 +510,27 @@ export default function AdminDashboard() {
   async function saveContact(e) {
     e.preventDefault();
     if (!contactForm.id || !contactForm.name || !contactForm.designation || !contactForm.email || !contactForm.role) {
-      setStatus('Contact requires id, name, designation, email, and role.');
+      notify('error', 'Contact requires Contact ID, Name, Designation, Email, and Role.');
+      return;
+    }
+
+    if (!isValidId(contactForm.id)) {
+      notify('error', 'Contact ID format is invalid. Use lowercase letters, numbers, and hyphens only.');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email)) {
+      notify('error', 'Email format is invalid. Enter a valid email address.');
+      return;
+    }
+
+    if (contactForm.photoUrl && !isValidUrl(contactForm.photoUrl)) {
+      notify('error', 'Photo URL is invalid. Use a full http/https URL.');
       return;
     }
 
     setSaving(true);
-    setStatus('Saving contact...');
+    notify('info', 'Saving contact...');
     try {
       const payload = {
         ...contactForm,
@@ -372,9 +540,9 @@ export default function AdminDashboard() {
       const updated = await upsertContact(payload);
       setContactList(updated);
       setContactForm(emptyContact());
-      setStatus('Contact saved successfully.');
-    } catch {
-      setStatus('Failed to save contact.');
+      notify('success', 'Contact saved successfully.');
+    } catch (error) {
+      notify('error', getErrorMessage(error, 'Failed to save contact.'));
     } finally {
       setSaving(false);
     }
@@ -383,14 +551,77 @@ export default function AdminDashboard() {
   async function removeContact(id) {
     if (!confirm('Delete this contact?')) return;
     setSaving(true);
-    setStatus('Deleting contact...');
+    notify('info', 'Deleting contact...');
     try {
       const updated = await deleteContact(id);
       setContactList(updated);
       if (contactForm.id === id) setContactForm(emptyContact());
-      setStatus('Contact deleted.');
-    } catch {
-      setStatus('Failed to delete contact.');
+      notify('success', 'Contact deleted.');
+    } catch (error) {
+      notify('error', getErrorMessage(error, 'Failed to delete contact.'));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function editResource(item) {
+    setResourceForm({ ...item });
+    setActiveTab('resources');
+  }
+
+  async function saveResource(e) {
+    e.preventDefault();
+    if (!resourceForm.id || !resourceForm.title || !resourceForm.driveLink || !resourceForm.addedDate) {
+      notify('error', 'Resource requires Resource ID, Title, Drive Link, and Added Date.');
+      return;
+    }
+
+    if (!isValidId(resourceForm.id)) {
+      notify('error', 'Resource ID format is invalid. Use lowercase letters, numbers, and hyphens only.');
+      return;
+    }
+
+    if (!isValidUrl(resourceForm.driveLink)) {
+      notify('error', 'Drive Link is invalid. Use a full http/https URL.');
+      return;
+    }
+
+    if (!isValidDate(resourceForm.addedDate)) {
+      notify('error', 'Added Date format is invalid. Use YYYY-MM-DD.');
+      return;
+    }
+
+    setSaving(true);
+    notify('info', 'Saving resource...');
+    try {
+      const payload = {
+        ...resourceForm,
+        description: resourceForm.description || '',
+        category: resourceForm.category || 'General',
+        fileType: resourceForm.fileType || 'pdf',
+      };
+      const updated = await upsertResource(payload);
+      setResourceList(updated);
+      setResourceForm(emptyResource());
+      notify('success', 'Resource saved successfully.');
+    } catch (error) {
+      notify('error', getErrorMessage(error, 'Failed to save resource.'));
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function removeResource(id) {
+    if (!confirm('Delete this resource?')) return;
+    setSaving(true);
+    notify('info', 'Deleting resource...');
+    try {
+      const updated = await deleteResource(id);
+      setResourceList(updated);
+      if (resourceForm.id === id) setResourceForm(emptyResource());
+      notify('success', 'Resource deleted.');
+    } catch (error) {
+      notify('error', getErrorMessage(error, 'Failed to delete resource.'));
     } finally {
       setSaving(false);
     }
@@ -408,7 +639,12 @@ export default function AdminDashboard() {
   function addQuestionToForm(e) {
     e.preventDefault();
     if (!questionForm.id || !questionForm.question || !questionForm.optionA || !questionForm.optionB) {
-      setStatus('Question requires id, question text, and at least option A/B.');
+      notify('error', 'Question requires Question ID, Question Text, and at least Option A/B.');
+      return;
+    }
+
+    if (!isValidId(questionForm.id)) {
+      notify('error', 'Question ID format is invalid. Use lowercase letters, numbers, and hyphens only.');
       return;
     }
 
@@ -441,7 +677,7 @@ export default function AdminDashboard() {
     });
 
     setQuestionForm(emptyQuestion());
-    setStatus('Question staged in form. Save mock test to persist.');
+    notify('success', 'Question staged. Save mock test to persist changes.');
   }
 
   function editQuestion(q) {
@@ -463,22 +699,54 @@ export default function AdminDashboard() {
       ...prev,
       questions: prev.questions.filter((q) => q.id !== questionId),
     }));
+    notify('info', 'Question removed from staged list.');
   }
 
   async function saveMockTest(e) {
     e.preventDefault();
     if (!mockTestForm.id || !mockTestForm.title || !mockTestForm.subject || !mockTestForm.startDate || !mockTestForm.endDate) {
-      setStatus('Mock test requires id, title, subject, start date, and end date.');
+      notify('error', 'Mock test requires Mock Test ID, Title, Subject, Start Date, and End Date.');
       return;
     }
 
-    if (mockTestForm.questions.length === 0) {
-      setStatus('Add at least one question before saving.');
+    if (!isValidId(mockTestForm.id)) {
+      notify('error', 'Mock Test ID format is invalid. Use lowercase letters, numbers, and hyphens only.');
+      return;
+    }
+
+    if (!isValidDate(mockTestForm.startDate) || !isValidDate(mockTestForm.endDate)) {
+      notify('error', 'Start Date and End Date must be valid YYYY-MM-DD values.');
+      return;
+    }
+
+    if (new Date(mockTestForm.endDate) < new Date(mockTestForm.startDate)) {
+      notify('error', 'End Date cannot be earlier than Start Date.');
+      return;
+    }
+
+    if (!isPositiveInteger(mockTestForm.semester)) {
+      notify('error', 'Semester must be a positive whole number.');
+      return;
+    }
+
+    if (!isPositiveInteger(mockTestForm.durationMinutes)) {
+      notify('error', 'Duration (Minutes) must be a positive whole number.');
+      return;
+    }
+
+    if (Number(mockTestForm.totalMarks) && !isPositiveInteger(mockTestForm.totalMarks)) {
+      notify('error', 'Total Marks must be a positive whole number.');
+      return;
+    }
+
+    const questionValidationError = validateStagedQuestions(mockTestForm.questions);
+    if (questionValidationError) {
+      notify('error', questionValidationError);
       return;
     }
 
     setSaving(true);
-    setStatus('Saving mock test...');
+    notify('info', 'Saving mock test...');
     try {
       const payload = {
         ...mockTestForm,
@@ -490,9 +758,9 @@ export default function AdminDashboard() {
       setMockTestList(updated);
       setMockTestForm(emptyMockTest());
       setQuestionForm(emptyQuestion());
-      setStatus('Mock test saved successfully.');
-    } catch {
-      setStatus('Failed to save mock test.');
+      notify('success', 'Mock test saved successfully.');
+    } catch (error) {
+      notify('error', getErrorMessage(error, 'Failed to save mock test.'));
     } finally {
       setSaving(false);
     }
@@ -501,7 +769,7 @@ export default function AdminDashboard() {
   async function removeMockTest(id) {
     if (!confirm('Delete this mock test?')) return;
     setSaving(true);
-    setStatus('Deleting mock test...');
+    notify('info', 'Deleting mock test...');
     try {
       const updated = await deleteMockTest(id);
       setMockTestList(updated);
@@ -509,9 +777,9 @@ export default function AdminDashboard() {
         setMockTestForm(emptyMockTest());
         setQuestionForm(emptyQuestion());
       }
-      setStatus('Mock test deleted.');
-    } catch {
-      setStatus('Failed to delete mock test.');
+      notify('success', 'Mock test deleted.');
+    } catch (error) {
+      notify('error', getErrorMessage(error, 'Failed to delete mock test.'));
     } finally {
       setSaving(false);
     }
@@ -531,7 +799,7 @@ export default function AdminDashboard() {
         <div className="mx-auto mb-4 w-full max-w-7xl">
           <p className="text-xs font-medium uppercase tracking-[0.1em] text-[#667085]">Admin Workspace</p>
           <h1 className="mt-2 text-2xl font-semibold text-[#101828]">Admin Dashboard</h1>
-          <p className="mt-1 text-sm text-[#475467]">Manage notices, events, contacts, and mock tests.</p>
+          <p className="mt-1 text-sm text-[#475467]">Manage notices, events, contacts, resources, and mock tests.</p>
         </div>
 
         <div className="mx-auto grid w-full max-w-7xl gap-6 md:grid-cols-3">
@@ -546,7 +814,7 @@ export default function AdminDashboard() {
             </div>
 
             <p className="mb-4 text-sm text-[#475467]">
-              Notices, Events, Contacts, and Mock Tests are live with CRUD.
+              Notices, Events, Contacts, Resources, and Mock Tests are live with CRUD.
             </p>
 
             <div className="flex gap-2 mb-4">
@@ -573,6 +841,14 @@ export default function AdminDashboard() {
                 onClick={() => setActiveTab('contacts')}
               >
                 Contacts ({contactList.length})
+              </Button>
+              <Button
+                size="sm"
+                variant={activeTab === 'resources' ? 'outline' : 'ghost'}
+                className={activeTab === 'resources' ? buttonSoftClass : buttonGhostClass}
+                onClick={() => setActiveTab('resources')}
+              >
+                Resources ({resourceList.length})
               </Button>
               <Button
                 size="sm"
@@ -737,6 +1013,52 @@ export default function AdminDashboard() {
                   ))}
                 </div>
               </div>
+            ) : activeTab === 'resources' ? (
+              <div className="grid gap-4 lg:grid-cols-2">
+                <form onSubmit={saveResource} className={`${panelClass} space-y-3`}>
+                  <h4 className="font-semibold text-[#101828]">Create / Update Resource</h4>
+                  <Field label="Resource ID">
+                    <input className={fieldClass} placeholder="e.g. resource-2026-01" value={resourceForm.id} onChange={(e) => setResourceForm((p) => ({ ...p, id: e.target.value }))} />
+                  </Field>
+                  <Field label="Title">
+                    <input className={fieldClass} placeholder="Enter resource title" value={resourceForm.title} onChange={(e) => setResourceForm((p) => ({ ...p, title: e.target.value }))} />
+                  </Field>
+                  <Field label="Description">
+                    <textarea className={fieldClass} rows={3} placeholder="Enter description" value={resourceForm.description} onChange={(e) => setResourceForm((p) => ({ ...p, description: e.target.value }))} />
+                  </Field>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Field label="Category">
+                      <input className={fieldClass} placeholder="e.g. Syllabus" value={resourceForm.category} onChange={(e) => setResourceForm((p) => ({ ...p, category: e.target.value }))} />
+                    </Field>
+                    <Field label="File Type">
+                      <input className={fieldClass} placeholder="e.g. pdf" value={resourceForm.fileType} onChange={(e) => setResourceForm((p) => ({ ...p, fileType: e.target.value }))} />
+                    </Field>
+                  </div>
+                  <Field label="Drive Link">
+                    <input className={fieldClass} placeholder="https://..." value={resourceForm.driveLink} onChange={(e) => setResourceForm((p) => ({ ...p, driveLink: e.target.value }))} />
+                  </Field>
+                  <Field label="Added Date">
+                    <input type="date" className={fieldClass} value={resourceForm.addedDate} onChange={(e) => setResourceForm((p) => ({ ...p, addedDate: e.target.value }))} />
+                  </Field>
+                  <div className="flex gap-2">
+                    <Button type="submit" size="sm" className={buttonPrimaryClass} loading={saving}>Save Resource</Button>
+                    <Button type="button" size="sm" variant="ghost" className={buttonGhostClass} onClick={() => setResourceForm(emptyResource())}>Clear</Button>
+                  </div>
+                </form>
+
+                <div className="space-y-2 max-h-[28rem] overflow-auto pr-1">
+                  {sortedResources.map((item) => (
+                    <div key={item.id} className={panelClass}>
+                      <p className="font-semibold text-[#101828] line-clamp-1">{item.title}</p>
+                      <p className="text-xs text-[#667085]">{item.category || 'General'} · {item.fileType || 'file'} · {item.addedDate}</p>
+                      <div className="mt-2 flex gap-2">
+                        <Button size="sm" variant="secondary" className={buttonSoftClass} onClick={() => editResource(item)}>Edit</Button>
+                        <Button size="sm" variant="ghost" className={buttonGhostClass} onClick={() => removeResource(item.id)}>Delete</Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ) : (
               <div className="grid gap-4 lg:grid-cols-2">
                 <div className="space-y-4">
@@ -876,9 +1198,27 @@ export default function AdminDashboard() {
                 </p>
               </div>
 
-              {status && (
-                <div className="rounded-xl border border-[#E4E7EC] bg-[#FCFCFD] p-3">
-                  <p className="text-sm text-[#475467]">{status}</p>
+              {flash && (
+                <div
+                  className={`rounded-xl border p-3 ${
+                    flash.type === 'error'
+                      ? 'border-[#FDA29B] bg-[#FEF3F2]'
+                      : flash.type === 'success'
+                        ? 'border-[#ABEFC6] bg-[#ECFDF3]'
+                        : 'border-[#B2DDFF] bg-[#EFF8FF]'
+                  }`}
+                >
+                  <p
+                    className={`text-sm ${
+                      flash.type === 'error'
+                        ? 'text-[#B42318]'
+                        : flash.type === 'success'
+                          ? 'text-[#067647]'
+                          : 'text-[#175CD3]'
+                    }`}
+                  >
+                    {flash.message}
+                  </p>
                 </div>
               )}
 

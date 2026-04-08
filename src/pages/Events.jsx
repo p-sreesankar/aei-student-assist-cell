@@ -2,7 +2,7 @@ import { useMemo, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Clock, ExternalLink, CalendarDays } from 'lucide-react';
 import SEO from '@components/SEO';
-import { getEvents } from '@lib/repositories/contentRepository';
+import { getEvents, subscribeContentUpdates } from '@lib/repositories/contentRepository';
 import { SectionWrapper } from '@components/layout';
 import { Badge, Card, EmptyState, PageBanner, Button } from '@components/ui';
 import { formatDate, isUpcoming, isSoon } from '@utils/date';
@@ -265,8 +265,13 @@ export default function Events() {
     }
 
     load();
+    const unsubscribe = subscribeContentUpdates(() => {
+      load();
+    }, ['events']);
+
     return () => {
       mounted = false;
+      unsubscribe();
     };
   }, []);
 

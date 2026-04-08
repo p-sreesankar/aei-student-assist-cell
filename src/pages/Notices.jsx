@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Pin, Paperclip, ExternalLink, ChevronDown, ChevronUp } from 'lucide-react';
 import SEO from '@components/SEO';
-import { getNotices } from '@lib/repositories/contentRepository';
+import { getNotices, subscribeContentUpdates } from '@lib/repositories/contentRepository';
 import { SectionWrapper } from '@components/layout';
 import { Badge, Card, EmptyState, PageBanner } from '@components/ui';
 import { formatDate, isNew } from '@utils/date';
@@ -188,8 +188,13 @@ export default function Notices() {
     }
 
     load();
+    const unsubscribe = subscribeContentUpdates(() => {
+      load();
+    }, ['notices']);
+
     return () => {
       mounted = false;
+      unsubscribe();
     };
   }, []);
 
