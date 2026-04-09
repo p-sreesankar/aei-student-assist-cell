@@ -1,23 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, ShieldAlert } from 'lucide-react';
+import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import SEO from '@components/SEO';
 import { Button } from '@components/ui';
 import { getAdminLockState, isAdminAuthenticated, verifyAdminPin } from '@utils/adminAuth';
+import { auth, hasFirebaseConfig } from '@lib/firebase';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
-  const [authReady, setAuthReady] = useState(true);
   const [pin, setPin] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [remainingMs, setRemainingMs] = useState(0);
 
   useEffect(() => {
-    if (authReady && isAdminAuthenticated()) {
+    if (isAdminAuthenticated()) {
       navigate('/admin/dashboard', { replace: true });
     }
-  }, [authReady, navigate]);
+  }, [navigate]);
 
   useEffect(() => {
     const update = () => {
@@ -43,6 +46,21 @@ export default function AdminLogin() {
     try {
       const result = await verifyAdminPin(pin.trim());
       if (result.ok) {
+        if (hasFirebaseConfig) {
+          if (!email.trim() || !password.trim()) {
+            setError('Enter Firebase admin email and password.');
+            return;
+          }
+
+          const credential = await signInWithEmailAndPassword(auth, email.trim(), password);
+          const tokenResult = await credential.user.getIdTokenResult(true);
+          if (!tokenResult?.claims?.admin) {
+            await signOut(auth).catch(() => {});
+            setError('This Firebase account is missing the admin claim.');
+            return;
+          }
+        }
+
         navigate('/admin/dashboard', { replace: true });
         return;
       }
@@ -57,6 +75,7 @@ export default function AdminLogin() {
     } finally {
       setLoading(false);
       setPin('');
+      setPassword('');
     }
   }
 
@@ -76,40 +95,66 @@ export default function AdminLogin() {
             <p className="mt-1 text-sm text-[#475467]">Use your admin PIN to continue.</p>
           </div>
 
-          {!authReady ? (
-            <p className="text-sm text-[#667085]">Checking auth session...</p>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <label className="block">
-                <span className="mb-1.5 block text-sm font-medium text-[#344054]">PIN</span>
-                <div className="relative">
-                  <Lock size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#667085]" />
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <label className="block">
+              <span className="mb-1.5 block text-sm font-medium text-[#344054]">PIN</span>
+              <div className="relative">
+                <Lock size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#667085]" />
+                <input
+                  type="password"
+                  inputMode="numeric"
+                  value={pin}
+                  disabled={isLocked || loading}
+                  onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
+                  placeholder="Enter PIN"
+                  className="w-full rounded-xl border border-[#D0D5DD] bg-white py-2.5 pl-9 pr-3 text-[#101828] outline-none transition-colors placeholder:text-[#98A2B3] focus:border-[#98A2B3] focus:ring-2 focus:ring-[#EAECF0]"
+                />
+              </div>
+            </label>
+
+            {hasFirebaseConfig && (
+              <>
+                <label className="block">
+                  <span className="mb-1.5 block text-sm font-medium text-[#344054]">Firebase Admin Email</span>
+                  <input
+                    type="email"
+                    value={email}
+                    disabled={isLocked || loading}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="username"
+                    placeholder="admin@example.com"
+                    className="w-full rounded-xl border border-[#D0D5DD] bg-white px-3 py-2.5 text-[#101828] outline-none transition-colors placeholder:text-[#98A2B3] focus:border-[#98A2B3] focus:ring-2 focus:ring-[#EAECF0]"
+                  />
+                </label>
+
+                <label className="block">
+                  <span className="mb-1.5 block text-sm font-medium text-[#344054]">Firebase Admin Password</span>
                   <input
                     type="password"
-                    inputMode="numeric"
-                    value={pin}
+                    value={password}
                     disabled={isLocked || loading}
-                    onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
-                    placeholder="Enter PIN"
-                    className="w-full rounded-xl border border-[#D0D5DD] bg-white py-2.5 pl-9 pr-3 text-[#101828] outline-none transition-colors placeholder:text-[#98A2B3] focus:border-[#98A2B3] focus:ring-2 focus:ring-[#EAECF0]"
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                    placeholder="Enter password"
+                    className="w-full rounded-xl border border-[#D0D5DD] bg-white px-3 py-2.5 text-[#101828] outline-none transition-colors placeholder:text-[#98A2B3] focus:border-[#98A2B3] focus:ring-2 focus:ring-[#EAECF0]"
                   />
-                </div>
-              </label>
+                </label>
+              </>
+            )}
 
-              {isLocked && (
-                <div className="flex items-center gap-2 text-sm text-[#B54708]">
-                  <ShieldAlert size={16} />
-                  Retry after {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
-                </div>
-              )}
+            {isLocked && (
+              <div className="flex items-center gap-2 text-sm text-[#B54708]">
+                <ShieldAlert size={16} />
+                Retry after {String(mins).padStart(2, '0')}:{String(secs).padStart(2, '0')}
+              </div>
+            )}
 
-              {error && <p className="text-sm text-[#B42318]">{error}</p>}
+            {error && <p className="text-sm text-[#B42318]">{error}</p>}
 
-              <Button type="submit" variant="outline" className="w-full !border-[#D0D5DD] !bg-[#F8FAFC] !text-[#101828] hover:!bg-[#EEF2F6]" disabled={isLocked || loading} loading={loading}>
-                Continue
-              </Button>
-            </form>
-          )}
+            <Button type="submit" variant="outline" className="w-full !border-[#D0D5DD] !bg-[#F8FAFC] !text-[#101828] hover:!bg-[#EEF2F6]" disabled={isLocked || loading} loading={loading}>
+              Continue
+            </Button>
+          </form>
         </div>
       </div>
     </>

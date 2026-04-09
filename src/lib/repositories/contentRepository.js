@@ -203,20 +203,16 @@ async function readDomain(domain, fallback) {
   const localItems = domain === 'resources'
     ? mergeWithSeedResources(readLocal(domain, fallback))
     : readLocal(domain, fallback);
-  const canUseCloud = await hasFirebaseAdminSession();
-  if (!canUseCloud) {
-    if (domain === 'resources') {
-      writeLocal(domain, localItems);
-    }
-    return localItems;
-  }
+  const canUseCloudWrites = await hasFirebaseAdminSession();
 
   try {
     const ref = doc(db, COLLECTION, domain);
     const snap = await getDoc(ref);
     if (!snap.exists()) {
       const seeded = localItems;
-      await setDoc(ref, { items: seeded, updatedAt: Date.now() }, { merge: true });
+      if (canUseCloudWrites) {
+        await setDoc(ref, { items: seeded, updatedAt: Date.now() }, { merge: true });
+      }
       return seeded;
     }
 
@@ -229,7 +225,7 @@ async function readDomain(domain, fallback) {
 
     const mergedItems = mergeWithSeedResources(items);
     writeLocal(domain, mergedItems);
-    if (mergedItems.length !== items.length) {
+    if (mergedItems.length !== items.length && canUseCloudWrites) {
       await setDoc(ref, { items: mergedItems, updatedAt: Date.now() }, { merge: true });
     }
     return mergedItems;
@@ -244,19 +240,22 @@ async function writeDomain(domain, items) {
   }
 
   const cleanItems = Array.isArray(items) ? items : [];
-  writeLocal(domain, cleanItems);
+  if (!hasFirebaseConfig || !db) {
+    writeLocal(domain, cleanItems);
+    return cleanItems;
+  }
 
-  if (!hasFirebaseConfig || !db) return cleanItems;
-
-  // In PIN-only mode, keep local writes as source of truth unless a Firebase admin session exists.
   const canUseCloud = await hasFirebaseAdminSession();
-  if (!canUseCloud) return cleanItems;
+  if (!canUseCloud) {
+    throw new Error('Cloud sync unavailable. Sign in with a Firebase admin account to save shared content.');
+  }
 
   try {
     const ref = doc(db, COLLECTION, domain);
     await setDoc(ref, { items: cleanItems, updatedAt: Date.now() }, { merge: true });
+    writeLocal(domain, cleanItems);
   } catch {
-    // Keep local data as source of truth when cloud write fails.
+    throw new Error('Unable to sync content to Firestore. Please retry after checking network and Firebase rules.');
   }
 
   return cleanItems;
