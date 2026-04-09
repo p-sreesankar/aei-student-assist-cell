@@ -45,9 +45,14 @@ export const schemes = [
       // ── Semester 5 ──────────────────────────────────────────────────────
       {
         semester: 5,
+      },
+
+      // ── Semester 6 ──────────────────────────────────────────────────────
+      {
+        semester: 6,
         subjects: [
           {
-            id: '2019-s5-control-systems',
+            id: '2019-s6-control-systems',
             name: 'Process Dynamics & Control',
             code: 'AET304',
             isLab: false,
@@ -57,17 +62,9 @@ export const schemes = [
               { type: 'notes',   title: 'Module 3',    driveLink: 'https://drive.google.com/file/d/14vw2rGe4li5LFiTwlIgwS8pkmFu7ULr-/view?usp=sharing' },
               { type: 'notes',   title: 'Module 4',    driveLink: 'https://drive.google.com/file/d/1nTGtzLjEZMMjDxaHXZzyNlpujx_1MnBb/view?usp=sharing' },
               { type: 'notes',   title: 'Module 5',    driveLink: 'https://drive.google.com/file/d/1UmRsQueovFDMMfP6bDRWDfsLCi0PJ7_Z/view?usp=sharing' },
-
-
             ],
           },
-
         ],
-      },
-
-      // ── Semester 6 ──────────────────────────────────────────────────────
-      {
-        semester: 6,
         // subjects: [
         //   {
         //     id: '2019-s6-dsp',
