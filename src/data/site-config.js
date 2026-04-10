@@ -39,17 +39,17 @@ const SITE_CONFIG = {
   // Replace this with your own Google Form embed URL.
   // To get it: Open Google Forms → click "Send" → click the embed icon (<>) → copy the URL from the src="..." part.
 
-  grievanceFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSe_EXAMPLE_REPLACE_THIS/viewform?embedded=true", // [Required]
+  grievanceFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSc51Wa1GVLcjAqq55u70y33rA0qmYe2_TqWkfFRXdOSS-TrGQ/viewform?embedded=true", // [Required]
 
   // ---------- Social Links ----------
   // Set a link to "" (empty quotes) to hide that icon on the site.
 
   socialLinks: {
-    instagram: "https://www.instagram.com/aei_cet/",        // [Optional] Instagram page URL
-    linkedin:  "https://www.linkedin.com/company/aei-cet/", // [Optional] LinkedIn page URL
+    instagram: "https://www.instagram.com/ae_association_cet/",        // [Optional] Instagram page URL
+    linkedin:  "", // [Optional] LinkedIn page URL
     youtube:   "",                                           // [Optional] YouTube channel URL
-    email:     "mailto:studentassistcell.aei@cet.ac.in",    // [Optional] General contact email (keep mailto: prefix)
-    website:   "https://www.cet.ac.in",                     // [Optional] College or dept website
+    email:     "",    // [Optional] General contact email (keep mailto: prefix)
+    website:   "",                     // [Optional] College or dept website
   },
 
   // ---------- Theme Colors ----------

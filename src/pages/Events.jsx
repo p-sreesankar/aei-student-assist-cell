@@ -148,7 +148,7 @@ function EventCard({ event, isPast = false }) {
     <Card className={`overflow-hidden flex flex-col ${isPast ? 'opacity-75' : ''}`}>
       {/* ── Image / Placeholder ──────────────────────────────────────── */}
       {showImage ? (
-        <div className={`h-36 sm:h-44 bg-surface2 overflow-hidden ${isPast ? 'grayscale' : ''}`}>
+        <div className="h-36 sm:h-44 bg-surface2 overflow-hidden">
           <img
             src={event.image}
             alt={event.title}
@@ -162,7 +162,6 @@ function EventCard({ event, isPast = false }) {
           className={`
             h-36 sm:h-44 bg-gradient-to-br ${gradient}
             flex items-center justify-center
-            ${isPast ? 'grayscale' : ''}
           `}
         >
           <span className="text-6xl font-heading font-extrabold text-white/20 select-none">

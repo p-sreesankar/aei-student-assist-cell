@@ -61,6 +61,20 @@
 /** @type {Array<{id: string, title: string, date: string, endDate: string|null, venue: string, description: string, image: string|null, category: string, time: string|null, registrationUrl: string|null, instagramUrl: string|null}>} */
 const EVENTS = [
   {
+    id:              "candela-26",
+    title:           "Candela '26",
+    date:            "2026-04-20",
+    endDate:         null,
+    venue:           "AEI Department",
+    description:     "Candela '26 is coming soon. Stay tuned for the official poster, schedule, and registration details.",
+    image:           null,
+    category:        "fest",
+    time:            null,
+    registrationUrl: null,
+    instagramUrl:    null,
+  },
+
+  {
     id:              "farewell-aei-26",
     title:           "Farewell AEI'26",
     date:            "2026-03-30",
