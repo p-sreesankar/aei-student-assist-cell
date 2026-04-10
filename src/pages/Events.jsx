@@ -105,7 +105,6 @@ function CalendarTearOff({ dateStr, isPast = false }) {
         w-14 h-16 sm:w-[4.5rem] sm:h-[5.25rem]
         rounded-lg sm:rounded-xl overflow-hidden
         shadow-card
-        ${isPast ? 'opacity-60 grayscale' : ''}
       `}
     >
       {/* Top bar — month + weekday */}
@@ -147,7 +146,7 @@ function EventCard({ event, isPast = false, onImageClick }) {
   const showImage = Boolean(event.image) && !imageError;
 
   return (
-    <Card className={`overflow-hidden flex flex-col ${isPast ? 'opacity-75' : ''}`}>
+    <Card className="overflow-hidden flex flex-col">
       {/* ── Image / Placeholder ──────────────────────────────────────── */}
       {showImage ? (
         <button
