@@ -53,44 +53,6 @@
 // ============================================================================
 
 const FACULTY = [
-
-  // ──── Coordinators (shown first) ───────────────────────────────────────
-  {
-    id:          "anitha-s",
-    name:        "Dr. Anitha S.",
-    designation: "Associate Professor & Cell Coordinator",
-    department:  "Applied Electronics and Instrumentation",
-    email:       "anitha.s@cet.ac.in",
-    phone:       "+91-471-2515555",
-    photoUrl:    null,
-    role:        "coordinator",
-  },
-
-  // ──── Advisors ─────────────────────────────────────────────────────────
-  {
-    id:          "rajesh-kumar-t",
-    name:        "Prof. Rajesh Kumar T.",
-    designation: "Assistant Professor & Faculty Advisor",
-    department:  "Applied Electronics and Instrumentation",
-    email:       "rajesh.t@cet.ac.in",
-    phone:       "+91-471-2515556",
-    photoUrl:    null,
-    role:        "advisor",
-  },
-
-  // ──── Faculty ──────────────────────────────────────────────────────────
-  {
-    id:          "meera-krishnan",
-    name:        "Dr. Meera Krishnan",
-    designation: "Professor & HOD",
-    department:  "Applied Electronics and Instrumentation",
-    email:       "meera.k@cet.ac.in",
-    phone:       null,
-    photoUrl:    null,
-    role:        "faculty",
-  },
-
-  // ──── Student Representatives ──────────────────────────────────────────
   {
     id:          "Mayoogh Manohar",
     name:        "Mayoogh Manohar",

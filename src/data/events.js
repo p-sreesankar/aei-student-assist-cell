@@ -58,72 +58,6 @@
 
 /** @type {Array<{id: string, title: string, date: string, endDate: string|null, venue: string, description: string, image: string|null, category: string, time: string|null, registrationUrl: string|null}>} */
 const EVENTS = [
-
-  {
-    id:              "techfest-aei-2026",
-    title:           "TechFest AEI 2026",
-    date:            "2026-04-10",
-    endDate:         "2026-04-12",
-    venue:           "Seminar Hall, CET Main Block",
-    description:     "The annual technical festival of the AEI department featuring project exhibitions, coding contests, a robotics challenge, and guest lectures from industry professionals. Open to all engineering students.",
-    image:           null,
-    category:        "fest",
-    time:            "9:00 AM – 5:00 PM",
-    registrationUrl: "https://forms.gle/EXAMPLE_TECHFEST_REG",
-  },
-
-  {
-    id:              "ieee-embedded-workshop-2026",
-    title:           "IEEE Workshop — Embedded Systems for IoT",
-    date:            "2026-03-22",
-    endDate:         "2026-03-23",
-    venue:           "AEI Seminar Room, 2nd Floor",
-    description:     "A hands-on two-day workshop on designing IoT solutions using ESP32 and Arduino. Participants will build a working weather station by the end of Day 2. Materials provided.",
-    image:           null,
-    category:        "workshop",
-    time:            "10:00 AM – 4:00 PM",
-    registrationUrl: "https://forms.gle/EXAMPLE_WORKSHOP_REG",
-  },
-
-  {
-    id:              "hackathon-ctrl-alt-build-2026",
-    title:           "Ctrl+Alt+Build — 24-Hour Hackathon",
-    date:            "2026-03-08",
-    endDate:         "2026-03-09",
-    venue:           "CET Innovation Hub",
-    description:     "A 24-hour hackathon open to all CET students. Build solutions for real-world problems. Teams of 2–4. Top 3 teams win cash prizes and mentorship from industry sponsors.",
-    image:           null,
-    category:        "competition",
-    time:            "6:00 PM (Day 1) – 6:00 PM (Day 2)",
-    registrationUrl: "https://forms.gle/EXAMPLE_HACKATHON",
-  },
-
-  {
-    id:              "alumni-talk-feb-2026",
-    title:           "Alumni Talk — Careers in VLSI Design",
-    date:            "2026-02-14",
-    endDate:         null,
-    venue:           "EEE Auditorium, CET",
-    description:     "Mr. Rohit Menon (AEI Batch of 2018, currently at Intel Bangalore) shares insights on breaking into the VLSI industry, skills to develop during college, and tips for cracking placement interviews.",
-    image:           null,
-    category:        "seminar",
-    time:            "2:00 PM – 3:30 PM",
-    registrationUrl: null,
-  },
-
-  {
-    id:              "christmas-celebration-2025",
-    title:           "Christmas Celebration — AEI Department",
-    date:            "2025-12-20",
-    endDate:         null,
-    venue:           "AEI Department Hall",
-    description:     "Secret Santa, carol singing, and a department potluck to close out the year. Everyone's invited — bring your best dish and holiday spirit!",
-    image:           null,
-    category:        "cultural",
-    time:            "3:00 PM – 6:00 PM",
-    registrationUrl: null,
-  },
-
   {
     id:              "onam-celebration-2025",
     title:           "Onam Celebrations — AEI Department",
@@ -134,6 +68,19 @@ const EVENTS = [
     image:           null,
     category:        "cultural",
     time:            "10:00 AM – 2:00 PM",
+    registrationUrl: null,
+  },
+
+  {
+    id:              "event-2025-03-25",
+    title:           "Cracking The Consulting & Analytics Industry",
+    date:            "2026-03-25",
+    endDate:         null,
+    venue:           "EC Seminar Hall",
+    description:     "AEI Association × Internship Cell present an exclusive session to help you navigate careers in consulting and analytics.\n\nKickstart your career journey by learning directly from seniors who have secured roles in the industry:\n\n• Pranathi Ajayan – KPMG\n• Rahul Sam – Geojit | Incoming Analyst at KPMG\n\n📅 Date: 25 March 2026\n📍 Venue: EC Seminar Hall\n\nDon’t miss this opportunity to gain real insights and guidance ✨",
+    image:           "https://aei-cet.vercel.app/images/events/craking-the-consulting-analytics-industry.png",
+    category:        "general",
+    time:            "4:30 pm",
     registrationUrl: null,
   },
 

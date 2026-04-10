@@ -1,0 +1,72 @@
+const MOCK_TESTS = [
+  {
+    id: "aids-s3-mock-1-2026",
+    title: "AIDS Mock Test 1",
+    subject: "Artificial Intelligence & Data Science",
+    scheme: "2024",
+    semester: 3,
+    difficulty: "medium",
+    startDate: "2026-04-05",
+    endDate: "2026-04-30",
+    durationMinutes: 30,
+    totalMarks: 20,
+    questions: [
+      {
+        id: "q1",
+        type: "mcq",
+        question: "Which of the following is a supervised learning algorithm?",
+        options: ["K-Means", "Linear Regression", "Apriori", "PCA"],
+        correctAnswer: 1,
+        explanation: "Linear Regression is supervised because it learns from labeled data.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        question: "Overfitting means the model performs well on training data but poorly on unseen data.",
+        options: ["True", "False"],
+        correctAnswer: 0,
+        explanation: "That is the standard definition of overfitting.",
+      },
+      {
+        id: "q3",
+        type: "mcq",
+        question: "Which metric is typically used for classification accuracy?",
+        options: ["MSE", "R2 Score", "Accuracy", "MAE"],
+        correctAnswer: 2,
+        explanation: "Accuracy is the fraction of correctly predicted labels.",
+      },
+    ],
+  },
+  {
+    id: "tm-s3-mock-1-2026",
+    title: "Transducers & Measurements Mock 1",
+    subject: "Transducers & Measurements",
+    scheme: "2024",
+    semester: 3,
+    difficulty: "easy",
+    startDate: "2026-03-01",
+    endDate: "2026-03-30",
+    durationMinutes: 25,
+    totalMarks: 15,
+    questions: [
+      {
+        id: "q1",
+        type: "mcq",
+        question: "A transducer converts:",
+        options: ["Mechanical energy to heat", "One form of energy to another", "Current to voltage only", "None of these"],
+        correctAnswer: 1,
+        explanation: "A transducer converts one form of energy into another.",
+      },
+      {
+        id: "q2",
+        type: "true-false",
+        question: "Thermocouple is an active transducer.",
+        options: ["True", "False"],
+        correctAnswer: 0,
+        explanation: "Thermocouples generate emf due to temperature difference, so they are active.",
+      },
+    ],
+  },
+];
+
+export { MOCK_TESTS };
