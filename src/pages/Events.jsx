@@ -150,13 +150,21 @@ function EventCard({ event, isPast = false }) {
     <Card className={`overflow-hidden flex flex-col ${isPast ? 'opacity-75' : ''}`}>
       {/* ── Image / Placeholder ──────────────────────────────────────── */}
       {showImage ? (
-        <div className="h-36 sm:h-44 bg-surface2 overflow-hidden">
+        <div className="relative h-36 sm:h-44 bg-surface2 overflow-hidden">
+          <img
+            src={event.image}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover scale-110 blur-xl opacity-45"
+          />
+          <div className="absolute inset-0 bg-black/10" />
           <img
             src={event.image}
             alt={event.title}
             loading="lazy"
             onError={() => setImageError(true)}
-            className="w-full h-full object-contain"
+            className="relative z-10 w-full h-full object-contain"
           />
         </div>
       ) : (
