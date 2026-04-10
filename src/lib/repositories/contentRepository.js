@@ -200,24 +200,25 @@ async function readDomain(domain, fallback) {
     return mergedLocal;
   }
 
-  const localItems = domain === 'resources'
-    ? mergeWithSeedResources(readLocal(domain, fallback))
-    : readLocal(domain, fallback);
+  const fallbackItems = domain === 'resources'
+    ? mergeWithSeedResources(clone(fallback))
+    : clone(fallback);
   const canUseCloudWrites = await hasFirebaseAdminSession();
 
   try {
     const ref = doc(db, COLLECTION, domain);
     const snap = await getDoc(ref);
     if (!snap.exists()) {
-      const seeded = localItems;
+      const seeded = fallbackItems;
       if (canUseCloudWrites) {
         await setDoc(ref, { items: seeded, updatedAt: Date.now() }, { merge: true });
       }
+      writeLocal(domain, seeded);
       return seeded;
     }
 
     const data = snap.data();
-    const items = Array.isArray(data?.items) ? data.items : localItems;
+    const items = Array.isArray(data?.items) ? data.items : fallbackItems;
     if (domain !== 'resources') {
       writeLocal(domain, items);
       return items;
@@ -230,7 +231,9 @@ async function readDomain(domain, fallback) {
     }
     return mergedItems;
   } catch {
-    return localItems;
+    // Keep cross-browser behavior deterministic when cloud read fails.
+    writeLocal(domain, fallbackItems);
+    return fallbackItems;
   }
 }
 
