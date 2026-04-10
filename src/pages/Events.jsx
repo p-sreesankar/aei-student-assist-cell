@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock, ExternalLink, CalendarDays } from 'lucide-react';
+import { MapPin, Clock, ExternalLink, Instagram } from 'lucide-react';
 import SEO from '@components/SEO';
 import { EVENTS } from '@data/events';
 import { SectionWrapper } from '@components/layout';
@@ -24,6 +24,7 @@ import { formatDate, isUpcoming, isSoon } from '@utils/date';
 //    category:        string,          // "workshop" | "fest" | "seminar" | "competition" | "cultural" | "general"
 //    time:            string | null,   // human-readable time range
 //    registrationUrl: string | null,   // form link for upcoming events
+//    instagramUrl:    string | null,   // Instagram post/reel link
 //  }
 //
 //  Upcoming vs Past is auto-derived: event.date >= today → upcoming.
@@ -140,16 +141,19 @@ function EventCard({ event, isPast = false }) {
   const days = daysUntil(event.date);
   const showCountdown = !isPast && days >= 0 && days <= 7;
   const gradient = gradientFor(event.id);
+  const [imageError, setImageError] = useState(false);
+  const showImage = Boolean(event.image) && !imageError;
 
   return (
     <Card className={`overflow-hidden flex flex-col ${isPast ? 'opacity-75' : ''}`}>
       {/* ── Image / Placeholder ──────────────────────────────────────── */}
-      {event.image ? (
+      {showImage ? (
         <div className={`h-36 sm:h-44 bg-surface2 overflow-hidden ${isPast ? 'grayscale' : ''}`}>
           <img
             src={event.image}
             alt={event.title}
             loading="lazy"
+            onError={() => setImageError(true)}
             className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
           />
         </div>
@@ -223,18 +227,32 @@ function EventCard({ event, isPast = false }) {
           {event.description}
         </p>
 
-        {/* CTA — only for upcoming events with registration */}
-        {!isPast && event.registrationUrl && (
-          <div className="mt-4">
-            <a
-              href={event.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="primary" size="sm" icon={<ExternalLink size={14} />} iconPosition="right">
-                Register
-              </Button>
-            </a>
+        {/* CTA — only for upcoming events */}
+        {!isPast && (event.registrationUrl || event.instagramUrl) && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {event.registrationUrl && (
+              <a
+                href={event.registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="primary" size="sm" icon={<ExternalLink size={14} />} iconPosition="right">
+                  Register
+                </Button>
+              </a>
+            )}
+
+            {event.instagramUrl && (
+              <a
+                href={event.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button variant="secondary" size="sm" icon={<Instagram size={14} />}>
+                  Instagram
+                </Button>
+              </a>
+            )}
           </div>
         )}
       </div>

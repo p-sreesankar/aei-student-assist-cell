@@ -17,6 +17,7 @@
 //       category:        "workshop",                    ← see CATEGORY OPTIONS below
 //       time:            "10:00 AM – 4:00 PM",          ← or null
 //       registrationUrl: null,                           ← Google Form link, or null
+//       instagramUrl:    null,                           ← Instagram post/reel link, or null
 //     },
 //
 //  2. Replace placeholder values with your actual content.
@@ -52,12 +53,41 @@
 //  │ category         │ String                           │ Yes      │ One of the category options above           │
 //  │ time             │ String | null                    │ No       │ Time range, or null                         │
 //  │ registrationUrl  │ String | null                    │ No       │ Registration form link, or null             │
+//  │ instagramUrl     │ String | null                    │ No       │ Instagram post/reel link, or null           │
 //  └──────────────────┴──────────────────────────────────┴──────────┴─────────────────────────────────────────────┘
 //
 // ============================================================================
 
-/** @type {Array<{id: string, title: string, date: string, endDate: string|null, venue: string, description: string, image: string|null, category: string, time: string|null, registrationUrl: string|null}>} */
+/** @type {Array<{id: string, title: string, date: string, endDate: string|null, venue: string, description: string, image: string|null, category: string, time: string|null, registrationUrl: string|null, instagramUrl: string|null}>} */
 const EVENTS = [
+  {
+    id:              "farewell-aei-26",
+    title:           "Farewell AEI'26",
+    date:            "2026-03-30",
+    endDate:         null,
+    venue:           "AEI Department",
+    description:     "A special farewell gathering for the AEI 2026 batch with faculty, classmates, and shared memories from the journey.",
+    image:           "/images/events/farewell-26.png",
+    category:        "cultural",
+    time:            null,
+    registrationUrl: null,
+    instagramUrl:    null,
+  },
+
+  {
+    id:              "department-iftar-26",
+    title:           "Department IFTAR '26",
+    date:            "2026-03-12",
+    endDate:         null,
+    venue:           "AEI Department",
+    description:     "Department IFTAR '26 organized by AEI students and faculty as an evening of togetherness and community.",
+    image:           "/images/events/iftar-26.png",
+    category:        "cultural",
+    time:            null,
+    registrationUrl: null,
+    instagramUrl:    "https://www.instagram.com/reels/DWBcRM2jwfd/",
+  },
+
   {
     id:              "onam-celebration-2025",
     title:           "Onam Celebrations — AEI Department",
@@ -69,6 +99,7 @@ const EVENTS = [
     category:        "cultural",
     time:            "10:00 AM – 2:00 PM",
     registrationUrl: null,
+    instagramUrl:    null,
   },
 
   {
@@ -78,10 +109,11 @@ const EVENTS = [
     endDate:         null,
     venue:           "EC Seminar Hall",
     description:     "AEI Association × Internship Cell present an exclusive session to help you navigate careers in consulting and analytics.\n\nKickstart your career journey by learning directly from seniors who have secured roles in the industry:\n\n• Pranathi Ajayan – KPMG\n• Rahul Sam – Geojit | Incoming Analyst at KPMG\n\n📅 Date: 25 March 2026\n📍 Venue: EC Seminar Hall\n\nDon’t miss this opportunity to gain real insights and guidance ✨",
-    image:           "https://aei-cet.vercel.app/images/events/craking-the-consulting-analytics-industry.png",
+    image:           "https://aei-cet.vercel.app/images/events/cracking-the-consulting-analytics-industry.png",
     category:        "general",
     time:            "4:30 pm",
     registrationUrl: null,
+    instagramUrl:    "https://www.instagram.com/reels/DW1brENE_DH/",
   },
 
 ];
