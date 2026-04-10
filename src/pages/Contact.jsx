@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Mail, Phone, MapPin, Clock, Building2,
-  MessageCircle, Send,
+  Mail, Phone,
 } from 'lucide-react';
 import SEO from '@components/SEO';
 import { FACULTY } from '@data/faculty';
@@ -158,8 +157,6 @@ function ContactCard({ person }) {
 // ══════════════════════════════════════════════════════════════════════════════
 
 export default function Contact() {
-  const contact = SITE_CONFIG.contact ?? {};
-
   const sortedFaculty = useMemo(
     () =>
       [...FACULTY].sort(
@@ -168,15 +165,8 @@ export default function Contact() {
     [],
   );
 
-  const officeDetails = [
-    { icon: Building2, label: 'Office', value: contact.officeRoom },
-    { icon: Clock,     label: 'Hours',  value: contact.officeHours },
-    { icon: Phone,     label: 'Phone',  value: contact.phone, href: contact.phone ? `tel:${contact.phone}` : null },
-    { icon: MapPin,    label: 'Address', value: contact.address },
-  ].filter((d) => d.value);
-
   return (
-    <>      <SEO title="Contact" description="Get in touch with the AEI Student Assist Cell — office hours, email, phone, and location." />      {/* ═══════════════════════════════════════════════════════════════ */}
+    <>      <SEO title="Contact" description="Get in touch with the AEI Student Assist Cell team." />      {/* ═══════════════════════════════════════════════════════════════ */}
       {/*  PAGE BANNER                                                  */}
       {/* ═══════════════════════════════════════════════════════════════ */}
       <PageBanner
@@ -225,129 +215,7 @@ export default function Contact() {
       </SectionWrapper>
 
       {/* ═══════════════════════════════════════════════════════════════ */}
-      {/*  2. GENERAL OFFICE INFO + REACH US                            */}
-      {/* ═══════════════════════════════════════════════════════════════ */}
-      <SectionWrapper background="white">
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* ── Office details card ────────────────────────────────── */}
-          {officeDetails.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.35 }}
-              className="
-                p-6 rounded-2xl bg-surface
-                border border-border shadow-card
-              "
-            >
-              <h3 className="font-heading font-bold text-h4 text-text-primary mb-5">
-                Department Office
-              </h3>
-
-              <div className="space-y-4">
-                {officeDetails.map((d) => {
-                  const Icon = d.icon;
-                  const Wrapper = d.href ? 'a' : 'div';
-                  const wrapperProps = d.href
-                    ? { href: d.href, className: 'hover:text-primary transition-colors' }
-                    : {};
-                  return (
-                    <Wrapper key={d.label} {...wrapperProps} className={`flex gap-3 ${d.href ? 'hover:text-primary transition-colors' : ''}`}>
-                      <div className="shrink-0 w-9 h-9 rounded-lg bg-primary-soft text-primary flex items-center justify-center">
-                        <Icon size={18} />
-                      </div>
-                      <div>
-                        <p className="text-caption text-text-muted font-semibold uppercase tracking-wide">
-                          {d.label}
-                        </p>
-                        <p className="text-body-sm text-text-primary leading-relaxed">
-                          {d.value}
-                        </p>
-                      </div>
-                    </Wrapper>
-                  );
-                })}
-              </div>
-            </motion.div>
-          )}
-
-          {/* ── Reach Us CTA card ──────────────────────────────────── */}
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.35, delay: 0.1 }}
-            className="
-              flex flex-col justify-center items-center text-center
-              p-8 rounded-2xl
-              bg-gradient-to-br from-primary-muted to-surface3
-              border border-border shadow-card
-            "
-          >
-            <div className="w-14 h-14 rounded-full bg-primary-soft text-primary flex items-center justify-center mb-5">
-              <Send size={24} />
-            </div>
-
-            <h3 className="font-heading font-bold text-h4 text-text-primary mb-2">
-              Get in Touch
-            </h3>
-            <p className="text-body-sm text-text-secondary mb-6 max-w-xs">
-              Have a question or need help? Reach out through the available channels.
-            </p>
-
-            {/* Primary email CTA temporarily disabled */}
-            {/*
-            {contact.email && (
-              <a
-                href={`mailto:${contact.email}`}
-                className="
-                  inline-flex items-center gap-2
-                  px-6 py-3 rounded-full
-                  bg-primary text-text-primary
-                  font-heading font-semibold text-body-sm
-                  shadow-card hover:shadow-card-hover
-                  hover:bg-primary-dim
-                  transition-[box-shadow,background-color] duration-200
-                "
-              >
-                <Mail size={16} />
-                Send an Email
-                <ArrowRight size={14} />
-              </a>
-            )}
-            */}
-
-            {/* Optional WhatsApp link */}
-            {contact.whatsapp && (
-              <a
-                href={contact.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="
-                  inline-flex items-center gap-2 mt-3
-                  px-5 py-2.5 rounded-full
-                  bg-emerald-500 text-white
-                  font-heading font-semibold text-body-sm
-                  shadow-card hover:shadow-card-hover
-                  hover:bg-emerald-600
-                  transition-all duration-200
-                "
-              >
-                <MessageCircle size={16} />
-                WhatsApp Us
-              </a>
-            )}
-
-            <p className="text-caption text-text-muted mt-5">
-              We typically respond within 24 hours ✨
-            </p>
-          </motion.div>
-        </div>
-      </SectionWrapper>
-
-      {/* ═══════════════════════════════════════════════════════════════ */}
-      {/*  3. MAP EMBED (optional)                                      */}
+      {/*  2. MAP EMBED (optional)                                      */}
       {/*  To HIDE: set mapEmbedUrl to "" in site-config.js             */}
       {/* ═══════════════════════════════════════════════════════════════ */}
       {SITE_CONFIG.mapEmbedUrl && (
