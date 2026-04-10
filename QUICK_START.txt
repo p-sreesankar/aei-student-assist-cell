@@ -20,7 +20,7 @@ Open PowerShell in C:\Users\SREESANKAR\Python\AEI and run:
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                                                                         │
 │  git add .                                                              │
-│  git commit -m "Initial commit: Student Assist Cell website"           │
+│  git commit -m "Initial commit: AEI Association website"           │
 │  git remote add origin https://github.com/p-sreesankar/aei-student-assist-cell.git
 │  git branch -M main                                                     │
 │  git push -u origin main                                                │

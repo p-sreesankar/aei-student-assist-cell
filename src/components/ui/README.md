@@ -1,6 +1,6 @@
 # UI Component Library
 
-> Warm, friendly, accessible React components for Student Assist Cell
+> Warm, friendly, accessible React components for AEI Association
 
 ---
 

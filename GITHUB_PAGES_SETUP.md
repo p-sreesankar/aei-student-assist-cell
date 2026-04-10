@@ -36,7 +36,7 @@ git init
 
 # 2. Add all files and commit
 git add .
-git commit -m "Initial commit: Student Assist Cell website"
+git commit -m "Initial commit: AEI Association website"
 
 # 3. Push to GitHub (replace YOUR_USERNAME with your actual GitHub username)
 git remote add origin https://github.com/YOUR_USERNAME/aei-student-assist-cell.git

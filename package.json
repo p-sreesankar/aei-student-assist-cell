@@ -2,7 +2,7 @@
   "name": "aei-student-assist-cell",
   "private": true,
   "version": "1.0.0",
-  "description": "Student Assist Cell — AEI Department, College of Engineering Trivandrum",
+  "description": "AEI Association — AEI Department, College of Engineering Trivandrum",
   "type": "module",
   "scripts": {
     "dev": "vite",

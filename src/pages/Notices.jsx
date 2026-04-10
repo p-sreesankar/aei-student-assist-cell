@@ -192,7 +192,7 @@ export default function Notices() {
   }, []);
 
   return (
-    <>      <SEO title="Notices" description="Browse the latest department notices and announcements from the AEI Student Assist Cell." />      {/* ═══════════════════════════════════════════════════════════════ */}
+    <>      <SEO title="Notices" description="Browse the latest department notices and announcements from the AEI Association." />      {/* ═══════════════════════════════════════════════════════════════ */}
       {/*  PAGE BANNER                                                   */}
       {/* ═══════════════════════════════════════════════════════════════ */}
       <PageBanner

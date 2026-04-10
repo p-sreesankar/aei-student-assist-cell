@@ -273,7 +273,7 @@ export default function About() {
   );
 
   return (
-    <>      <SEO title="About" description="Learn about the Student Assist Cell — mission, vision, team, and what we do for AEI students at CET." />      {/* ═══════════════════════════════════════════════════════════════ */}
+    <>      <SEO title="About" description="Learn about the AEI Association — mission, vision, team, and what we do for AEI students at CET." />      {/* ═══════════════════════════════════════════════════════════════ */}
       {/*  PAGE BANNER                                                  */}
       {/* ═══════════════════════════════════════════════════════════════ */}
       <PageBanner
@@ -314,7 +314,7 @@ export default function About() {
           >
             <img
               src={ABOUT.teamPhotoUrl}
-              alt="Student Assist Cell Team"
+              alt="AEI Association Team"
               className="w-full h-auto object-cover"
               loading="lazy"
             />
@@ -363,7 +363,7 @@ export default function About() {
       <SectionWrapper background="white">
         <SectionHeader
           title="What We Do"
-          subtitle="The four pillars of the Student Assist Cell"
+          subtitle="The four pillars of the AEI Association"
           number={2}
           sticker="✨"
           centered
@@ -413,7 +413,7 @@ export default function About() {
         <SectionWrapper background="default">
           <SectionHeader
             title="Meet the Team"
-            subtitle="The people behind the Student Assist Cell 👋"
+            subtitle="The people behind the AEI Association 👋"
             number={3}
             sticker="👥"
             centered

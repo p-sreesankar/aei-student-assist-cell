@@ -1,5 +1,5 @@
 // ============================================================================
-//  RESOURCES — Student Assist Cell Downloads & Links
+//  RESOURCES — AEI Association Downloads & Links
 // ============================================================================
 //
 //  HOW TO ADD A NEW RESOURCE:

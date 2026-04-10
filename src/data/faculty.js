@@ -1,5 +1,5 @@
 // ============================================================================
-//  FACULTY — Student Assist Cell Contact Cards
+//  FACULTY — AEI Association Contact Cards
 // ============================================================================
 //
 //  HOW TO ADD A NEW CONTACT:

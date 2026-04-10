@@ -52,7 +52,7 @@ export const SOCIAL_LINKS = {
 // ── Brand Information ──────────────────────────────────────────────────────
 
 export const BRAND = {
-  siteName: 'Student Assist Cell',
+  siteName: 'AEI Association',
   departmentShort: 'AEI',
   departmentFull: 'Applied Electronics and Instrumentation',
   collegeShort: 'CET',

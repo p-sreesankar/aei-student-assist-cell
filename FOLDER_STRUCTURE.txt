@@ -1,4 +1,4 @@
-Student Assist Cell — Project Structure
+AEI Association — Project Structure
 ========================================
 
 aei-student-assist-cell/

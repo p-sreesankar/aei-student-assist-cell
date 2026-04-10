@@ -1,5 +1,5 @@
 // ============================================================================
-//  ABOUT — Student Assist Cell About Content
+//  ABOUT — AEI Association About Content
 // ============================================================================
 //
 //  HOW TO EDIT (for non-developers):
@@ -19,9 +19,9 @@ export const ABOUT = {
   heading: "Our Mission",
 
   paragraphs: [
-    "The Student Assist Cell is a dedicated support system for students of the Applied Electronics and Instrumentation (AEI) department at College of Engineering Trivandrum. We exist to bridge the gap between students and the department, ensuring that every student has access to timely information, resources, and a platform to voice their concerns.",
+    "The AEI Association is a dedicated support system for students of the Applied Electronics and Instrumentation (AEI) department at College of Engineering Trivandrum. We exist to bridge the gap between students and the department, ensuring that every student has access to timely information, resources, and a platform to voice their concerns.",
 
-    "Our cell ensures that important notices, event announcements, academic resources, and downloadable materials are made available in one central, easy-to-access location. Whether you're looking for the latest exam schedule, lab manuals, event registrations, or need to submit a grievance, the Student Assist Cell is here to help.",
+    "Our cell ensures that important notices, event announcements, academic resources, and downloadable materials are made available in one central, easy-to-access location. Whether you're looking for the latest exam schedule, lab manuals, event registrations, or need to submit a grievance, the AEI Association is here to help.",
 
     "We are committed to creating a transparent, student-friendly environment where communication flows freely and no student feels left behind. Your success and well-being are at the heart of everything we do.",
   ],
@@ -36,7 +36,7 @@ export const ABOUT = {
     {
       year: "2019",
       title: "Cell Founded",
-      description: "AEI Student Assist Cell established as a bridge between students and department.",
+      description: "AEI Association established as a bridge between students and department.",
     },
     {
       year: "2021",

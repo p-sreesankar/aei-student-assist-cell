@@ -1,5 +1,5 @@
 // ══════════════════════════════════════════════════════════════════════════
-//  UI Component Library — Student Assist Cell
+//  UI Component Library — AEI Association
 // ══════════════════════════════════════════════════════════════════════════
 //
 //  Warm, friendly, accessible React components built with Tailwind CSS.

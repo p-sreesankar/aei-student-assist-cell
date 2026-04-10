@@ -1,4 +1,4 @@
-# Product Requirements Document: Student Assist Cell — AEI, CET
+# Product Requirements Document: AEI Association — AEI, CET
 
 ## Version 1.0 · March 5, 2026
 
@@ -8,7 +8,7 @@
 
 Students of the Applied Electronics and Instrumentation (AEI) department at College of Engineering Trivandrum (CET) currently lack a single, accessible, student-friendly digital presence where they can find department notices, upcoming events, downloadable resources, a photo gallery, and a channel to submit grievances. Information is scattered across WhatsApp groups, notice boards, and word-of-mouth — leading to missed deadlines, uneven access, and no clear grievance path.
 
-"Student Assist Cell" is a zero-cost, fully static public website hosted on GitHub Pages that consolidates all student-facing information into one mobile-first destination, maintained by a single non-developer maintainer who edits JavaScript data files and pushes to GitHub.
+"AEI Association" is a zero-cost, fully static public website hosted on GitHub Pages that consolidates all student-facing information into one mobile-first destination, maintained by a single non-developer maintainer who edits JavaScript data files and pushes to GitHub.
 
 ---
 
@@ -55,7 +55,7 @@ Students of the Applied Electronics and Instrumentation (AEI) department at Coll
 ### 4.1 Home
 
 - Purpose: First impression + navigation hub.
-- Content: Hero banner with cell name ("Student Assist Cell — AEI, CET"), a one-line tagline, and a grid/row of quick-link cards to every other section.
+- Content: Hero banner with cell name ("AEI Association — AEI, CET"), a one-line tagline, and a grid/row of quick-link cards to every other section.
 - Behavior: Smooth-scroll or anchor links to each section (single-page app feel). On mobile, quick-link cards stack into a 2-column grid.
 - Acceptance Criteria:
   - AC-1: Page loads in < 2 s on 3G.
@@ -142,10 +142,10 @@ All data files live in a `/data` directory and export plain JS arrays/objects co
 
 ```
 {
-  siteName:         String   — "Student Assist Cell"
+  siteName:         String   — "AEI Association"
   tagline:          String   — "AEI Department, College of Engineering Trivandrum"
   grievanceFormUrl: String   — full Google Form embed URL
-  footerText:       String   — "© 2026 Student Assist Cell — AEI, CET"
+  footerText:       String   — "© 2026 AEI Association — AEI, CET"
 }
 ```
 

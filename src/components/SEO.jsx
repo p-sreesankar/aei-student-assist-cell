@@ -5,8 +5,8 @@ import { SITE_CONFIG } from '@data/site-config';
  * SEO Component — Sets <title> and <meta description> per page
  *
  * Title format:
- *   Home  → "Student Assist Cell — AEI, CET"
- *   Other → "Notices | Student Assist Cell — AEI"
+ *   Home  → "AEI Association — AEI, CET"
+ *   Other → "Notices | AEI Association — AEI"
  *
  * @example
  * <SEO title="Notices" description="Browse the latest department announcements." />

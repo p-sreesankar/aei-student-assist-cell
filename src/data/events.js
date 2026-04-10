@@ -1,5 +1,5 @@
 // ============================================================================
-//  EVENTS — Student Assist Cell Event Calendar
+//  EVENTS — AEI Association Event Calendar
 // ============================================================================
 //
 //  HOW TO ADD A NEW EVENT:

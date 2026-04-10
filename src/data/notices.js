@@ -1,5 +1,5 @@
 // ============================================================================
-//  NOTICES — Student Assist Cell Notice Board
+//  NOTICES — AEI Association Notice Board
 // ============================================================================
 //
 //  HOW TO ADD A NEW NOTICE:

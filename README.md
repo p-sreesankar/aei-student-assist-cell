@@ -1,4 +1,4 @@
-# Student Assist Cell — AEI, CET
+# AEI Association — AEI, CET
 
 A modern, mobile-first static website for the Applied Electronics and Instrumentation (AEI) department at College of Engineering Trivandrum. Built with React, Vite, and Tailwind CSS. Zero backend — all content driven by simple JavaScript data files.
 
@@ -227,7 +227,7 @@ https://YOUR_USERNAME.github.io/aei-student-assist-cell/
 
 ## 🤝 Contributing
 
-This site is maintained by the AEI Student Assist Cell team. If you're a student or faculty member:
+This site is maintained by the AEI Association team. If you're a student or faculty member:
 
 1. Fork the repo
 2. Create a feature branch: `git checkout -b feature/your-feature`
@@ -252,4 +252,4 @@ For questions, issues, or suggestions:
 
 ---
 
-**Built with ❤️ by the AEI Student Assist Cell team**
+**Built with ❤️ by the AEI Association team**

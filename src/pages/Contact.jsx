@@ -166,7 +166,7 @@ export default function Contact() {
   );
 
   return (
-    <>      <SEO title="Contact" description="Get in touch with the AEI Student Assist Cell team." />      {/* ═══════════════════════════════════════════════════════════════ */}
+    <>      <SEO title="Contact" description="Get in touch with the AEI Association team." />      {/* ═══════════════════════════════════════════════════════════════ */}
       {/*  PAGE BANNER                                                  */}
       {/* ═══════════════════════════════════════════════════════════════ */}
       <PageBanner

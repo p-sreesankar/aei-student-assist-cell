@@ -1,6 +1,6 @@
 # Deployment Guide — GitHub Pages
 
-Step-by-step guide to deploy the Student Assist Cell website to GitHub Pages.
+Step-by-step guide to deploy the AEI Association website to GitHub Pages.
 
 ---
 
@@ -54,7 +54,7 @@ git init
 git add .
 
 # Commit
-git commit -m "Initial commit: Student Assist Cell website"
+git commit -m "Initial commit: AEI Association website"
 
 # Add remote origin (replace YOUR_USERNAME and REPO_NAME)
 git remote add origin https://github.com/YOUR_USERNAME/aei-student-assist-cell.git
