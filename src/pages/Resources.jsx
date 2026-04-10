@@ -62,6 +62,11 @@ function parseSchemeAndSemester(category) {
   };
 }
 
+function schemeFromSemester(semester) {
+  if (!Number.isFinite(Number(semester))) return '';
+  return Number(semester) >= 5 ? '2019' : '2024';
+}
+
 function inferSchemeAndSemester(item, schemesList) {
   const primary = parseSchemeAndSemester(item?.category);
   const fromFileType = parseSchemeAndSemester(item?.fileType);
@@ -76,6 +81,11 @@ function inferSchemeAndSemester(item, schemesList) {
 
   const semester = primary.semester ?? fromFileType.semester ?? secondary.semester;
   let schemeId = primary.schemeId || fromFileType.schemeId || secondary.schemeId;
+
+  // Business rule: semester decides scheme.
+  if (Number.isFinite(semester)) {
+    schemeId = schemeFromSemester(semester);
+  }
 
   if (!schemeId && Number.isFinite(semester)) {
     const candidates = schemesList.filter((scheme) =>
@@ -409,47 +419,23 @@ export default function Resources() {
   const previousMockTests = useMemo(() => getPreviousMockTests(mockTests), [mockTests]);
 
   const { mergedSchemes, unmappedResources } = useMemo(() => {
-    const moduleLookup = new Map();
-    schemes.forEach((scheme) => {
-      (scheme.semesters || []).forEach((semesterBlock) => {
-        (semesterBlock.subjects || []).forEach((subject) => {
-          const key = normalizeText(subject.name);
-          if (!key) return;
-          if (!moduleLookup.has(key)) moduleLookup.set(key, []);
-          moduleLookup.get(key).push({ schemeId: scheme.id, semester: semesterBlock.semester });
-        });
-      });
-    });
-
     const adminOnlyResources = adminResources.filter((item) => {
       const id = String(item?.id || '');
-      const moduleTitle = String(item?.moduleTitle || item?.description || '').trim();
+      const moduleTitle = String(item?.moduleTitle || '').trim();
       return !id.startsWith('site-') && Boolean(moduleTitle) && Boolean(item?.driveLink);
     });
     const unmatched = [];
 
     const moduleMap = adminOnlyResources.reduce((acc, item) => {
-      const moduleTitle = String(item.moduleTitle || item.description || '').trim();
+      const moduleTitle = String(item.moduleTitle || '').trim();
       const key = normalizeText(moduleTitle);
       if (!key) return acc;
       const parsed = inferSchemeAndSemester(item, schemes);
       let schemeId = parsed.schemeId;
       let semester = parsed.semester;
 
-      if (!schemeId || !Number.isFinite(semester)) {
-        const lookup = moduleLookup.get(key) || [];
-        if (lookup.length > 0) {
-          schemeId = schemeId || lookup[0].schemeId;
-          semester = Number.isFinite(semester) ? semester : lookup[0].semester;
-        }
-      }
-
-      if (!schemeId) {
-        schemeId = resolveSchemeFallback(schemes);
-      }
-
-      if (schemeId && !Number.isFinite(semester)) {
-        semester = resolveSemesterFallback(schemeId, schemes);
+      if (Number.isFinite(semester)) {
+        schemeId = schemeFromSemester(semester);
       }
 
       if (!schemeId || !Number.isFinite(semester)) {
@@ -479,13 +465,6 @@ export default function Resources() {
 
     const nextMergedSchemes = schemes.map((scheme) => {
       const semesterMap = new Map();
-
-      (scheme.semesters || []).forEach((semester) => {
-        semesterMap.set(semester.semester, {
-          ...semester,
-          subjects: [...(semester.subjects || [])],
-        });
-      });
 
       [...moduleMap.values()]
         .filter((group) => group.schemeId === scheme.id)
@@ -530,7 +509,8 @@ export default function Resources() {
         });
 
       return {
-        ...scheme,
+        id: scheme.id,
+        label: scheme.label,
         semesters: [...semesterMap.values()].sort((a, b) => a.semester - b.semester),
       };
     });
