@@ -54,67 +54,6 @@
 
 /** @type {Array<{id: string, title: string, category: string, date: string, description: string, attachmentUrl: string|null, pinned: boolean}>} */
 const NOTICES = [
-
-  {
-    id:            "mid-sem-exam-schedule-s6-2026",
-    title:         "Mid-Semester Exam Schedule — S6 AEI (March 2026)",
-    category:      "academic",
-    date:          "2026-03-04",
-    description:   "The mid-semester examination for S6 AEI will begin on March 17, 2026. Timetable and seating arrangement have been uploaded. Students are advised to check the attachment and report any conflicts to the class advisor before March 10.",
-    attachmentUrl: "https://drive.google.com/file/d/EXAMPLE1/view?usp=sharing",
-    pinned:        true,
-  },
-
-  {
-    id:            "ieee-workshop-registration-2026",
-    title:         "IEEE Workshop on Embedded Systems — Registration Open",
-    category:      "general",
-    date:          "2026-03-01",
-    description:   "A two-day workshop on 'Embedded Systems for IoT Applications' will be conducted on March 22–23 by the IEEE Student Branch. Registration is free for AEI students. Fill the Google Form linked below before March 15.",
-    attachmentUrl: "https://forms.gle/EXAMPLE_FORM_LINK",
-    pinned:        false,
-  },
-
-  {
-    id:            "fee-payment-reminder-s4-s6",
-    title:         "Fee Payment Reminder — S4 & S6 AEI",
-    category:      "administrative",
-    date:          "2026-02-25",
-    description:   "Students of S4 and S6 AEI are reminded to complete their semester fee payment by March 10, 2026. Late fee will be applicable after the deadline. Visit the accounts section or pay online through the college portal.",
-    attachmentUrl: null,
-    pinned:        false,
-  },
-
-  {
-    id:            "internship-opportunity-bosch-2026",
-    title:         "Internship Opportunity — Bosch India (Summer 2026)",
-    category:      "general",
-    date:          "2026-02-20",
-    description:   "Bosch India is offering summer internships for pre-final year students in instrumentation and control systems. Interested students should submit their resume to the placement cell by February 28. See the attached brochure for eligibility details.",
-    attachmentUrl: "https://drive.google.com/file/d/EXAMPLE2/view?usp=sharing",
-    pinned:        false,
-  },
-
-  {
-    id:            "lab-manual-submission-deadline",
-    title:         "Lab Manual Submission Deadline — S4 AEI",
-    category:      "academic",
-    date:          "2026-02-15",
-    description:   "All S4 AEI students must submit their completed Measurements & Instrumentation lab manual to the lab in-charge by March 5, 2026. Late submissions will not be accepted for internal assessment.",
-    attachmentUrl: null,
-    pinned:        false,
-  },
-
-  {
-    id:            "emergency-campus-closure-weather",
-    title:         "Campus Closed — Heavy Rainfall Warning (Feb 12)",
-    category:      "urgent",
-    date:          "2026-02-12",
-    description:   "Due to IMD's red alert for heavy rainfall in Thiruvananthapuram district, all classes and lab sessions are cancelled on February 12, 2026. Students are advised to stay safe and avoid unnecessary travel. Updates will be shared on the college website.",
-    attachmentUrl: null,
-    pinned:        false,
-  },
-
 ];
 
 export { NOTICES };
