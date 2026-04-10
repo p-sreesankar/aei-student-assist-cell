@@ -14,8 +14,8 @@ A modern, mobile-first static website for the Applied Electronics and Instrument
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/aei-student-assist-cell.git
-cd aei-student-assist-cell
+git clone https://github.com/YOUR_USERNAME/aei-association.git
+cd aei-association
 
 # Install dependencies
 npm install
@@ -31,7 +31,7 @@ Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
 ## 📁 Project Structure
 
 ```
-aei-student-assist-cell/
+aei-association/
 ├── public/
 │   └── images/              # Gallery photos, event images
 ├── src/
@@ -148,16 +148,16 @@ This site is configured to deploy to **GitHub Pages**.
 
 ### First-Time Setup
 
-1. Create a new GitHub repository: `aei-student-assist-cell`
+1. Create a new GitHub repository: `aei-association`
 2. Push this code to the repo:
 
 ```bash
-git remote add origin https://github.com/YOUR_USERNAME/aei-student-assist-cell.git
+git remote add origin https://github.com/YOUR_USERNAME/aei-association.git
 git branch -M main
 git push -u origin main
 ```
 
-3. Update `vite.config.js` → set `base: '/aei-student-assist-cell/'` (match your repo name)
+3. Update `vite.config.js` → set `base: '/aei-association/'` (match your repo name)
 
 ### Deploy
 
@@ -168,7 +168,7 @@ npm run deploy
 This builds the site and pushes it to the `gh-pages` branch. Your site will be live at:
 
 ```
-https://YOUR_USERNAME.github.io/aei-student-assist-cell/
+https://YOUR_USERNAME.github.io/aei-association/
 ```
 
 ### Custom Domain (Optional)

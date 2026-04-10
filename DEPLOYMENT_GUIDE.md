@@ -17,7 +17,7 @@ Step-by-step guide to deploy the AEI Association website to GitHub Pages.
 
 1. Go to [github.com](https://github.com) and sign in
 2. Click the **+** icon (top-right) → **New repository**
-3. Repository name: `aei-student-assist-cell` (or any name you prefer)
+3. Repository name: `aei-association` (or any name you prefer)
 4. Make it **Public** (required for free GitHub Pages)
 5. Do **NOT** initialize with README (we already have one)
 6. Click **Create Repository**
@@ -31,7 +31,7 @@ Open `vite.config.js` and set the `base` option to match your repository name:
 ```javascript
 export default defineConfig({
   // ...
-  base: '/aei-student-assist-cell/',  // ← Replace with YOUR repo name
+  base: '/aei-association/',  // ← Replace with YOUR repo name
   // ...
 });
 ```
@@ -57,7 +57,7 @@ git add .
 git commit -m "Initial commit: AEI Association website"
 
 # Add remote origin (replace YOUR_USERNAME and REPO_NAME)
-git remote add origin https://github.com/YOUR_USERNAME/aei-student-assist-cell.git
+git remote add origin https://github.com/YOUR_USERNAME/aei-association.git
 
 # Push to GitHub
 git branch -M main
@@ -94,7 +94,7 @@ This will:
    - Folder: `/ (root)`
 5. Click **Save**
 
-You'll see a message: **"Your site is live at https://YOUR_USERNAME.github.io/aei-student-assist-cell/"**
+You'll see a message: **"Your site is live at https://YOUR_USERNAME.github.io/aei-association/"**
 
 ---
 

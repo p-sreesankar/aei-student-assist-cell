@@ -1,7 +1,7 @@
 AEI Association — Project Structure
 ========================================
 
-aei-student-assist-cell/
+aei-association/
 │
 ├── public/                         # Static assets served as-is
 │   ├── favicon.svg                 # Site favicon
