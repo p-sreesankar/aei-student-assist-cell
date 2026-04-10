@@ -6,10 +6,10 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
 
-  // ── GitHub Pages deployment ──────────────────────────────────
-  // If using default GitHub Pages URL:  base: '/aei-student-assist-cell/'
-  // If using a custom domain:           base: '/'
-  base: '/aei-student-assist-cell/',
+  // ── Deployment ───────────────────────────────────────────────
+  // Root base by default (Vercel-friendly). Override with
+  // VITE_BASE_PATH when building for a subpath deployment.
+  base: process.env.VITE_BASE_PATH || '/',
 
   resolve: {
     alias: {
