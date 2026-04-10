@@ -251,10 +251,10 @@ function EventCard({ event, isPast = false, onImageClick }) {
           {event.description}
         </p>
 
-        {/* CTA — only for upcoming events */}
-        {!isPast && (event.registrationUrl || event.instagramUrl) && (
+        {/* CTA — show links for both upcoming and past events */}
+        {(event.registrationUrl || event.instagramUrl) && (
           <div className="mt-4 flex flex-wrap gap-2">
-            {event.registrationUrl && (
+            {!isPast && event.registrationUrl && (
               <a
                 href={event.registrationUrl}
                 target="_blank"
