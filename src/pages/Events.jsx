@@ -1,6 +1,6 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MapPin, Clock, ExternalLink, Instagram } from 'lucide-react';
+import { MapPin, Clock, ExternalLink, Instagram, X } from 'lucide-react';
 import SEO from '@components/SEO';
 import { EVENTS } from '@data/events';
 import { SectionWrapper } from '@components/layout';
@@ -138,7 +138,7 @@ function CalendarTearOff({ dateStr, isPast = false }) {
 //  EVENT CARD
 // ══════════════════════════════════════════════════════════════════════════════
 
-function EventCard({ event, isPast = false }) {
+function EventCard({ event, isPast = false, onImageClick }) {
   const days = daysUntil(event.date);
   const hideDate = Boolean(event.hideDate);
   const showCountdown = !hideDate && !isPast && days >= 0 && days <= 7;
@@ -150,7 +150,12 @@ function EventCard({ event, isPast = false }) {
     <Card className={`overflow-hidden flex flex-col ${isPast ? 'opacity-75' : ''}`}>
       {/* ── Image / Placeholder ──────────────────────────────────────── */}
       {showImage ? (
-        <div className="relative h-36 sm:h-44 bg-surface2 overflow-hidden">
+        <button
+          type="button"
+          onClick={() => onImageClick?.(event)}
+          className="relative h-36 sm:h-44 bg-surface2 overflow-hidden w-full cursor-zoom-in"
+          aria-label={`View full image for ${event.title}`}
+        >
           <img
             src={event.image}
             alt=""
@@ -166,7 +171,7 @@ function EventCard({ event, isPast = false }) {
             onError={() => setImageError(true)}
             className="relative z-10 w-full h-full object-contain"
           />
-        </div>
+        </button>
       ) : (
         <div
           className={`
@@ -280,11 +285,69 @@ function EventCard({ event, isPast = false }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
+//  IMAGE POPUP
+// ══════════════════════════════════════════════════════════════════════════════
+
+function EventImagePopup({ event, onClose }) {
+  useEffect(() => {
+    if (!event) return undefined;
+
+    function handleKeyDown(e) {
+      if (e.key === 'Escape') onClose();
+    }
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [event, onClose]);
+
+  if (!event?.image) return null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4"
+        onClick={onClose}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 z-10 rounded-full bg-surface/90 hover:bg-surface2 p-2.5 shadow-elevated transition-colors"
+          aria-label="Close image popup"
+        >
+          <X size={20} className="text-text-primary" />
+        </button>
+
+        <motion.img
+          initial={{ scale: 0.96, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.96, opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          src={event.image}
+          alt={event.title}
+          className="max-w-full max-h-[88vh] object-contain rounded-xl shadow-elevated"
+          onClick={(e) => e.stopPropagation()}
+        />
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
 //  EVENTS PAGE
 // ══════════════════════════════════════════════════════════════════════════════
 
 export default function Events() {
   const [activeTab, setActiveTab] = useState('upcoming');
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   // ── Derived filtered lists ─────────────────────────────────────────────
   const { upcoming, past } = useMemo(() => {
@@ -300,6 +363,8 @@ export default function Events() {
   const activeList = activeTab === 'upcoming' ? upcoming : past;
 
   const handleTabClick = useCallback((key) => setActiveTab(key), []);
+  const handleImageOpen = useCallback((event) => setSelectedEvent(event), []);
+  const handleImageClose = useCallback(() => setSelectedEvent(null), []);
 
   return (
     <>      <SEO title="Events" description="Upcoming and past events — workshops, seminars, fests and more from the AEI department." />      {/* ═════════════════════════════════════════════════════════════════ */}
@@ -396,12 +461,18 @@ export default function Events() {
             >
               {activeList.map((event) => (
                 <motion.div key={event.id} variants={staggerItem}>
-                  <EventCard event={event} isPast={activeTab === 'past'} />
+                  <EventCard
+                    event={event}
+                    isPast={activeTab === 'past'}
+                    onImageClick={handleImageOpen}
+                  />
                 </motion.div>
               ))}
             </motion.div>
           )}
         </AnimatePresence>
+
+        <EventImagePopup event={selectedEvent} onClose={handleImageClose} />
 
         {/* ═══════════════════════════════════════════════════════════════ */}
         {/*  RESULT COUNT                                                 */}
