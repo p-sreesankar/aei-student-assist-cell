@@ -46,9 +46,9 @@ const SITE_CONFIG = {
 
   socialLinks: {
     instagram: "https://www.instagram.com/ae_association_cet/",        // [Optional] Instagram page URL
-    linkedin:  "", // [Optional] LinkedIn page URL
+    // linkedin:  "", // [Optional] LinkedIn page URL
     youtube:   "",                                           // [Optional] YouTube channel URL
-    email:     "",    // [Optional] General contact email (keep mailto: prefix)
+    // email:     "",    // [Optional] General contact email (keep mailto: prefix)
     website:   "",                     // [Optional] College or dept website
   },
 

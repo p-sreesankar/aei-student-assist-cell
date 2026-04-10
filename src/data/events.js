@@ -123,7 +123,7 @@ const EVENTS = [
     endDate:         null,
     venue:           "EC Seminar Hall",
     description:     "AEI Association × Internship Cell present an exclusive session to help you navigate careers in consulting and analytics.\n\nKickstart your career journey by learning directly from seniors who have secured roles in the industry:\n\n• Pranathi Ajayan – KPMG\n• Rahul Sam – Geojit | Incoming Analyst at KPMG\n\n📅 Date: 25 March 2026\n📍 Venue: EC Seminar Hall\n\nDon’t miss this opportunity to gain real insights and guidance ✨",
-    image:           "https://aei-cet.vercel.app/images/events/cracking-the-consulting-analytics-industry.png",
+    image:           "/images/events/cracking-analytics-and-consulting-industry.png",
     category:        "general",
     time:            "4:30 pm",
     registrationUrl: null,
