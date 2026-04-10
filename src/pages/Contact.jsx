@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import {
   Mail, Phone, MapPin, Clock, Building2,
-  ArrowRight, MessageCircle, Send,
+  MessageCircle, Send,
 } from 'lucide-react';
 import SEO from '@components/SEO';
 import { FACULTY } from '@data/faculty';
@@ -293,10 +293,11 @@ export default function Contact() {
               Get in Touch
             </h3>
             <p className="text-body-sm text-text-secondary mb-6 max-w-xs">
-              Have a question or need help? Drop us an email and we'll get back to you.
+              Have a question or need help? Reach out through the available channels.
             </p>
 
-            {/* Primary email CTA */}
+            {/* Primary email CTA temporarily disabled */}
+            {/*
             {contact.email && (
               <a
                 href={`mailto:${contact.email}`}
@@ -315,6 +316,7 @@ export default function Contact() {
                 <ArrowRight size={14} />
               </a>
             )}
+            */}
 
             {/* Optional WhatsApp link */}
             {contact.whatsapp && (
