@@ -69,7 +69,7 @@ const EVENTS = [
     endDate:         null,
     venue:           "AEI Department",
     description:     "Candela '26 is coming soon. Stay tuned for the official poster, schedule, and registration details.",
-    image:           null,
+    image:           "/images/events/candela-26.png",
     category:        "fest",
     time:            null,
     registrationUrl: null,
@@ -130,7 +130,7 @@ const EVENTS = [
     category:        "general",
     time:            "4:30 pm",
     registrationUrl: null,
-    instagramUrl:    "https://www.instagram.com/reels/DW1brENE_DH/",
+    instagramUrl:    "https://www.instagram.com/reel/DW1brENE_DH/?igsh=dTNuc250eWcyNTF4",
   },
 
 ];

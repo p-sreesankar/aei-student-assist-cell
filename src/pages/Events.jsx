@@ -156,7 +156,7 @@ function EventCard({ event, isPast = false }) {
             alt={event.title}
             loading="lazy"
             onError={() => setImageError(true)}
-            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            className="w-full h-full object-contain"
           />
         </div>
       ) : (

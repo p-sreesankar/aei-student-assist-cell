@@ -201,7 +201,7 @@ function AlbumCard({ album, onClick, index }) {
           src={cover.src}
           alt={cover.caption}
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-contain"
         />
 
         {/* Gradient scrim at bottom */}
