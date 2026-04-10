@@ -42,9 +42,9 @@ export const NAV_LINKS = ALL_NAV_LINKS.filter((link) => {
 // Used in Footer component. To hide, leave the value as an empty string.
 
 export const SOCIAL_LINKS = {
-  email: 'mailto:studentassistcell.aei@cet.ac.in',
   instagram: 'https://www.instagram.com/aei_cet/',
-  linkedin: 'https://www.linkedin.com/company/aei-cet/',
+  // email: '',
+  // linkedin: '',
   // youtube: '',  // Commented out = hidden
   // twitter: '',  // Commented out = hidden
 };

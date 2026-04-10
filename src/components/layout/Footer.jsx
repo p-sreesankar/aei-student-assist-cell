@@ -14,6 +14,7 @@ import { NAV_LINKS, SOCIAL_LINKS, BRAND, FOOTER_CREDIT } from '@/config/navigati
  */
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const footerEmail = (SOCIAL_LINKS.email || '').trim();
 
   // ── Filter Active Social Links ─────────────────────────────────────────
   const activeSocialLinks = Object.entries(SOCIAL_LINKS).filter(
@@ -116,18 +117,20 @@ export default function Footer() {
             )}
 
             {/* Contact Email */}
-            <div className="space-y-2">
-              <p className="text-body-sm text-text-muted">
-                Got questions? Reach out:
-              </p>
-              <a
-                href={SOCIAL_LINKS.email || 'mailto:contact@example.com'}
-                className="inline-flex items-center gap-2 text-body-sm text-primary hover:text-primary-bright font-medium transition-colors"
-              >
-                <Mail size={16} />
-                <span>Email Us</span>
-              </a>
-            </div>
+            {footerEmail && (
+              <div className="space-y-2">
+                <p className="text-body-sm text-text-muted">
+                  Got questions? Reach out:
+                </p>
+                <a
+                  href={footerEmail}
+                  className="inline-flex items-center gap-2 text-body-sm text-primary hover:text-primary-bright font-medium transition-colors"
+                >
+                  <Mail size={16} />
+                  <span>Email Us</span>
+                </a>
+              </div>
+            )}
           </div>
         </div>
 

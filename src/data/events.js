@@ -18,6 +18,7 @@
 //       time:            "10:00 AM – 4:00 PM",          ← or null
 //       registrationUrl: null,                           ← Google Form link, or null
 //       instagramUrl:    null,                           ← Instagram post/reel link, or null
+//       hideDate:        false,                          ← true to hide date/calendar on card
 //     },
 //
 //  2. Replace placeholder values with your actual content.
@@ -54,11 +55,12 @@
 //  │ time             │ String | null                    │ No       │ Time range, or null                         │
 //  │ registrationUrl  │ String | null                    │ No       │ Registration form link, or null             │
 //  │ instagramUrl     │ String | null                    │ No       │ Instagram post/reel link, or null           │
+//  │ hideDate         │ Boolean                          │ No       │ Hide date and calendar for this event card  │
 //  └──────────────────┴──────────────────────────────────┴──────────┴─────────────────────────────────────────────┘
 //
 // ============================================================================
 
-/** @type {Array<{id: string, title: string, date: string, endDate: string|null, venue: string, description: string, image: string|null, category: string, time: string|null, registrationUrl: string|null, instagramUrl: string|null}>} */
+/** @type {Array<{id: string, title: string, date: string, endDate: string|null, venue: string, description: string, image: string|null, category: string, time: string|null, registrationUrl: string|null, instagramUrl: string|null, hideDate?: boolean}>} */
 const EVENTS = [
   {
     id:              "candela-26",
@@ -72,6 +74,7 @@ const EVENTS = [
     time:            null,
     registrationUrl: null,
     instagramUrl:    null,
+    hideDate:        true,
   },
 
   {

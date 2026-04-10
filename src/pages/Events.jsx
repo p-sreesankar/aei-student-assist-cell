@@ -25,6 +25,7 @@ import { formatDate, isUpcoming, isSoon } from '@utils/date';
 //    time:            string | null,   // human-readable time range
 //    registrationUrl: string | null,   // form link for upcoming events
 //    instagramUrl:    string | null,   // Instagram post/reel link
+//    hideDate:        boolean,         // hide date/calendar on card
 //  }
 //
 //  Upcoming vs Past is auto-derived: event.date >= today → upcoming.
@@ -139,7 +140,8 @@ function CalendarTearOff({ dateStr, isPast = false }) {
 
 function EventCard({ event, isPast = false }) {
   const days = daysUntil(event.date);
-  const showCountdown = !isPast && days >= 0 && days <= 7;
+  const hideDate = Boolean(event.hideDate);
+  const showCountdown = !hideDate && !isPast && days >= 0 && days <= 7;
   const gradient = gradientFor(event.id);
   const [imageError, setImageError] = useState(false);
   const showImage = Boolean(event.image) && !imageError;
@@ -175,7 +177,7 @@ function EventCard({ event, isPast = false }) {
         {/* Row: Calendar + Content */}
         <div className="flex gap-3 sm:gap-4">
           {/* Calendar tear-off */}
-          <CalendarTearOff dateStr={event.date} isPast={isPast} />
+          {!hideDate && <CalendarTearOff dateStr={event.date} isPast={isPast} />}
 
           {/* Text block */}
           <div className="flex-1 min-w-0">
@@ -191,7 +193,7 @@ function EventCard({ event, isPast = false }) {
                 </Badge>
               )}
 
-              {!isPast && isSoon(event.date) && (
+              {!hideDate && !isPast && isSoon(event.date) && (
                 <Badge variant="soon">Soon</Badge>
               )}
 
@@ -209,12 +211,22 @@ function EventCard({ event, isPast = false }) {
 
         {/* Meta: time + venue */}
         <div className="flex flex-wrap gap-x-4 gap-y-1 mt-3 text-body-sm text-text-muted">
-          <span className="flex items-center gap-1.5">
-            <Clock size={14} className="flex-shrink-0" />
-            {formatDate(event.date)}
-            {event.endDate && ` – ${formatDate(event.endDate)}`}
-            {event.time && ` · ${event.time}`}
-          </span>
+          {!hideDate && (
+            <span className="flex items-center gap-1.5">
+              <Clock size={14} className="flex-shrink-0" />
+              {formatDate(event.date)}
+              {event.endDate && ` – ${formatDate(event.endDate)}`}
+              {event.time && ` · ${event.time}`}
+            </span>
+          )}
+
+          {hideDate && event.time && (
+            <span className="flex items-center gap-1.5">
+              <Clock size={14} className="flex-shrink-0" />
+              {event.time}
+            </span>
+          )}
+
           <span className="flex items-center gap-1.5">
             <MapPin size={14} className="flex-shrink-0" />
             {event.venue}
