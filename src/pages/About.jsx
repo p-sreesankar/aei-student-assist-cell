@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   Heart, Zap, Users, ShieldCheck,
@@ -7,10 +7,10 @@ import {
 } from 'lucide-react';
 import SEO from '@components/SEO';
 import { ABOUT } from '@data/about';
-import { FACULTY } from '@data/faculty';
 import { SITE_CONFIG } from '@data/site-config';
 import { SectionWrapper } from '@components/layout';
 import { Card, PageBanner, SectionHeader } from '@components/ui';
+import { getContacts, subscribeContentUpdates } from '@lib/repositories/contentRepository';
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  STATIC DATA
@@ -263,13 +263,36 @@ function Timeline({ milestones }) {
 // ══════════════════════════════════════════════════════════════════════════════
 
 export default function About() {
+  const [facultyList, setFacultyList] = useState([]);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadContacts() {
+      const items = await getContacts();
+      if (mounted) {
+        setFacultyList(items);
+      }
+    }
+
+    loadContacts();
+    const unsubscribe = subscribeContentUpdates(() => {
+      loadContacts();
+    }, ['contacts']);
+
+    return () => {
+      mounted = false;
+      unsubscribe();
+    };
+  }, []);
+
   // Sort faculty by role precedence
   const sortedFaculty = useMemo(
     () =>
-      [...FACULTY].sort(
+      [...facultyList].sort(
         (a, b) => ROLE_ORDER.indexOf(a.role) - ROLE_ORDER.indexOf(b.role),
       ),
-    [],
+    [facultyList],
   );
 
   return (

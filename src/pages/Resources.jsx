@@ -408,7 +408,7 @@ export default function Resources() {
   const upcomingMockTests = useMemo(() => getUpcomingMockTests(mockTests), [mockTests]);
   const previousMockTests = useMemo(() => getPreviousMockTests(mockTests), [mockTests]);
 
-  const mergedSchemes = useMemo(() => {
+  const { mergedSchemes, unmappedResources } = useMemo(() => {
     const moduleLookup = new Map();
     schemes.forEach((scheme) => {
       (scheme.semesters || []).forEach((semesterBlock) => {
@@ -426,6 +426,7 @@ export default function Resources() {
       const moduleTitle = String(item?.moduleTitle || item?.description || '').trim();
       return !id.startsWith('site-') && Boolean(moduleTitle) && Boolean(item?.driveLink);
     });
+    const unmatched = [];
 
     const moduleMap = adminOnlyResources.reduce((acc, item) => {
       const moduleTitle = String(item.moduleTitle || item.description || '').trim();
@@ -451,7 +452,10 @@ export default function Resources() {
         semester = resolveSemesterFallback(schemeId, schemes);
       }
 
-      if (!schemeId || !Number.isFinite(semester)) return acc;
+      if (!schemeId || !Number.isFinite(semester)) {
+        unmatched.push(item);
+        return acc;
+      }
 
       const groupKey = `${schemeId}::${semester}::${key}`;
       if (!acc.has(groupKey)) {
@@ -473,7 +477,7 @@ export default function Resources() {
       return acc;
     }, new Map());
 
-    return schemes.map((scheme) => {
+    const nextMergedSchemes = schemes.map((scheme) => {
       const semesterMap = new Map();
 
       (scheme.semesters || []).forEach((semester) => {
@@ -530,6 +534,12 @@ export default function Resources() {
         semesters: [...semesterMap.values()].sort((a, b) => a.semester - b.semester),
       };
     });
+    const nextUnmapped = unmatched.sort((a, b) => new Date(b.addedDate || 0) - new Date(a.addedDate || 0));
+
+    return {
+      mergedSchemes: nextMergedSchemes,
+      unmappedResources: nextUnmapped,
+    };
   }, [adminResources]);
 
   useEffect(() => {
@@ -640,8 +650,8 @@ export default function Resources() {
         {/*  STEP 1 — SCHEME SELECTOR                                     */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto mb-8">
-          {schemes.map((s) => {
-            const displayScheme = mergedSchemes.find((item) => item.id === s.id) || s;
+          {mergedSchemes.map((s) => {
+            const displayScheme = s;
             const count = getSubjectCountFromScheme(displayScheme);
             const semCount = getSemestersWithContentFromScheme(displayScheme).length;
             const isSelected = s.id === selectedScheme;
@@ -781,6 +791,31 @@ export default function Resources() {
           <p className="text-caption text-text-muted text-center mt-8">
             {filteredSubjects.length} subject{filteredSubjects.length !== 1 ? 's' : ''} in Semester {selectedSemester}
           </p>
+        )}
+
+        {unmappedResources.length > 0 && (
+          <Card className="mt-8">
+            <h3 className="font-heading font-semibold text-h4 text-text-primary">Other Resources</h3>
+            <p className="text-body-sm text-text-secondary mt-1">
+              These resources were added from admin but do not match a specific scheme/semester yet.
+            </p>
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              {unmappedResources.map((item) => (
+                <a
+                  key={item.id}
+                  href={item.driveLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg border border-border bg-surface2 px-3 py-2 text-body-sm text-text-primary hover:border-primary-bright hover:bg-surface3 transition-colors"
+                >
+                  <div className="font-semibold line-clamp-1">{item.title || item.moduleTitle || 'Resource'}</div>
+                  <div className="text-caption text-text-muted line-clamp-1">
+                    {item.moduleTitle || item.category || item.fileType || 'Uncategorized'}
+                  </div>
+                </a>
+              ))}
+            </div>
+          </Card>
         )}
       </SectionWrapper>
     </>
