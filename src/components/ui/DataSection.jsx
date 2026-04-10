@@ -31,7 +31,7 @@ export default function DataSection({
   data = [],
   emptyIcon = 'inbox',
   emptyTitle = 'Nothing here yet',
-  emptySubtitle = 'Check back soon! 👀',
+  emptySubtitle = 'Check back soon! ',
   emptyAction = null,
   children,
   className = '',

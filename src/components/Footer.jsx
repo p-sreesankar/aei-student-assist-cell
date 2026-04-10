@@ -105,7 +105,7 @@ export default function Footer() {
               {SITE_CONFIG.footerText.replace('2026', currentYear)}
             </p>
             <p className="text-caption text-text-muted">
-              Built with ❤️ for students
+              Built for students
             </p>
           </div>
         </div>

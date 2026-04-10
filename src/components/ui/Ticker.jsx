@@ -5,13 +5,13 @@
  * Used between sections to break page rhythm and add editorial flair.
  * 
  * @example
- * <Ticker items={['📌 Notice Board', '📅 Events', '📂 Resources']} />
+ * <Ticker items={[' Notice Board', ' Events', ' Resources']} />
  * 
  * @example
  * // Custom speed & separator
  * <Ticker
  *   items={['Design', 'Build', 'Ship']}
- *   separator="✦"
+ *   separator=""
  *   speed={40}
  * />
  */
@@ -25,17 +25,32 @@ export default function Ticker({
 }) {
   if (items.length === 0) return null;
 
-  // Build the repeated content with optional colored separator
-  const tickerContent = items.flatMap((item, i) => [
-    <span key={`item-${i}`}>{item}</span>,
-    <span key={`sep-${i}`} style={separatorColor ? { color: separatorColor } : {}}>
-      {'  '}{separator}{'  '}
-    </span>,
-  ]);
+  // Build repeated content with consistent item spacing.
+  const tickerContent = items.flatMap((item, i) => {
+    const content = [
+      <span key={`item-${i}`} className="inline-flex items-center px-4 md:px-5">
+        {item}
+      </span>,
+    ];
+
+    if (separator) {
+      content.push(
+        <span
+          key={`sep-${i}`}
+          className="inline-flex items-center px-1"
+          style={separatorColor ? { color: separatorColor } : {}}
+        >
+          {separator}
+        </span>
+      );
+    }
+
+    return content;
+  });
 
   // Duplicate for seamless loop
   const strip = (
-    <span className="inline-block whitespace-nowrap" aria-hidden="true">
+    <span className="inline-flex items-center whitespace-nowrap" aria-hidden="true">
       {tickerContent}
     </span>
   );

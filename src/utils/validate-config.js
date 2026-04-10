@@ -83,14 +83,14 @@ export function validateConfig() {
   // ── Print warnings ─────────────────────────────────────────────────────
   if (warnings.length > 0) {
     console.group(
-      '%c⚠ Site Config Warnings',
+      '%c Site Config Warnings',
       'color: #F59E0B; font-weight: bold; font-size: 13px;'
     );
     warnings.forEach((msg) => console.warn(`  → ${msg}`));
     console.groupEnd();
   } else {
     console.log(
-      '%c✓ Site config looks good!',
+      '%c Site config looks good!',
       'color: #10B981; font-weight: bold;'
     );
   }

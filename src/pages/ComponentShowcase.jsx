@@ -272,7 +272,7 @@ export default function ComponentShowcase() {
               <EmptyState
                 icon="inbox"
                 title="No notices yet"
-                subtitle="Check back soon for updates! 📬"
+                subtitle="Check back soon for updates! "
               />
             </Card>
 
@@ -290,7 +290,7 @@ export default function ComponentShowcase() {
               <EmptyState
                 icon="image"
                 title="No photos yet"
-                subtitle="Event photos will appear here 📸"
+                subtitle="Event photos will appear here "
               />
             </Card>
 

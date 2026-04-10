@@ -20,7 +20,7 @@ import { formatDate, isNew } from '@utils/date';
 //    date:          string,          // "YYYY-MM-DD" — used for sorting (newest first)
 //    description:   string,          // 1–3 sentence body text
 //    attachmentUrl: string | null,   // link to file / form, or null
-//    pinned:        boolean,         // true → always shown at top with 📌 icon
+//    pinned:        boolean,         // true → always shown at top with  icon
 //  }
 //
 //  TO ADD A NOTICE:
@@ -239,7 +239,7 @@ export default function Notices() {
         {pinnedNotices.length > 0 && (
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-lg">📌</span>
+              <span className="text-lg"></span>
               <h2 className="text-h4 font-heading font-semibold text-text-primary">
                 Pinned Notices
               </h2>
@@ -271,7 +271,7 @@ export default function Notices() {
               title="No notices found"
               subtitle={
                 activeFilter === 'all'
-                  ? 'No notices have been posted yet. Check back soon! 📬'
+                  ? 'No notices have been posted yet. Check back soon! '
                   : `No ${activeFilter} notices at the moment. Try a different filter.`
               }
             />

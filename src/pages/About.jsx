@@ -278,7 +278,7 @@ export default function About() {
       {/* ═══════════════════════════════════════════════════════════════ */}
       <PageBanner
         title="About the Cell"
-        subtitle="Who we are and what drives us ✨"
+        subtitle="Who we are and what drives us "
         breadcrumb={[
           { label: 'Home', path: '/' },
           { label: 'About', path: '/about' },
@@ -365,7 +365,7 @@ export default function About() {
           title="What We Do"
           subtitle="The four pillars of the AEI Association"
           number={2}
-          sticker="✨"
+          sticker=""
           centered
         />
 
@@ -413,9 +413,9 @@ export default function About() {
         <SectionWrapper background="default">
           <SectionHeader
             title="Meet the Team"
-            subtitle="The people behind the AEI Association 👋"
+            subtitle="The people behind the AEI Association "
             number={3}
-            sticker="👥"
+            sticker=""
             centered
           />
 
@@ -443,7 +443,7 @@ export default function About() {
             title="Our Journey"
             subtitle="Key milestones in the life of the cell"
             number={4}
-            sticker="🎯"
+            sticker=""
             centered
           />
           <div className="max-w-2xl mx-auto mt-8">

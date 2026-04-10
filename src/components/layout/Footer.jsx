@@ -140,7 +140,7 @@ export default function Footer() {
             
             {/* Copyright */}
             <p>
-              © {currentYear} {BRAND.siteName} — {BRAND.departmentShort}, {BRAND.collegeShort}. All rights reserved.
+              (c) {currentYear} {BRAND.siteName} — {BRAND.departmentShort}, {BRAND.collegeShort}. All rights reserved.
             </p>
 
             {/* Credit */}

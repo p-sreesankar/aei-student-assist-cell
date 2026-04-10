@@ -8,7 +8,7 @@ import { Inbox, FileQuestion, Calendar, Image, FileText } from 'lucide-react';
  * <EmptyState
  *   icon="inbox"
  *   title="No notices yet"
- *   subtitle="Check back soon for updates! 📬"
+ *   subtitle="Check back soon for updates! "
  * />
  * 
  * @example
@@ -29,13 +29,13 @@ import { Inbox, FileQuestion, Calendar, Image, FileText } from 'lucide-react';
  * <EmptyState
  *   icon={<Sparkles size={48} className="text-primary-400" />}
  *   title="Nothing here yet"
- *   subtitle="We're working on adding new content. Stay tuned! ✨"
+ *   subtitle="We're working on adding new content. Stay tuned! "
  * />
  */
 export default function EmptyState({
   icon = 'inbox',
   title = 'Nothing here yet',
-  subtitle = 'Check back soon! 👀',
+  subtitle = 'Check back soon! ',
   action = null,
   className = '',
   ...props

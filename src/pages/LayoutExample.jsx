@@ -152,7 +152,7 @@ export default function LayoutExample() {
           <EmptyState
             icon="inbox"
             title="No items found"
-            subtitle="This is what an empty section looks like. Clear, friendly, and non-alarming. 📬"
+            subtitle="This is what an empty section looks like. Clear, friendly, and non-alarming. "
             action={
               <Button variant="primary" size="sm">
                 Add New Item

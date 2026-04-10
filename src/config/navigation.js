@@ -62,4 +62,4 @@ export const BRAND = {
 
 // ── Footer Credit ──────────────────────────────────────────────────────────
 
-export const FOOTER_CREDIT = 'Made with ❤️ by AEI Association 2025-26';
+export const FOOTER_CREDIT = 'Made by AEI Association 2025-26';

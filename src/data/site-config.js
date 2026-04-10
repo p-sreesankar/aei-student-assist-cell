@@ -33,7 +33,7 @@ const SITE_CONFIG = {
 
   // ---------- Footer ----------
 
-  footerText: "© 2026 AEI Association — AEI, CET. All rights reserved.", // [Required] Footer copyright line
+  footerText: "2026 AEI Association — AEI, CET. All rights reserved.", // [Required] Footer copyright line
 
   // ---------- Grievance Form ----------
   // Replace this with your own Google Form embed URL.

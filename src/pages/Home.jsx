@@ -126,8 +126,8 @@ export default function Home() {
 
       {/* ─── Marquee Strip — mid blue bg, subtle ────────────────── */}
       <Ticker
-        items={['📌 Notice Board', '📅 Events', '🖼️ Gallery', '📂 Resources', '📝 Grievance', '📞 Contact']}
-        separator="✦"
+        items={['Notice Board', 'Events', 'Gallery', 'Resources', 'Grievance', 'Contact']}
+        separator="•"
         className="py-3 font-heading font-semibold text-sm md:text-base tracking-wide"
         style={{
           backgroundColor: '#0F2744',
@@ -214,7 +214,7 @@ export default function Home() {
             subtitle="Stay updated with important announcements"
             number={2}
             eyebrow="Latest Updates"
-            sticker="📌"
+            sticker=""
             showAccent
           />
         </motion.div>
@@ -231,7 +231,7 @@ export default function Home() {
               <EmptyState
                 icon="inbox"
                 title="No notices yet"
-                subtitle="Check back soon — we'll post updates here! 📬"
+                subtitle="Check back soon — we'll post updates here! "
               />
             </Card>
           </motion.div>
@@ -322,7 +322,7 @@ export default function Home() {
             subtitle="Mark your calendar for what's coming up"
             number={3}
             eyebrow="What's Coming"
-            sticker="📅"
+            sticker=""
             showAccent
             accentColor="accent"
           />
@@ -340,7 +340,7 @@ export default function Home() {
               <EmptyState
                 icon="calendar"
                 title="No upcoming events"
-                subtitle="All caught up! New events will be posted here soon 🎉"
+                subtitle="All caught up! New events will be posted here soon "
               />
             </Card>
           </motion.div>

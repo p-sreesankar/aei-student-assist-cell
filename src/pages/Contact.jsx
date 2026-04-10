@@ -171,7 +171,7 @@ export default function Contact() {
       {/* ═══════════════════════════════════════════════════════════════ */}
       <PageBanner
         title="Contact Us"
-        subtitle="We're here to help — reach out anytime 👋"
+        subtitle="We're here to help — reach out anytime "
         breadcrumb={[
           { label: 'Home', path: '/' },
           { label: 'Contact', path: '/contact' },
@@ -188,7 +188,7 @@ export default function Contact() {
           title="Meet the Team"
           subtitle="The people you can reach out to"
           number={1}
-          sticker="👋"
+          sticker=""
           centered
         />
 
@@ -224,7 +224,7 @@ export default function Contact() {
             title="Find Us"
             subtitle="AEI Department, College of Engineering Trivandrum"
             number={2}
-            sticker="📍"
+            sticker=""
             centered
           />
           <div className="mt-6 rounded-2xl overflow-hidden shadow-card border border-border">

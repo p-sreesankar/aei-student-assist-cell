@@ -408,7 +408,7 @@ export default function Gallery() {
       {/* ═══════════════════════════════════════════════════════════════ */}
       <PageBanner
         title="Gallery"
-        subtitle="Snapshots from department life 📸"
+        subtitle="Snapshots from department life "
         breadcrumb={[
           { label: 'Home', path: '/' },
           { label: 'Gallery', path: '/gallery' },
@@ -435,7 +435,7 @@ export default function Gallery() {
                   <EmptyState
                     icon="image"
                     title="Photos coming soon!"
-                    subtitle="We're building our collection. Check back after the next event! 📸"
+                    subtitle="We're building our collection. Check back after the next event! "
                   />
                 </Card>
               ) : (

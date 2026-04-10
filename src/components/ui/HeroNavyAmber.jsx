@@ -84,7 +84,7 @@ export default function HeroNavyAmber() {
           style={{ color: '#F8FAFC' }}
         >
           Your Department,{' '}
-          <span style={{ color: '#F59E0B' }}>Here&nbsp;to&nbsp;Help</span> 👋
+          <span style={{ color: '#F59E0B' }}>Here&nbsp;to&nbsp;Help</span> 
         </motion.h1>
 
         {/* Subtext */}

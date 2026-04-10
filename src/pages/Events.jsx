@@ -443,7 +443,7 @@ export default function Events() {
                   }
                   subtitle={
                     activeTab === 'upcoming'
-                      ? 'Check back soon — something exciting is always around the corner! 🎉'
+                      ? 'Check back soon — something exciting is always around the corner! '
                       : 'Events will show up here once they\'ve happened.'
                   }
                 />
