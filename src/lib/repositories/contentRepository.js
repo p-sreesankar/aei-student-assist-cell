@@ -16,6 +16,7 @@ const LS_KEYS = {
   mockTests: 'aei:content:mock-tests',
   resources: 'aei:content:resources',
 };
+const MIGRATION_KEY_PREFIX = 'aei:content:cloud-migrated:';
 
 const LS_KEY_TO_DOMAIN = Object.entries(LS_KEYS).reduce((acc, [domain, key]) => {
   acc[key] = domain;
@@ -143,6 +144,48 @@ function writeLocal(domain, items) {
   }
 }
 
+function getMigrationKey(domain) {
+  return `${MIGRATION_KEY_PREFIX}${domain}`;
+}
+
+function isLocalMigrated(domain) {
+  return localStorage.getItem(getMigrationKey(domain)) === '1';
+}
+
+function markLocalMigrated(domain) {
+  localStorage.setItem(getMigrationKey(domain), '1');
+}
+
+function readLocalSnapshot(domain) {
+  const key = LS_KEYS[domain];
+  const raw = localStorage.getItem(key);
+  if (!raw) return { exists: false, items: [] };
+
+  try {
+    const parsed = JSON.parse(raw);
+    return { exists: true, items: Array.isArray(parsed) ? parsed : [] };
+  } catch {
+    return { exists: true, items: [] };
+  }
+}
+
+function mergeItemsById(cloudItems, localItems) {
+  const merged = new Map();
+
+  const setItem = (item) => {
+    const id = String(item?.id || '').trim();
+    const key = id || JSON.stringify(item);
+    if (!key) return;
+    merged.set(key, item);
+  };
+
+  (Array.isArray(cloudItems) ? cloudItems : []).forEach(setItem);
+  // Local items win during migration so previous admin work is preserved.
+  (Array.isArray(localItems) ? localItems : []).forEach(setItem);
+
+  return [...merged.values()];
+}
+
 export function subscribeContentUpdates(onUpdate, domains = []) {
   if (typeof window === 'undefined' || typeof onUpdate !== 'function') {
     return () => {};
@@ -204,21 +247,38 @@ async function readDomain(domain, fallback) {
     ? mergeWithSeedResources(clone(fallback))
     : clone(fallback);
   const canUseCloudWrites = await hasFirebaseAdminSession();
+  const localSnapshot = readLocalSnapshot(domain);
+  const hasLocalToMigrate = localSnapshot.exists && !isLocalMigrated(domain);
 
   try {
     const ref = doc(db, COLLECTION, domain);
     const snap = await getDoc(ref);
     if (!snap.exists()) {
-      const seeded = fallbackItems;
+      const localItems = domain === 'resources'
+        ? mergeWithSeedResources(localSnapshot.items)
+        : clone(localSnapshot.items);
+      const seeded = hasLocalToMigrate && localItems.length > 0 ? localItems : fallbackItems;
       if (canUseCloudWrites) {
         await setDoc(ref, { items: seeded, updatedAt: Date.now() }, { merge: true });
+        if (hasLocalToMigrate) {
+          markLocalMigrated(domain);
+        }
       }
       writeLocal(domain, seeded);
       return seeded;
     }
 
     const data = snap.data();
-    const items = Array.isArray(data?.items) ? data.items : fallbackItems;
+    let items = Array.isArray(data?.items) ? data.items : fallbackItems;
+    if (canUseCloudWrites && hasLocalToMigrate) {
+      const localItems = domain === 'resources'
+        ? mergeWithSeedResources(localSnapshot.items)
+        : clone(localSnapshot.items);
+      items = mergeItemsById(items, localItems);
+      await setDoc(ref, { items, updatedAt: Date.now() }, { merge: true });
+      markLocalMigrated(domain);
+    }
+
     if (domain !== 'resources') {
       writeLocal(domain, items);
       return items;
