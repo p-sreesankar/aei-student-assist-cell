@@ -41,7 +41,6 @@ export default function Projects() {
           <SectionHeader
             title="Department Builds"
             subtitle="Every card includes project owner details, key tags, a repository link, and a concise technical overview."
-            eyebrow="AEI Innovation Lab"
             showAccent
           />
 
