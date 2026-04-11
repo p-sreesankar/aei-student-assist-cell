@@ -57,7 +57,7 @@ aei-association/
 ├── PRD.md                          # Product Requirements Document
 ├── README.md                       # Project overview & usage guide
 ├── tailwind.config.js              # Tailwind CSS theme customization
-└── vite.config.js                  # Vite build config (GitHub Pages deployment)
+└── vite.config.js                  # Vite build config (Vercel-friendly base path)
 
 ========================================
 Key Directories to Know:
@@ -87,7 +87,7 @@ How Content Flows:
 1. You edit a data file (e.g., src/data/notices.js) → add a new notice
 2. The corresponding page (e.g., src/pages/Notices.jsx) imports that data
 3. The page renders the data using React components
-4. You run 'npm run deploy' → site updates on GitHub Pages
+4. You push to GitHub → Vercel auto-deploys the latest commit
 
 ========================================
 Common Tasks:

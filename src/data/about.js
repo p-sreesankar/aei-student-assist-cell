@@ -51,7 +51,7 @@ export const ABOUT = {
     {
       year: "2025",
       title: "Website Launched",
-      description: "Full-featured website with events, resources, and real-time updates deployed on GitHub Pages.",
+      description: "Full-featured website with events, resources, and real-time updates deployed on Vercel.",
     },
   ],
 

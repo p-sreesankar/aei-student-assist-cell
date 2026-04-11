@@ -1,6 +1,6 @@
-# Deployment Guide — GitHub Pages
+# Deployment Guide — Vercel
 
-Step-by-step guide to deploy the AEI Association website to GitHub Pages.
+Step-by-step guide to deploy the AEI Association website on Vercel.
 
 ---
 
@@ -8,43 +8,15 @@ Step-by-step guide to deploy the AEI Association website to GitHub Pages.
 
 - [x] Node.js installed (v18+)
 - [x] Git installed
-- [x] GitHub account created
-- [x] All content data files updated in `src/data/`
+- [x] GitHub account
+- [x] Vercel account
+- [x] Content updates completed in `src/data/`
 
 ---
 
-## Step 1: Create a GitHub Repository
+## Step 1: Push Code to GitHub
 
-1. Go to [github.com](https://github.com) and sign in
-2. Click the **+** icon (top-right) → **New repository**
-3. Repository name: `aei-association` (or any name you prefer)
-4. Make it **Public** (required for free GitHub Pages)
-5. Do **NOT** initialize with README (we already have one)
-6. Click **Create Repository**
-
----
-
-## Step 2: Update Vite Config
-
-Open `vite.config.js` and set the `base` option to match your repository name:
-
-```javascript
-export default defineConfig({
-  // ...
-  base: '/aei-association/',  // ← Replace with YOUR repo name
-  // ...
-});
-```
-
-**Important:** Make sure it starts and ends with `/`.
-
-If you plan to use a custom domain later, set `base: '/'` instead.
-
----
-
-## Step 3: Push Code to GitHub
-
-Open a terminal in your project folder and run:
+If your repo is already on GitHub, skip this step.
 
 ```bash
 # Initialize git (if not already done)
@@ -56,154 +28,98 @@ git add .
 # Commit
 git commit -m "Initial commit: AEI Association website"
 
-# Add remote origin (replace YOUR_USERNAME and REPO_NAME)
+# Add remote origin (replace YOUR_USERNAME)
 git remote add origin https://github.com/YOUR_USERNAME/aei-association.git
 
-# Push to GitHub
+# Push
 git branch -M main
 git push -u origin main
 ```
 
-Your code is now on GitHub!
+---
+
+## Step 2: Import Project in Vercel
+
+1. Go to [vercel.com](https://vercel.com) and sign in.
+2. Click **Add New Project**.
+3. Import your GitHub repository.
+4. Confirm build settings:
+   - Framework Preset: `Vite`
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+5. Click **Deploy**.
+
+Your site will be published on a `*.vercel.app` URL.
 
 ---
 
-## Step 4: Deploy to GitHub Pages
+## Step 3: Verify SPA Routing
 
-Run this command:
+This repo includes `vercel.json` with SPA fallback routing to `index.html`.
 
-```bash
-npm run deploy
+If deep links return 404, confirm `vercel.json` still contains:
+
+```json
+{
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/.*", "dest": "/index.html" }
+  ]
+}
 ```
 
-This will:
-1. Build the production site (`npm run build`)
-2. Push the `dist/` folder to a new branch called `gh-pages`
+---
 
-**Wait 1–2 minutes** for GitHub to process the deployment.
+## Step 4: Custom Domain (Optional)
+
+1. Open your Vercel project.
+2. Go to **Settings → Domains**.
+3. Add your custom domain.
+4. Add DNS records exactly as shown by Vercel.
+5. Wait for verification and enable HTTPS.
 
 ---
 
-## Step 5: Enable GitHub Pages
+## Updating the Site
 
-1. Go to your repository on GitHub
-2. Click **Settings** (top-right)
-3. Scroll down to **Pages** (left sidebar)
-4. Under **Source**, select:
-   - Branch: `gh-pages`
-   - Folder: `/ (root)`
-5. Click **Save**
+After initial setup, deployment is automatic:
 
-You'll see a message: **"Your site is live at https://YOUR_USERNAME.github.io/aei-association/"**
-
----
-
-## Step 6: Test Your Site
-
-Click the URL to open your live website. If you see a blank page:
-
-1. Wait 2–3 minutes (GitHub Pages can be slow on first deploy)
-2. Hard refresh: `Ctrl+F5` (Windows) or `Cmd+Shift+R` (Mac)
-3. Check that `base` in `vite.config.js` matches your repo name exactly
-
----
-
-## Updating the Site (After Initial Deploy)
-
-Every time you update content:
-
-1. Edit the data files in `src/data/`
-2. Save your changes
-3. Commit and push:
+1. Edit content files (`src/data/*.js`)
+2. Commit and push:
 
 ```bash
 git add .
-git commit -m "Update notices / events / etc."
+git commit -m "Update notices/events/resources"
 git push
 ```
 
-4. Deploy:
-
-```bash
-npm run deploy
-```
-
-Your changes will be live in 1–2 minutes.
-
----
-
-## Using a Custom Domain (Optional)
-
-If you have a custom domain (e.g., `assistcell.cet.ac.in`):
-
-### A. Update Vite Config
-
-In `vite.config.js`, change:
-
-```javascript
-base: '/',  // Remove the repo-specific base
-```
-
-### B. Add CNAME File
-
-Create a file `public/CNAME` (no extension) with your domain:
-
-```
-assistcell.cet.ac.in
-```
-
-### C. Configure DNS
-
-Go to your DNS provider and add a CNAME record:
-
-| Type  | Name       | Value                              |
-|-------|------------|------------------------------------|
-| CNAME | assistcell | YOUR_USERNAME.github.io            |
-
-Or for an apex domain (e.g., `aei-cell.com`), add A records:
-
-| Type | Name | Value         |
-|------|------|---------------|
-| A    | @    | 185.199.108.153 |
-| A    | @    | 185.199.109.153 |
-| A    | @    | 185.199.110.153 |
-| A    | @    | 185.199.111.153 |
-
-### D. Enable HTTPS
-
-1. Go to **Settings → Pages** on GitHub
-2. Check **Enforce HTTPS** (wait for DNS propagation if greyed out)
+3. Vercel auto-builds and deploys the new commit.
 
 ---
 
 ## Troubleshooting
 
-### "404 — There isn't a GitHub Pages site here"
+### Build failed on Vercel
 
-- Make sure `gh-pages` branch exists (run `npm run deploy` again)
-- Check GitHub Actions tab — deployment might have failed
-- Ensure repository is **Public**
+- Run `npm run build` locally and fix the first error.
+- Run `npm run validate:resources` for resource data issues.
+- Redeploy from Vercel dashboard after fixing.
 
-### Blank page / Assets not loading
+### Route 404 on direct URL
 
-- Verify `base` in `vite.config.js` matches your repo name **exactly**
-- Using HashRouter? Check that `App.jsx` uses `<HashRouter>`, not `<BrowserRouter>`
-- Hard refresh: `Ctrl+F5`
+- Confirm `vercel.json` rewrite to `/index.html` is present.
+- Redeploy after any routing config changes.
 
-### Changes not appearing after deploy
+### Content not updating
 
-- GitHub Pages can take 1–5 minutes to update
-- Clear browser cache
-- Check if `git push` succeeded before running `npm run deploy`
+- Confirm commit reached the connected production branch.
+- Check deployment logs in Vercel dashboard.
+- Hard refresh browser (`Ctrl+F5`).
 
 ---
 
 ## Need Help?
 
-- Check [GitHub Pages documentation](https://docs.github.com/en/pages)
+- Check [Vercel docs](https://vercel.com/docs)
 - Open an issue in this repository
 - Contact: studentassistcell.aei@cet.ac.in
-
----
-
-**Your site is now live! 🎉**

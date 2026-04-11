@@ -8,7 +8,7 @@
 
 Students of the Applied Electronics and Instrumentation (AEI) department at College of Engineering Trivandrum (CET) currently lack a single, accessible, student-friendly digital presence where they can find department notices, upcoming events, downloadable resources, a photo gallery, and a channel to submit grievances. Information is scattered across WhatsApp groups, notice boards, and word-of-mouth — leading to missed deadlines, uneven access, and no clear grievance path.
 
-"AEI Association" is a zero-cost, fully static public website hosted on GitHub Pages that consolidates all student-facing information into one mobile-first destination, maintained by a single non-developer maintainer who edits JavaScript data files and pushes to GitHub.
+"AEI Association" is a fully static public website hosted on Vercel that consolidates all student-facing information into one mobile-first destination, maintained by a single non-developer maintainer who edits JavaScript data files and pushes to GitHub.
 
 ---
 
@@ -19,7 +19,7 @@ Students of the Applied Electronics and Instrumentation (AEI) department at Coll
 - G1: Give every AEI student instant, mobile-friendly access to notices, events, resources, and contacts.
 - G2: Provide a grievance submission channel via an embedded Google Form — zero backend.
 - G3: Make content updates trivial — edit a `.js` data file, push, done. No build step required.
-- G4: Run at zero recurring cost (GitHub Pages free tier).
+- G4: Run at minimal recurring cost (Vercel Hobby tier).
 - G5: Reflect a warm, approachable visual identity that feels student-centric, not bureaucratic.
 
 ### Non-Goals
@@ -236,11 +236,11 @@ Note: Status (upcoming/past) is derived at render time by comparing `date` to `n
 
 - Page Load (mobile 3G): First Contentful Paint < 2 s — measured via Lighthouse / PageSpeed Insights.
 - Mobile Usability: 0 mobile-usability errors — measured via Google Search Console.
-- Content Freshness: New notice visible within 5 min of `git push` — manual check (GitHub Pages deploy time).
+- Content Freshness: New notice visible within 5 min of `git push` — manual check (Vercel deploy time).
 - Maintainer Update Time: < 5 minutes to add a notice end-to-end — timed dry-run.
 - Grievance Submissions: >= 1 submission within first 30 days of launch — Google Form response sheet.
 - Lighthouse Score: >= 90 (Performance, Accessibility, Best Practices) — Lighthouse audit.
-- Zero Downtime: 99.9% uptime — GitHub Pages status / uptime monitor (free tier, e.g., UptimeRobot).
+- Zero Downtime: 99.9% uptime — Vercel status / uptime monitor (e.g., UptimeRobot).
 
 ---
 
@@ -254,7 +254,7 @@ Note: Status (upcoming/past) is derived at render time by comparing `date` to `n
 - PWA / offline access (Medium effort) — Add `manifest.json` + service worker; students can "install" the site.
 - Student blog / articles section (Medium effort) — New `data/blog.js` + a card layout; same pattern as notices.
 - RSS feed for notices (Low effort) — Generate a static `feed.xml` from `notices.js` via a small build script.
-- Custom domain + HTTPS (Low effort) — GitHub Pages settings + DNS CNAME record; free via Let's Encrypt.
+- Custom domain + HTTPS (Low effort) — Vercel domain settings + DNS records; free SSL provisioning.
 
 All future additions follow the same pattern: new data file → new rendering block → push. The architecture does not need to change.
 
@@ -290,7 +290,7 @@ No build tools, no bundlers, no npm. Pure HTML + CSS + vanilla JS. The `data/*.j
 
 ## Constraints Recap
 
-- Zero cost (GitHub Pages free hosting).
+- Minimal cost (Vercel Hobby hosting).
 - No backend ever.
 - Easy for a non-developer maintainer to update (edit JS data files + git push).
 - Must work on mobile (students use phones).

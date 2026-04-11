@@ -146,7 +146,7 @@ Edit `src/data/site-config.js` to change:
 
 ## 🚢 Deployment
 
-This site deploys to **GitHub Pages via GitHub Actions**.
+This site is hosted on **Vercel**.
 
 ### First-Time Setup
 
@@ -159,29 +159,34 @@ git branch -M main
 git push -u origin main
 ```
 
-3. In GitHub repository settings, set **Pages Source** to **GitHub Actions**
-4. Ensure workflow permissions allow Pages deploy (`pages: write`, `id-token: write`)
+3. Go to [Vercel](https://vercel.com), click **Add New Project**, and import your GitHub repository
+4. Confirm build settings:
+	- Framework Preset: `Vite`
+	- Build Command: `npm run build`
+	- Output Directory: `dist`
+5. Click **Deploy**
 
 ### Deploy Flow
 
-Every push to `main` triggers `.github/workflows/deploy.yml`:
+After initial setup, Vercel handles deployments automatically:
 
-1. Install deps (`npm ci` in CI)
-2. Build (`npm run build`)
-3. Publish `dist/` to GitHub Pages
+1. Push commits to GitHub
+2. Vercel builds and deploys the latest commit
+3. Main branch updates production, other branches get preview URLs
 
 Your site will be live at:
 
 ```
-https://YOUR_USERNAME.github.io/aei-association/
+https://YOUR-PROJECT.vercel.app
 ```
 
 ### Custom Domain (Optional)
 
-1. Add a `CNAME` file to `public/` with your domain (e.g., `assistcell.aei.cet.ac.in`)
-2. In `vite.config.js`, keep `base: '/'` for custom-domain serving
-3. Configure DNS settings to point to GitHub Pages
-4. Push changes to `main` and wait for the deploy workflow to complete
+1. Open your project in Vercel → **Settings** → **Domains**
+2. Add your domain (e.g., `assistcell.aei.cet.ac.in`)
+3. Configure DNS records as instructed by Vercel
+4. Keep `base: '/'` in `vite.config.js`
+5. Redeploy from Vercel dashboard (or push a new commit)
 
 ---
 
@@ -190,10 +195,10 @@ https://YOUR_USERNAME.github.io/aei-association/
 - **React 18** — UI library
 - **Vite** — Lightning-fast build tool
 - **Tailwind CSS** — Utility-first CSS framework
-- **React Router** — Client-side routing (HashRouter for GitHub Pages)
+- **React Router** — Client-side routing
 - **Framer Motion** — Smooth animations
 - **Lucide React** — Beautiful open-source icons
-- **GitHub Pages** — Free static hosting
+- **Vercel** — Hosting and deployment platform
 
 ---
 
@@ -212,12 +217,11 @@ https://YOUR_USERNAME.github.io/aei-association/
 
 ## 🔧 Troubleshooting
 
-### "Page not found" on GitHub Pages
+### "Page not found" on Vercel
 
-- Make sure Pages source is set to **GitHub Actions**
-- Make sure `base` in `vite.config.js` is correct for your deployment mode
-- Ensure you're using `HashRouter` in `App.jsx` (not `BrowserRouter`)
-- Push a new commit to `main` to trigger deployment again
+- Confirm `vercel.json` includes SPA fallback to `/index.html`
+- Make sure `base` in `vite.config.js` is `/`
+- Redeploy the latest commit from the Vercel dashboard
 
 ### Images not loading
 
@@ -229,7 +233,7 @@ https://YOUR_USERNAME.github.io/aei-association/
 
 - Hard refresh: `Ctrl+F5` (Windows) or `Cmd+Shift+R` (Mac)
 - Clear browser cache
-- Check the latest GitHub Actions workflow run status
+- Check latest deployment status in Vercel dashboard
 
 ---
 

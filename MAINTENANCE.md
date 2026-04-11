@@ -10,7 +10,7 @@ This repository is a static-content-first site.
 
 1. Public pages read from `src/data/*.js` at build time.
 2. There is no live admin dashboard or runtime CMS in production flow.
-3. Content changes are made in git, then deployed by GitHub Actions.
+3. Content changes are made in git, then deployed on Vercel.
 4. Firebase is optional and used for analytics in the frontend plus an optional content/assets sync pipeline.
 
 Key idea: the git repository is the source of truth.
@@ -30,7 +30,7 @@ Primary files:
 
 Operational files:
 
-- `.github/workflows/deploy.yml` (push to `main` triggers build and Pages deploy)
+- `.github/workflows/deploy.yml` (optional CI build checks)
 - `package.json` (scripts)
 - `scripts/validate-resources.mjs` (resource quality checks)
 - `scripts/firebase/sync-content.mjs` (optional Firebase sync)
@@ -56,7 +56,7 @@ npm run build
 
 3. Preview quickly with `npm run preview` if the change is visual.
 4. Commit with a clear message.
-5. Push to `main` (or merge to `main`) and watch GitHub Actions deployment.
+5. Push to `main` (or merge to `main`) and watch Vercel deployment.
 6. Verify production pages after deploy.
 
 ## 5. Content-Specific Rules
@@ -149,13 +149,15 @@ If a section is set to `false`, routes and nav links for that section disappear.
 
 ## 6. Deployment Operations
 
-Auto-deploy is configured in `.github/workflows/deploy.yml`:
+This site is hosted on Vercel.
 
-1. Trigger: push to `main`
-2. Build environment: Node 18
-3. Build command: `npm run build`
-4. Output artifact: `dist`
-5. Publish target: GitHub Pages
+Primary deploy flow:
+
+1. Push to GitHub
+2. Vercel builds the commit (`npm run build`)
+3. Vercel publishes production from the configured production branch
+
+If GitHub Actions is used in this repo, treat it as CI checks only unless explicitly wired to Vercel deployment.
 
 Local deployment readiness commands:
 
@@ -220,7 +222,7 @@ If production content is wrong after a change:
 
 1. Identify last known good commit.
 2. Revert content files only (avoid broad rollback if unnecessary).
-3. Push fix and wait for GitHub Pages redeploy.
+3. Push fix and wait for Vercel redeploy.
 
 If Firebase sync caused unintended data shape:
 
@@ -235,7 +237,7 @@ If Firebase sync caused unintended data shape:
 Checks:
 
 1. Confirm push reached `main`.
-2. Check latest run in GitHub Actions (`Deploy to GitHub Pages`).
+2. Check latest deployment in Vercel dashboard.
 3. Confirm build step succeeded.
 4. Hard refresh browser after deploy completes.
 
@@ -284,7 +286,7 @@ Checks:
 1. Review `site-config.js` contact/social links.
 2. Confirm footer year/branding text is current.
 3. Check dependency updates (`npm outdated`) and evaluate upgrade PRs.
-4. Confirm GitHub Pages deployment health (recent runs all green).
+4. Confirm Vercel deployment health (recent deploys green).
 
 ### Per Semester Changeover
 
@@ -319,5 +321,5 @@ npm run firebase:sync:text
 - [ ] Ran `npm run validate:resources`
 - [ ] Ran `npm run build`
 - [ ] Verified key pages locally (or preview)
-- [ ] Pushed changes and confirmed GitHub Pages deployment
+- [ ] Pushed changes and confirmed Vercel deployment
 - [ ] Spot-checked production
