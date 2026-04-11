@@ -1,65 +1,80 @@
-import { PageBanner } from '@components/ui';
+import SEO from '@components/SEO';
 import { SectionWrapper } from '@components/layout';
-import { projects } from '@data/projects';
-import { Github, Users2 } from 'lucide-react';
+import { Badge, EmptyState, PageBanner } from '@components/ui';
+import { PROJECTS } from '@data/projects';
 
 export default function Projects() {
   return (
     <>
-      <PageBanner 
+      <SEO 
+        title="Projects — AEI Department" 
+        description="Showcase of student and department projects featuring innovative engineering solutions."
+      />
+      
+      <PageBanner
         title="Department Projects"
-        subtitle="Exploring innovation through student-led development and research."
+        description="Showcasing innovation and research from our students and faculty."
+        gradient="from-primary to-primary-muted"
       />
 
-      <SectionWrapper>
+      <SectionWrapper animate>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project) => (
-            <div key={project.id} className="bg-transparent backdrop-blur-xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-white/30 overflow-hidden mt-2 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:bg-white/10 group">
-              {/* Image */}
-              <div className="h-52 overflow-hidden relative bg-transparent">
-                <div className="absolute inset-0 bg-blue-900/10 group-hover:bg-transparent transition-colors z-10"></div>
-                <img 
-                  src={project.image} 
-                  alt={project.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-              </div>
-
-              {/* Content */}
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold text-slate-800 mb-3 group-hover:text-blue-700 transition-colors drop-shadow-sm">{project.name}</h3>
+          {PROJECTS.length > 0 ? (
+            PROJECTS.map(project => (
+              <div 
+                key={project.id} 
+                className="bg-[#0F2744]/50 backdrop-blur-md border border-[#1E4976]/50 rounded-lg overflow-hidden flex flex-col shadow-card hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
+              >
+                {/* 4. Image */}
+                <div className="h-48 w-full overflow-hidden shrink-0">
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                </div>
                 
-                {/* Creators */}
-                <div className="flex items-start gap-2 text-sm text-slate-700 mb-4">
-                  <Users2 size={16} className="mt-0.5 text-blue-600 shrink-0" />
-                  <div className="flex flex-wrap gap-1.5">
+                <div className="p-6 flex flex-col flex-grow">
+                  {/* 1. Project Name */}
+                  <h3 className="text-h4 font-bold text-text-primary mb-3">
+                    {project.title}
+                  </h3>
+                  
+                  {/* 2. Created By */}
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {project.creators.map((creator, i) => (
-                      <span key={i} className="bg-transparent backdrop-blur-md ring-1 ring-white/40 px-2.5 py-0.5 rounded-full text-xs font-semibold text-slate-700 shadow-sm">
+                      <Badge key={i} variant="primary">
                         {creator}
-                      </span>
+                      </Badge>
                     ))}
                   </div>
+                  
+                  {/* 5. Description */}
+                  <p className="text-body-sm text-text-secondary mb-6 flex-grow">
+                    {project.description}
+                  </p>
+                  
+                  {/* 3. GitHub Link */}
+                  <a 
+                    href={project.github} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="mt-auto px-4 py-2 border border-border-bright text-text-primary font-body-sm rounded-md transition-all hover:bg-primary-soft hover:text-white flex items-center justify-center gap-2"
+                  >
+                    <span>View Repository</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </a>
                 </div>
-
-                {/* Description */}
-                <p className="text-slate-600 text-sm mb-6 flex-grow leading-relaxed">
-                  {project.description}
-                </p>
-
-                {/* GitHub Action */}
-                <a 
-                  href={project.githubLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-auto inline-flex items-center justify-center gap-2 bg-transparent hover:bg-white/20 backdrop-blur-md text-slate-800 ring-1 ring-white/40 hover:ring-white/80 text-sm font-semibold py-2.5 px-4 rounded-xl transition-all shadow-sm hover:shadow w-full"
-                >
-                  <Github size={18} />
-                  View Source Code
-                </a>
               </div>
+            ))
+          ) : (
+            <div className="col-span-full">
+              <EmptyState title="No projects yet" message="Check back later for exciting student projects." />
             </div>
-          ))}
+          )}
         </div>
       </SectionWrapper>
     </>
