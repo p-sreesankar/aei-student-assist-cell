@@ -82,6 +82,8 @@ aei-association/
 
 **You only need to edit files in the `src/data/` folder.** No HTML or CSS knowledge required.
 
+For full maintenance SOPs, check `MAINTENANCE.md`.
+
 ### Add a Notice
 
 1. Open `src/data/notices.js`
@@ -89,25 +91,25 @@ aei-association/
 3. Paste it at the **top** of the list
 4. Update the values (title, date, description, etc.)
 5. Save → `git add .` → `git commit -m "add notice: title"` → `git push`
-6. Deploy: `npm run deploy`
+6. Push to `main` (or merge into `main`) and let GitHub Actions deploy automatically
 
 ### Add an Event
 
 1. Open `src/data/events.js`
 2. Add a new event object (see file comments for structure)
-3. Save, commit, push, deploy
+3. Save, commit, push to `main`
 
 ### Add a Gallery Photo
 
-1. Upload the image to `src/assets/gallery/` or use a Google Drive link
-2. Open `src/data/gallery.js` and add a new entry
-3. Save, commit, push, deploy
+1. Upload the image to `public/images/`
+2. Reference it in the relevant data file (for example, `src/data/events.js` or `src/data/projects.js`)
+3. Save, commit, push to `main`
 
 ### Update Contact Info
 
 1. Open `src/data/faculty.js`
 2. Edit existing entries or add new ones
-3. Save, commit, push, deploy
+3. Save, commit, push to `main`
 
 ### Change Global Settings
 
@@ -144,7 +146,7 @@ Edit `src/data/site-config.js` to change:
 
 ## 🚢 Deployment
 
-This site is configured to deploy to **GitHub Pages**.
+This site deploys to **GitHub Pages via GitHub Actions**.
 
 ### First-Time Setup
 
@@ -157,15 +159,18 @@ git branch -M main
 git push -u origin main
 ```
 
-3. Update `vite.config.js` → set `base: '/aei-association/'` (match your repo name)
+3. In GitHub repository settings, set **Pages Source** to **GitHub Actions**
+4. Ensure workflow permissions allow Pages deploy (`pages: write`, `id-token: write`)
 
-### Deploy
+### Deploy Flow
 
-```bash
-npm run deploy
-```
+Every push to `main` triggers `.github/workflows/deploy.yml`:
 
-This builds the site and pushes it to the `gh-pages` branch. Your site will be live at:
+1. Install deps (`npm ci` in CI)
+2. Build (`npm run build`)
+3. Publish `dist/` to GitHub Pages
+
+Your site will be live at:
 
 ```
 https://YOUR_USERNAME.github.io/aei-association/
@@ -174,9 +179,9 @@ https://YOUR_USERNAME.github.io/aei-association/
 ### Custom Domain (Optional)
 
 1. Add a `CNAME` file to `public/` with your domain (e.g., `assistcell.aei.cet.ac.in`)
-2. In `vite.config.js`, change `base: '/'`
+2. In `vite.config.js`, keep `base: '/'` for custom-domain serving
 3. Configure DNS settings to point to GitHub Pages
-4. Deploy: `npm run deploy`
+4. Push changes to `main` and wait for the deploy workflow to complete
 
 ---
 
@@ -199,7 +204,9 @@ https://YOUR_USERNAME.github.io/aei-association/
 | `npm run dev`    | Start development server (port 5173)           |
 | `npm run build`  | Build for production in `dist/`                |
 | `npm run preview`| Preview production build locally               |
-| `npm run deploy` | Build + deploy to GitHub Pages                 |
+| `npm run validate:resources` | Validate `src/data/resources.js` dataset rules |
+| `npm run firebase:sync` | Sync content + images to Firebase (optional) |
+| `npm run firebase:sync:text` | Sync content only to Firebase (optional) |
 
 ---
 
@@ -207,9 +214,10 @@ https://YOUR_USERNAME.github.io/aei-association/
 
 ### "Page not found" on GitHub Pages
 
-- Make sure `base` in `vite.config.js` matches your repo name
+- Make sure Pages source is set to **GitHub Actions**
+- Make sure `base` in `vite.config.js` is correct for your deployment mode
 - Ensure you're using `HashRouter` in `App.jsx` (not `BrowserRouter`)
-- Run `npm run deploy` again
+- Push a new commit to `main` to trigger deployment again
 
 ### Images not loading
 
@@ -221,7 +229,7 @@ https://YOUR_USERNAME.github.io/aei-association/
 
 - Hard refresh: `Ctrl+F5` (Windows) or `Cmd+Shift+R` (Mac)
 - Clear browser cache
-- Check GitHub Actions tab to see if deployment succeeded
+- Check the latest GitHub Actions workflow run status
 
 ---
 
