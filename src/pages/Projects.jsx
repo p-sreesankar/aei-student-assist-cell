@@ -17,13 +17,13 @@ export default function Projects() {
         gradient="from-primary to-primary-muted"
       />
 
-      <SectionWrapper animate>
+      <SectionWrapper animate className="!bg-[#0052FF]">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {PROJECTS.length > 0 ? (
             PROJECTS.map(project => (
               <div 
                 key={project.id} 
-                className="bg-[#0F2744]/50 backdrop-blur-md border border-[#1E4976]/50 rounded-lg overflow-hidden flex flex-col shadow-card hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
+                className="bg-white rounded-xl overflow-hidden flex flex-col border border-blue-50 stroke-blue-100 shadow-none transition-all duration-300 transform hover:-translate-y-1"
               >
                 {/* 4. Image */}
                 <div className="h-48 w-full overflow-hidden shrink-0">
@@ -36,7 +36,7 @@ export default function Projects() {
                 
                 <div className="p-6 flex flex-col flex-grow">
                   {/* 1. Project Name */}
-                  <h3 className="text-h4 font-bold text-text-primary mb-3">
+                  <h3 className="text-h4 font-bold text-slate-900 mb-3">
                     {project.title}
                   </h3>
                   
@@ -50,7 +50,7 @@ export default function Projects() {
                   </div>
                   
                   {/* 5. Description */}
-                  <p className="text-body-sm text-text-secondary mb-6 flex-grow">
+                  <p className="text-body-sm text-slate-600 mb-6 flex-grow leading-relaxed">
                     {project.description}
                   </p>
                   
@@ -59,7 +59,7 @@ export default function Projects() {
                     href={project.github} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="mt-auto px-4 py-2 border border-border-bright text-text-primary font-body-sm rounded-md transition-all hover:bg-primary-soft hover:text-white flex items-center justify-center gap-2"
+                    className="mt-auto px-4 py-3 border border-slate-200 text-slate-800 font-medium rounded-lg transition-colors hover:bg-slate-50 active:bg-slate-100 flex items-center justify-center gap-2"
                   >
                     <span>View Repository</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
