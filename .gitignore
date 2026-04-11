@@ -41,3 +41,5 @@ MAINTENANCE.md
 # Firebase local credentials
 firebase-service-account.json
 .env.firebase
+
+-firebase-adminsdk-.json
