@@ -14,27 +14,28 @@ export default function Projects() {
       <SectionWrapper>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project) => (
-            <div key={project.id} className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 flex flex-col transition-transform hover:-translate-y-1 hover:shadow-lg">
+            <div key={project.id} className="bg-white rounded-xl shadow-sm overflow-hidden border border-slate-200 mt-2 flex flex-col transition-all hover:-translate-y-1 hover:shadow-xl hover:border-blue-200 group">
               {/* Image */}
-              <div className="h-48 overflow-hidden relative bg-gray-100">
+              <div className="h-52 overflow-hidden relative bg-slate-100">
+                <div className="absolute inset-0 bg-blue-900/10 group-hover:bg-transparent transition-colors z-10"></div>
                 <img 
                   src={project.image} 
                   alt={project.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
               </div>
 
               {/* Content */}
-              <div className="p-6 flex flex-col flex-grow">
-                <h3 className="text-xl font-bold text-slate-800 mb-3">{project.name}</h3>
+              <div className="p-6 flex flex-col flex-grow bg-gradient-to-b from-white to-slate-50">
+                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-700 transition-colors">{project.name}</h3>
                 
                 {/* Creators */}
                 <div className="flex items-start gap-2 text-sm text-slate-600 mb-4">
                   <Users2 size={16} className="mt-0.5 text-blue-600 shrink-0" />
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-1.5">
                     {project.creators.map((creator, i) => (
-                      <span key={i} className="bg-slate-100 px-2 py-0.5 rounded-full text-xs font-medium text-slate-700">
+                      <span key={i} className="bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full text-xs font-semibold text-blue-700">
                         {creator}
                       </span>
                     ))}
@@ -42,7 +43,7 @@ export default function Projects() {
                 </div>
 
                 {/* Description */}
-                <p className="text-slate-600 text-sm mb-6 flex-grow">
+                <p className="text-slate-600 text-sm mb-6 flex-grow leading-relaxed">
                   {project.description}
                 </p>
 
@@ -51,9 +52,9 @@ export default function Projects() {
                   href={project.githubLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-auto inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium py-2.5 px-4 rounded-lg transition-colors w-full"
+                  className="mt-auto inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-blue-600 text-white text-sm font-semibold py-2.5 px-4 rounded-lg transition-all shadow-sm hover:shadow-md w-full"
                 >
-                  <Github size={16} />
+                  <Github size={18} />
                   View Source Code
                 </a>
               </div>
