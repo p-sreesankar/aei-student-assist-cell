@@ -8,9 +8,12 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "validate:resources": "node scripts/validate-resources.mjs"
+    "validate:resources": "node scripts/validate-resources.mjs",
+    "firebase:sync": "node scripts/firebase/sync-content.mjs",
+    "firebase:sync:text": "node scripts/firebase/sync-content.mjs --text-only"
   },
   "dependencies": {
+    "firebase-admin": "^13.8.0",
     "framer-motion": "^11.18.0",
     "lucide-react": "^0.469.0",
     "react": "^18.3.1",

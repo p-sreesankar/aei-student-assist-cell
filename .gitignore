@@ -37,3 +37,7 @@ Thumbs.db
 
 # Local maintenance docs
 MAINTENANCE.md
+
+# Firebase local credentials
+firebase-service-account.json
+.env.firebase
