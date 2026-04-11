@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ExternalLink, ShieldCheck, Lock, Clock, MessageSquare } from 'lucide-react';
+import { ExternalLink, ShieldCheck, Lock } from 'lucide-react';
 import SEO from '@components/SEO';
 import { SITE_CONFIG } from '@data/site-config';
 import { SectionWrapper } from '@components/layout';
@@ -15,9 +15,7 @@ const fadeUp = {
 };
 
 const steps = [
-  { icon: MessageSquare, text: 'Fill out the form below — your identity is kept confidential.' },
   { icon: ShieldCheck,   text: 'The AEI Association coordinator will review your submission.' },
-  { icon: Clock,         text: "You'll receive a response via the email you provide (if given)." },
   { icon: Lock,          text: 'For urgent matters, contact us directly via the Contact page.' },
 ];
 

@@ -54,6 +54,26 @@
 
 const FACULTY = [
   {
+    id:          "helen-mary-m-c",
+    name:        "Dr. Helen Mary M C",
+    designation: "Association Staff Advisor",
+    department:  "Applied Electronics and Instrumentation",
+    email:       "helenmarymc@cet.ac.in",
+    phone:       "9446219621",
+    photoUrl:    null,
+    role:        "advisor",
+  },
+  {
+    id:          "nanditha-dev",
+    name:        "Nanditha Dev",
+    designation: "Web Team Lead",
+    department:  "Applied Electronics and Instrumentation",
+    email:       "2005nanditha@gmail.com",
+    phone:       "9847093356",
+    photoUrl:    null,
+    role:        "student-rep",
+  },
+  {
     id:          "Mayoogh Manohar",
     name:        "Mayoogh Manohar",
     designation: "Student Representative (S6 AEI)",
