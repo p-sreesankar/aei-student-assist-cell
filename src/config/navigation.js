@@ -18,6 +18,7 @@ const PATH_TO_SECTION = {
   '/notices':   'notices',
   '/events':    'events',
   '/resources': 'resources',
+  '/projects':  'projects',
   '/grievance': 'grievance',
   '/contact':   'contact',
 };
@@ -28,6 +29,7 @@ const ALL_NAV_LINKS = [
   { label: 'Notices', path: '/notices' },
   { label: 'Events', path: '/events' },
   { label: 'Resources', path: '/resources' },
+  { label: 'Projects', path: '/projects' },
   { label: 'Grievance', path: '/grievance' },
   { label: 'Contact', path: '/contact' },
 ];

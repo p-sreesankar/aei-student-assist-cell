@@ -11,6 +11,7 @@ const About      = lazy(() => import('@pages/About'));
 const Notices    = lazy(() => import('@pages/Notices'));
 const Events     = lazy(() => import('@pages/Events'));
 const Resources  = lazy(() => import('@pages/Resources'));
+const Projects   = lazy(() => import('@pages/Projects'));
 const Grievance  = lazy(() => import('@pages/Grievance'));
 const Contact    = lazy(() => import('@pages/Contact'));
 const NotFound   = lazy(() => import('@pages/NotFound'));
@@ -26,6 +27,7 @@ export default function App() {
             {SECTIONS.notices   && <Route path="/notices"   element={<Notices />} />}
             {SECTIONS.events    && <Route path="/events"    element={<Events />} />}
             {SECTIONS.resources && <Route path="/resources" element={<Resources />} />}
+            {SECTIONS.projects  && <Route path="/projects"  element={<Projects />} />}
             {SECTIONS.grievance && <Route path="/grievance" element={<Grievance />} />}
             {SECTIONS.contact   && <Route path="/contact"   element={<Contact />} />}
             <Route path="*"          element={<NotFound />} />

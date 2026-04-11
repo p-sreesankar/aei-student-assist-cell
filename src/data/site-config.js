@@ -111,6 +111,7 @@ const SECTIONS = {
   notices:   true,   // Notices board page
   events:    true,   // Events page
   resources: true,   // Resources / downloads page
+  projects:  true,   // Projects showcase page
   grievance: true,   // Anonymous grievance form page
   contact:   true,   // Contact page
 };
