@@ -18,3 +18,4 @@ export { default as EmptyState } from './EmptyState';
 export { default as PageBanner } from './PageBanner';
 export { default as DataSection } from './DataSection';
 export { default as Ticker } from './Ticker';
+export { default as ProjectShowcaseCard } from './ProjectShowcaseCard';

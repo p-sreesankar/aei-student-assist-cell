@@ -1,79 +1,79 @@
+import { motion } from 'framer-motion';
 import SEO from '@components/SEO';
 import { SectionWrapper } from '@components/layout';
-import { Badge, EmptyState, PageBanner } from '@components/ui';
+import { EmptyState, PageBanner, ProjectShowcaseCard, SectionHeader } from '@components/ui';
 import { PROJECTS } from '@data/projects';
+
+const container = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 14 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
+};
 
 export default function Projects() {
   return (
     <>
-      <SEO 
-        title="Projects — AEI Department" 
-        description="Showcase of student and department projects featuring innovative engineering solutions."
-      />
-      
-      <PageBanner
-        title="Department Projects"
-        description="Showcasing innovation and research from our students and faculty."
-        gradient="from-primary to-primary-muted"
+      <SEO
+        title="Projects"
+        description="Explore AEI department projects across embedded systems, VLSI, instrumentation, AI, and automation domains."
       />
 
-      <SectionWrapper animate className="!bg-[#0052FF]">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {PROJECTS.length > 0 ? (
-            PROJECTS.map(project => (
-              <div 
-                key={project.id} 
-                className="bg-white rounded-xl overflow-hidden flex flex-col border border-blue-50 stroke-blue-100 shadow-none transition-all duration-300 transform hover:-translate-y-1"
-              >
-                {/* 4. Image */}
-                <div className="h-48 w-full overflow-hidden shrink-0">
-                  <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                  />
-                </div>
-                
-                <div className="p-6 flex flex-col flex-grow">
-                  {/* 1. Project Name */}
-                  <h3 className="text-h4 font-bold text-slate-900 mb-3">
-                    {project.title}
-                  </h3>
-                  
-                  {/* 2. Created By */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.creators.map((creator, i) => (
-                      <Badge key={i} variant="primary">
-                        {creator}
-                      </Badge>
-                    ))}
-                  </div>
-                  
-                  {/* 5. Description */}
-                  <p className="text-body-sm text-slate-600 mb-6 flex-grow leading-relaxed">
-                    {project.description}
-                  </p>
-                  
-                  {/* 3. GitHub Link */}
-                  <a 
-                    href={project.github} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="mt-auto px-4 py-3 border border-slate-200 text-slate-800 font-medium rounded-lg transition-colors hover:bg-slate-50 active:bg-slate-100 flex items-center justify-center gap-2"
-                  >
-                    <span>View Repository</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="7" y1="17" x2="17" y2="7"></line>
-                      <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="col-span-full">
-              <EmptyState title="No projects yet" message="Check back later for exciting student projects." />
+      <PageBanner
+        title="Projects Showcase"
+        subtitle="Built by our students and mentors across AI, VLSI, instrumentation, and automation tracks."
+        breadcrumb={[
+          { label: 'Home', path: '/' },
+          { label: 'Projects', path: '/projects' },
+        ]}
+        gradientFrom="from-[#0C1D34]"
+        gradientTo="to-[#0A1628]"
+      />
+
+      <SectionWrapper background="default" className="relative overflow-hidden">
+        <div className="pointer-events-none absolute -top-40 right-0 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-40 left-0 h-80 w-80 rounded-full bg-blue-700/15 blur-3xl" />
+
+        <div className="relative z-[1]">
+          <SectionHeader
+            title="Department Builds"
+            subtitle="Every card includes project owner details, key tags, a repository link, and a concise technical overview."
+            eyebrow="AEI Innovation Lab"
+            showAccent
+          />
+
+          {PROJECTS.length === 0 ? (
+            <div className="mt-8">
+              <EmptyState
+                icon="inbox"
+                title="No projects listed yet"
+                subtitle="Add entries in src/data/projects.js to publish your showcase."
+              />
             </div>
+          ) : (
+            <motion.div
+              variants={container}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-40px' }}
+              className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+            >
+              {PROJECTS.map((project) => (
+                <motion.div key={project.id} variants={item}>
+                  <ProjectShowcaseCard
+                    title={project.title}
+                    description={project.description}
+                    image={project.image}
+                    tags={project.tags}
+                    creators={project.creators}
+                    link={project.github}
+                  />
+                </motion.div>
+              ))}
+            </motion.div>
           )}
         </div>
       </SectionWrapper>

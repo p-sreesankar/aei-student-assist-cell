@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 import { motion } from 'framer-motion';
 import {
   Megaphone, CalendarDays, FolderDown,
-  MessageSquareWarning, Users, ArrowRight, Pin,
+  MessageSquareWarning, Users, ArrowRight, Pin, FolderGit2,
   Paperclip, ChevronRight,
 } from 'lucide-react';
 import SEO from '@components/SEO';
@@ -49,6 +49,15 @@ const quickLinks = [
     label: 'Resources',
     description: 'Downloads, manuals & forms',
     icon: FolderDown,
+    color: 'bg-primary-soft text-primary',
+    hoverBorder: 'hover:border-border-bright',
+  },
+  {
+    to: '/projects',
+    section: 'projects',
+    label: 'Projects',
+    description: 'Student innovations & builds',
+    icon: FolderGit2,
     color: 'bg-primary-soft text-primary',
     hoverBorder: 'hover:border-border-bright',
   },
