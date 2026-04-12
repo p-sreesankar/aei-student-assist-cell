@@ -584,6 +584,16 @@ const RESOURCES = [
     addedDate: "2026-04-12",
   },
   {
+    id: "site-2024-s2-foc-series-two-2026-answer-key",
+    moduleTitle: "Foundations of Computing (FoC)",
+    title: "Answer Key",
+    description: "FoC Series 2 (2026)",
+    category: "2024 Scheme S2",
+    fileType: "answer-key",
+    driveLink: "https://drive.google.com/file/d/1zztFOzmxl0UuRnACwHV8k3dSz3CCrsru/view?usp=sharing",
+    addedDate: "2026-04-12",
+  },
+  {
     id: "site-2024-s2-ipr-series-two-2026-question-paper",
     moduleTitle: "Engineering Entrepreneurship and IPR",
     title: "Question Paper",
