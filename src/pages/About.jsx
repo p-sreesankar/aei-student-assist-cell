@@ -378,7 +378,7 @@ export default function About() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-40px' }}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-5 mt-6"
+            className="grid [grid-template-columns:repeat(auto-fit,minmax(220px,1fr))] gap-5 mt-6 max-w-6xl mx-auto"
           >
             {sortedFaculty.map((person) => (
               <CoordinatorCard key={person.id} person={person} />
