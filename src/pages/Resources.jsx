@@ -37,6 +37,14 @@ const FILE_TYPE_META = {
 };
 
 const MODULE_PRIORITY = {
+  S2: [
+    'Chemistry',
+    'Engineering Entrepreneurship and IPR',
+    'Foundations of Computing (FoC)',
+    'Mathematics',
+    'Network Theory (NT)',
+    'Programming in C (PRC)',
+  ],
   S3: [
     'Artificial Intelligence & Data Science',
     'Transducers & Measurements',

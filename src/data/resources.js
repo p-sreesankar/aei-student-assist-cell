@@ -125,7 +125,7 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-foc-linux-commands-notes",
-    moduleTitle: "Foundations of Computing",
+    moduleTitle: "Foundations of Computing (FoC)",
     title: "Linux Commands",
     description: "Foundations of Computing (S2)",
     category: "2024 Scheme S2",
@@ -475,8 +475,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-chemistry-first-series-mar-2026-answer-key-answer-key",
+    moduleTitle: "Chemistry",
     title: "Answer Key",
-    description: "Chemistry First Series (Mar 2026)",
+    description: "Chemistry Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "answer-key",
     driveLink: "https://drive.google.com/file/d/16K1J3TQufdCFRwLDRzVuVJMrS_E4eWca/view?usp=sharing",
@@ -484,8 +485,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-chemistry-first-series-mar-2026-qn-paper-question-paper",
+    moduleTitle: "Chemistry",
     title: "Question Paper",
-    description: "Chemistry First Series (Mar 2026)",
+    description: "Chemistry Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "question-paper",
     driveLink: "https://drive.google.com/file/d/1jBM6NKDAmTbJcEhVWUl-ky17oSAdOyJm/view?usp=sharing",
@@ -493,8 +495,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-fc-first-series-mar-2026-answer-key-answer-key",
+    moduleTitle: "Foundations of Computing (FoC)",
     title: "Answer Key",
-    description: "FC First Series (Mar 2026)",
+    description: "FoC Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "answer-key",
     driveLink: "https://drive.google.com/file/d/1Om4YjJXFbiqjXqgNpHc7GhESwbpsUATn/view?usp=sharing",
@@ -502,8 +505,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-fc-first-series-mar-2026-qn-paper-question-paper",
+    moduleTitle: "Foundations of Computing (FoC)",
     title: "Question Paper",
-    description: "FC First Series (Mar 2026)",
+    description: "FoC Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "question-paper",
     driveLink: "https://drive.google.com/file/d/1x3S5YapTSMSPgnMemqj5Jzu9GRYMFe0M/view?usp=sharing",
@@ -511,8 +515,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-maths-first-series-mar-2026-answer-key-answer-key",
+    moduleTitle: "Mathematics",
     title: "Answer Key",
-    description: "Maths First Series (Mar 2026)",
+    description: "Mathematics Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "answer-key",
     driveLink: "https://drive.google.com/file/d/1DrcZNGbvFmd0wvML3206BMdDXlrUCNIj/view?usp=sharing",
@@ -520,8 +525,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-maths-first-series-mar-2026-qn-paper-question-paper",
+    moduleTitle: "Mathematics",
     title: "Question Paper",
-    description: "Maths First Series (Mar 2026)",
+    description: "Mathematics Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "question-paper",
     driveLink: "https://drive.google.com/file/d/1hD4xsSc-z5UHjbAeCjeSvgPfUginqZHj/view?usp=sharing",
@@ -529,8 +535,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-nt-first-series-mar-2026-answer-key-answer-key",
+    moduleTitle: "Network Theory (NT)",
     title: "Answer Key",
-    description: "NT First Series (Mar 2026)",
+    description: "Network Theory (NT) Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "answer-key",
     driveLink: "https://drive.google.com/file/d/1HEN7IjAmdGdD9JVfszBdGHqv1wj3ZI42/view?usp=sharing",
@@ -538,8 +545,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-nt-first-series-mar-2026-qn-paper-question-paper",
+    moduleTitle: "Network Theory (NT)",
     title: "Question Paper",
-    description: "NT First Series (Mar 2026)",
+    description: "Network Theory (NT) Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "question-paper",
     driveLink: "https://drive.google.com/file/d/1dk9JFTynnsMKh3ei0NkBdE-SYEGVdM5f/view?usp=drive_link",
@@ -547,8 +555,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-ipr-first-series-mar-2026-answer-key-answer-key",
+    moduleTitle: "Engineering Entrepreneurship and IPR",
     title: "Answer Key",
-    description: "IPR First Series (Mar 2026)",
+    description: "Engineering Entrepreneurship and IPR Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "answer-key",
     driveLink: "https://drive.google.com/file/d/1tALjxQ_rvHbFoNLJi2YaGCFb4KQqxS_0/view?usp=sharing",
@@ -556,8 +565,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-ipr-first-series-mar-2026-qn-paper-question-paper",
+    moduleTitle: "Engineering Entrepreneurship and IPR",
     title: "Question Paper",
-    description: "IPR First Series (Mar 2026)",
+    description: "Engineering Entrepreneurship and IPR Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "question-paper",
     driveLink: "https://drive.google.com/file/d/11yB9Vq9-A6awcDQbXWBDZ2E29TAG60Nu/view?usp=sharing",
@@ -565,6 +575,7 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-foc-series-two-2026-question-paper",
+    moduleTitle: "Foundations of Computing (FoC)",
     title: "Question Paper",
     description: "FoC Series 2 (2026)",
     category: "2024 Scheme S2",
@@ -574,6 +585,7 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-ipr-series-two-2026-question-paper",
+    moduleTitle: "Engineering Entrepreneurship and IPR",
     title: "Question Paper",
     description: "Engineering Entrepreneurship and IPR Series 2 (2026)",
     category: "2024 Scheme S2",
@@ -583,6 +595,7 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-ipr-series-two-2026-answer-key",
+    moduleTitle: "Engineering Entrepreneurship and IPR",
     title: "Answer Key",
     description: "Engineering Entrepreneurship and IPR Series 2 (2026)",
     category: "2024 Scheme S2",
@@ -592,8 +605,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-prc-first-series-mar-2026-answer-key-answer-key",
+    moduleTitle: "Programming in C (PRC)",
     title: "Answer Key",
-    description: "PRC First Series (Mar 2026)",
+    description: "Programming in C (PRC) Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "answer-key",
     driveLink: "https://drive.google.com/file/d/1tyXcoG7LDb6W2TVs_ol_w5Jbp28Li-WH/view?usp=sharing",
@@ -601,8 +615,9 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-prc-first-series-mar-2026-qn-paper-question-paper",
+    moduleTitle: "Programming in C (PRC)",
     title: "Question Paper",
-    description: "PRC First Series (Mar 2026)",
+    description: "Programming in C (PRC) Series 1 (Mar 2026)",
     category: "2024 Scheme S2",
     fileType: "question-paper",
     driveLink: "https://drive.google.com/file/d/1vgRPS9cES7t-HZ0EJz7bXPM0ruMzOSuL/view?usp=sharing",
@@ -610,6 +625,7 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-chemistry-lab-video-expt-10",
+    moduleTitle: "Chemistry",
     title: "Expt. 10",
     description: "Chemistry Lab (GXCYT122)",
     category: "2024 Scheme S2",
@@ -619,6 +635,7 @@ const RESOURCES = [
   },
   {
     id: "site-2024-s2-chemistry-lab-video-expt-11",
+    moduleTitle: "Chemistry",
     title: "Expt. 11",
     description: "Chemistry Lab (GXCYT122)",
     category: "2024 Scheme S2",
