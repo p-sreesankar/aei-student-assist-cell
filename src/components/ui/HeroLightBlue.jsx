@@ -18,6 +18,8 @@ const ROTATING_PHRASES = [
   'Resources, whenever you need them.',
 ];
 
+const LOGO_SRC = '/images/logo/logo.png';
+
 export default function HeroLightBlue() {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [showScroll, setShowScroll] = useState(true);
@@ -98,6 +100,21 @@ export default function HeroLightBlue() {
 
       {/* ── Content ───────────────────────────────────────────────── */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40 text-center">
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55 }}
+          className="mx-auto mb-8 md:mb-10 w-40 sm:w-48 md:w-56"
+        >
+          <img
+            src={LOGO_SRC}
+            alt={`${SITE_CONFIG.departmentShort} logo`}
+            className="w-full h-auto object-contain"
+            style={{ filter: 'drop-shadow(0 0 18px rgba(14,165,233,0.2))' }}
+          />
+        </motion.div>
+
         {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}

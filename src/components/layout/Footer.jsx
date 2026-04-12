@@ -2,6 +2,8 @@ import { Link } from 'react-router';
 import { Mail, Instagram, Linkedin, ExternalLink } from 'lucide-react';
 import { NAV_LINKS, SOCIAL_LINKS, BRAND, FOOTER_CREDIT } from '@/config/navigation';
 
+const LOGO_SRC = '/images/logo/logo.png';
+
 /**
  * Footer Component — Warm, friendly footer with navigation and contact info
  * 
@@ -41,8 +43,18 @@ export default function Footer() {
           <div className="space-y-4">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-primary-muted flex items-center justify-center text-text-primary font-heading font-bold text-xl shadow-card">
-                {BRAND.departmentShort}
+              <div
+                className="w-12 h-12 rounded-lg p-1.5 flex items-center justify-center shadow-card"
+                style={{
+                  backgroundColor: 'rgba(14,165,233,0.08)',
+                  border: '1px solid rgba(14,165,233,0.25)',
+                }}
+              >
+                <img
+                  src={LOGO_SRC}
+                  alt={`${BRAND.departmentShort} logo`}
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div>
                 <div className="text-h4 font-heading font-bold text-text-primary">

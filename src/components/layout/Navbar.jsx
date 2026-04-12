@@ -4,6 +4,8 @@ import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NAV_LINKS, BRAND } from '@/config/navigation';
 
+const LOGO_SRC = '/images/logo/logo.png';
+
 /**
  * Navbar Component — Layered blue dark theme, sticky navigation
  *
@@ -77,15 +79,19 @@ export default function Navbar() {
               to="/"
               className="flex items-center gap-3 group"
             >
-              {/* Logo Placeholder */}
+              {/* Logo */}
               <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center font-heading font-bold text-lg shadow-card"
+                className="w-10 h-10 rounded-lg p-1.5 flex items-center justify-center shadow-card"
                 style={{
-                  background: 'linear-gradient(135deg, #0EA5E9, #0284C7)',
-                  color: '#0A1628',
+                  backgroundColor: 'rgba(14,165,233,0.08)',
+                  border: '1px solid rgba(14,165,233,0.25)',
                 }}
               >
-                {BRAND.departmentShort}
+                <img
+                  src={LOGO_SRC}
+                  alt={`${BRAND.departmentShort} logo`}
+                  className="w-full h-full object-contain"
+                />
               </div>
 
               {/* Brand Name */}
