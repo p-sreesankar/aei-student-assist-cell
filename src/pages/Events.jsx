@@ -146,7 +146,7 @@ function EventCard({ event, isPast = false, onImageClick }) {
   const showImage = Boolean(event.image) && !imageError;
 
   return (
-    <Card className="overflow-hidden flex flex-col">
+    <Card className="overflow-hidden flex flex-col h-full">
       {/* ── Image / Placeholder ──────────────────────────────────────── */}
       {showImage ? (
         <button
@@ -250,34 +250,32 @@ function EventCard({ event, isPast = false, onImageClick }) {
           {event.description}
         </p>
 
-        {/* CTA — show links for both upcoming and past events */}
-        {(event.registrationUrl || event.instagramUrl) && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {!isPast && event.registrationUrl && (
-              <a
-                href={event.registrationUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="primary" size="sm" icon={<ExternalLink size={14} />} iconPosition="right">
-                  Register
-                </Button>
-              </a>
-            )}
+        {/* CTA row — keep a consistent reserved space so all cards match height */}
+        <div className="mt-4 min-h-[2.25rem] flex flex-wrap gap-2 items-start">
+          {!isPast && event.registrationUrl && (
+            <a
+              href={event.registrationUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="primary" size="sm" icon={<ExternalLink size={14} />} iconPosition="right">
+                Register
+              </Button>
+            </a>
+          )}
 
-            {event.instagramUrl && (
-              <a
-                href={event.instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="secondary" size="sm" icon={<Instagram size={14} />}>
-                  Instagram
-                </Button>
-              </a>
-            )}
-          </div>
-        )}
+          {event.instagramUrl && (
+            <a
+              href={event.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="secondary" size="sm" icon={<Instagram size={14} />}>
+                Instagram
+              </Button>
+            </a>
+          )}
+        </div>
       </div>
     </Card>
   );
@@ -459,7 +457,7 @@ export default function Events() {
               className="grid gap-4 sm:gap-6 md:grid-cols-2"
             >
               {activeList.map((event) => (
-                <motion.div key={event.id} variants={staggerItem}>
+                <motion.div key={event.id} variants={staggerItem} className="h-full">
                   <EventCard
                     event={event}
                     isPast={activeTab === 'past'}

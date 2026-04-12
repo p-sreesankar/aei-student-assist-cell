@@ -54,6 +54,15 @@
 
 /** @type {Array<{id: string, title: string, category: string, date: string, description: string, attachmentUrl: string|null, pinned: boolean}>} */
 const NOTICES = [
+	{
+		id: "sem-exam-dates-s2-s4-s6-s8",
+		title: "Sem Exam Dates",
+		category: "academic",
+		date: "2026-04-12",
+		description: "B.Tech Applied Electronics Detailed Examination Time Table (S2, S4, S6, S8).",
+		attachmentUrl: "https://www.instagram.com/p/DWwQmkqk-Vn/?igsh=MTl3dnJhajNxdGc2MA==",
+		pinned: true,
+	},
 ];
 
 export { NOTICES };
