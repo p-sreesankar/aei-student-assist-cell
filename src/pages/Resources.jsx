@@ -80,14 +80,28 @@ function schemeForSemester(semester) {
   return semNumber <= 4 ? '2024 Scheme' : '2019 Scheme';
 }
 
-function normalizeType(fileType = '') {
-  const raw = fileType.toLowerCase();
-  if (raw.includes('question-paper')) return 'question-paper';
-  if (raw.includes('answer-key')) return 'answer-key';
+function normalizeType(resource) {
+  const raw = (resource.fileType || '').toLowerCase().trim();
+  const hintText = [
+    resource.id,
+    resource.title,
+    resource.moduleTitle,
+    resource.description,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
+
+  if (raw.includes('question-paper') || raw.includes('question paper')) return 'question-paper';
+  if (raw.includes('answer-key') || raw.includes('answer key')) return 'answer-key';
   if (raw.includes('formula')) return 'formula';
   if (raw.includes('video')) return 'video';
-  if (raw.includes('2019 scheme') || raw.includes('2024 scheme')) return 'notes';
-  if (['pdf', 'doc', 'xls', 'ppt', 'img', 'zip', 'link', 'notes'].includes(raw)) return raw;
+
+  // Many legacy entries are PDFs that are actually notes modules.
+  if (raw === 'notes') return 'notes';
+  if (raw === 'pdf' && /\bnotes?\b/.test(hintText)) return 'notes';
+
+  if (['pdf', 'doc', 'xls', 'ppt', 'img', 'zip', 'link'].includes(raw)) return raw;
   return 'link';
 }
 
@@ -171,7 +185,7 @@ export default function Resources() {
           semester,
           scheme: schemeForSemester(semester),
           moduleName: extractModule(resource),
-          normalizedType: normalizeType(resource.fileType),
+          normalizedType: normalizeType(resource),
         };
       }),
     [],
