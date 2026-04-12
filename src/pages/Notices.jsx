@@ -187,6 +187,9 @@ export default function Notices() {
     return filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
   }, [activeFilter]);
 
+  const showFilteredEmptyState =
+    filteredNotices.length === 0 && !(pinnedNotices.length > 0 && activeFilter === 'all');
+
   const handleFilterClick = useCallback((key) => {
     setActiveFilter(key);
   }, []);
@@ -264,7 +267,7 @@ export default function Notices() {
         {/* ═════════════════════════════════════════════════════════════ */}
         {/*  FILTERED NOTICES LIST                                       */}
         {/* ═════════════════════════════════════════════════════════════ */}
-        {filteredNotices.length === 0 ? (
+        {showFilteredEmptyState ? (
           <Card>
             <EmptyState
               icon="inbox"

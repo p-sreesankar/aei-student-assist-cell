@@ -97,9 +97,9 @@ function normalizeType(resource) {
   if (raw.includes('formula')) return 'formula';
   if (raw.includes('video')) return 'video';
 
-  // Many legacy entries are PDFs that are actually notes modules.
+  // Treat notes and pdf as one unified resource type.
   if (raw === 'notes') return 'notes';
-  if (raw === 'pdf' && /\bnotes?\b/.test(hintText)) return 'notes';
+  if (raw === 'pdf') return 'notes';
 
   if (['pdf', 'doc', 'xls', 'ppt', 'img', 'zip', 'link'].includes(raw)) return raw;
   return 'link';
