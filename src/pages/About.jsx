@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import {
   Heart, Zap, Users, ShieldCheck,
   Megaphone, CalendarDays, FolderDown, MessageSquareWarning,
-  Mail, Phone, Milestone,
+  Mail, Phone,
 } from 'lucide-react';
 import SEO from '@components/SEO';
 import { ABOUT } from '@data/about';
@@ -213,52 +213,6 @@ function CoordinatorCard({ person }) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  TIMELINE COMPONENT
-// ══════════════════════════════════════════════════════════════════════════════
-
-function Timeline({ milestones }) {
-  if (!milestones || milestones.length === 0) return null;
-
-  return (
-    <div className="relative pl-8 sm:pl-10">
-      {/* Vertical line */}
-      <div className="absolute left-3 sm:left-4 top-2 bottom-2 w-0.5 bg-gradient-to-b from-primary-dim via-primary to-accent rounded-full" />
-
-      <div className="space-y-8">
-        {milestones.map((m, i) => (
-          <motion.div
-            key={m.year}
-            initial={{ opacity: 0, x: -12 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-30px' }}
-            transition={{ duration: 0.35, delay: i * 0.1 }}
-            className="relative"
-          >
-            {/* Dot */}
-            <div className="absolute -left-8 sm:-left-10 top-1 w-6 h-6 rounded-full bg-surface border-[3px] border-primary shadow-sm flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-primary" />
-            </div>
-
-            {/* Content */}
-            <div>
-              <span className="inline-block px-2.5 py-0.5 rounded-full bg-primary-soft text-primary text-caption font-bold mb-1">
-                {m.year}
-              </span>
-              <h4 className="font-heading font-bold text-body text-text-primary leading-snug">
-                {m.title}
-              </h4>
-              <p className="text-body-sm text-text-secondary mt-1 leading-relaxed">
-                {m.description}
-              </p>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ══════════════════════════════════════════════════════════════════════════════
 //  ABOUT PAGE
 // ══════════════════════════════════════════════════════════════════════════════
 
@@ -433,24 +387,6 @@ export default function About() {
         </SectionWrapper>
       )}
 
-      {/* ═══════════════════════════════════════════════════════════════ */}
-      {/*  4. TIMELINE — "Our Journey"                                  */}
-      {/*  To HIDE this section: set ABOUT.milestones to []             */}
-      {/* ═══════════════════════════════════════════════════════════════ */}
-      {ABOUT.milestones && ABOUT.milestones.length > 0 && (
-        <SectionWrapper background="white">
-          <SectionHeader
-            title="Our Journey"
-            subtitle="Key milestones in the life of the cell"
-            number={4}
-            sticker=""
-            centered
-          />
-          <div className="max-w-2xl mx-auto mt-8">
-            <Timeline milestones={ABOUT.milestones} />
-          </div>
-        </SectionWrapper>
-      )}
     </>
   );
 }
