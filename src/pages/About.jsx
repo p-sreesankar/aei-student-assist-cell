@@ -231,7 +231,7 @@ export default function About() {
       {/*  PAGE BANNER                                                  */}
       {/* ═══════════════════════════════════════════════════════════════ */}
       <PageBanner
-        title="About the Cell"
+        title="About the Association"
         subtitle="Who we are and what drives us "
         breadcrumb={[
           { label: 'Home', path: '/' },

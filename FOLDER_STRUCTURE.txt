@@ -31,7 +31,7 @@ aei-association/
 │   │   └── site-config.js          # Global site configuration (name, tagline, colors, socials, form URL)
 │   │
 │   ├── pages/                      # Page components (one file per route)
-│   │   ├── About.jsx               # /about — About the Cell page
+│   │   ├── About.jsx               # /about — About the Association page
 │   │   ├── Contact.jsx             # /contact — Faculty contact cards
 │   │   ├── Events.jsx              # /events — Event calendar (upcoming & past)
 │   │   ├── Gallery.jsx             # /gallery — Photo grid with lightbox

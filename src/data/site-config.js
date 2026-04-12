@@ -78,7 +78,7 @@ const SITE_CONFIG = {
     officeRoom:    "Room 203, AEI Block",         // [Optional] Office room / location
     officeHours:   "Mon–Fri, 10:00 AM – 4:00 PM", // [Optional] Working hours
     phone:         "+91-471-2515555",              // [Optional] Department office phone
-    email:         "studentassistcell.aei@cet.ac.in", // [Required] Primary contact email
+    email:         "studentassistassociation.aei@cet.ac.in", // [Required] Primary contact email
     whatsapp:      "",                             // [Optional] WhatsApp link (https://wa.me/91XXXXXXXXXX)
     address:       "Department of AEI, College of Engineering Trivandrum, Thiruvananthapuram, Kerala 695016",
   },

@@ -122,4 +122,4 @@ git push
 
 - Check [Vercel docs](https://vercel.com/docs)
 - Open an issue in this repository
-- Contact: studentassistcell.aei@cet.ac.in
+- Contact: studentassistassociation.aei@cet.ac.in

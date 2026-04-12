@@ -55,16 +55,16 @@ Students of the Applied Electronics and Instrumentation (AEI) department at Coll
 ### 4.1 Home
 
 - Purpose: First impression + navigation hub.
-- Content: Hero banner with cell name ("AEI Association — AEI, CET"), a one-line tagline, and a grid/row of quick-link cards to every other section.
+- Content: Hero banner with association name ("AEI Association — AEI, CET"), a one-line tagline, and a grid/row of quick-link cards to every other section.
 - Behavior: Smooth-scroll or anchor links to each section (single-page app feel). On mobile, quick-link cards stack into a 2-column grid.
 - Acceptance Criteria:
   - AC-1: Page loads in < 2 s on 3G.
   - AC-2: All 7 section links visible without scrolling on desktop.
   - AC-3: Hero image/gradient renders correctly on viewports from 320 px to 1440 px.
 
-### 4.2 About the Cell
+### 4.2 About the Association
 
-- Purpose: Explain the cell's mission, scope, and team.
+- Purpose: Explain the association's mission, scope, and team.
 - Content: 2–3 paragraphs of static text + optional team photo/illustration. Driven by `data/about.js`.
 - Behavior: Pure text render; no interactivity.
 - Acceptance Criteria:
@@ -222,7 +222,7 @@ Note: Status (upcoming/past) is derived at render time by comparing `date` to `n
 [
   {
     name:        String        — "Dr. Anitha S."
-    designation: String        — "Cell Coordinator, Assoc. Professor"
+    designation: String        — "Association Coordinator, Assoc. Professor"
     email:       String        — "anitha@cet.ac.in"
     phone:       String        — "+91-XXXXXXXXXX"
     photoUrl:    String | null — headshot URL

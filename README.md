@@ -183,7 +183,7 @@ https://YOUR-PROJECT.vercel.app
 ### Custom Domain (Optional)
 
 1. Open your project in Vercel → **Settings** → **Domains**
-2. Add your domain (e.g., `assistcell.aei.cet.ac.in`)
+2. Add your domain (e.g., `assistassociation.aei.cet.ac.in`)
 3. Configure DNS records as instructed by Vercel
 4. Keep `base: '/'` in `vite.config.js`
 5. Redeploy from Vercel dashboard (or push a new commit)
@@ -259,7 +259,7 @@ This project is open-source and available under the MIT License.
 
 For questions, issues, or suggestions:
 - Open an issue on GitHub
-- Email: studentassistcell.aei@cet.ac.in
+- Email: studentassistassociation.aei@cet.ac.in
 - Visit the Contact page on the live site
 
 ---

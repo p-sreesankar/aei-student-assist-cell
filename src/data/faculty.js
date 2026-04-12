@@ -32,7 +32,7 @@
 //  - If photoUrl is null, the site will show an avatar with the person's initials
 //
 //  ROLE OPTIONS:
-//  - "coordinator"  → Cell coordinator / primary contact (shown first)
+//  - "coordinator"  → Association coordinator / primary contact (shown first)
 //  - "advisor"      → Faculty advisor
 //  - "faculty"      → Other faculty members involved
 //  - "student-rep"  → Student representatives / volunteers
