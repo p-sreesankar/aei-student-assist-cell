@@ -362,6 +362,7 @@ export default function Home() {
             className="mt-8 space-y-4"
           >
             {upcomingEvents.map((event) => {
+              const hideDate = Boolean(event.hideDate);
               const eventDate = new Date(event.date);
               const day = eventDate.getDate();
               const month = eventDate.toLocaleString('default', { month: 'short' }).toUpperCase();
@@ -371,14 +372,22 @@ export default function Home() {
                   <Card clickable className="group">
                     <div className="flex gap-3 sm:gap-5">
                       {/* Date Block */}
-                      <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl bg-gradient-to-br from-[rgba(245,158,11,0.15)] to-[rgba(245,158,11,0.08)] flex flex-col items-center justify-center border border-[rgba(245,158,11,0.2)]">
-                        <span className="text-h4 sm:text-h3 md:text-h2 font-heading font-bold text-accent leading-none">
-                          {day}
-                        </span>
-                        <span className="text-caption font-heading font-semibold text-accent uppercase tracking-wider">
-                          {month}
-                        </span>
-                      </div>
+                      {!hideDate ? (
+                        <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl bg-gradient-to-br from-[rgba(245,158,11,0.15)] to-[rgba(245,158,11,0.08)] flex flex-col items-center justify-center border border-[rgba(245,158,11,0.2)]">
+                          <span className="text-h4 sm:text-h3 md:text-h2 font-heading font-bold text-accent leading-none">
+                            {day}
+                          </span>
+                          <span className="text-caption font-heading font-semibold text-accent uppercase tracking-wider">
+                            {month}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-xl bg-gradient-to-br from-primary-soft to-[rgba(14,165,233,0.08)] flex items-center justify-center border border-[rgba(14,165,233,0.2)]">
+                          <span className="text-caption sm:text-body-sm font-heading font-semibold text-primary uppercase tracking-wider text-center px-1">
+                            Coming Soon
+                          </span>
+                        </div>
+                      )}
 
                       {/* Event Info */}
                       <div className="flex-1 min-w-0">
