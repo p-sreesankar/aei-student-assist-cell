@@ -102,12 +102,12 @@ function validateResources(resources) {
     bySemesterModule.get(semester).push(moduleName);
   });
 
-  if ((bySemester.get('S2') || 0) !== 15) {
-    errors.push(`S2 count mismatch: expected 15, found ${bySemester.get('S2') || 0}.`);
+  if ((bySemester.get('S2') || 0) !== 21) {
+    errors.push(`S2 count mismatch: expected 21, found ${bySemester.get('S2') || 0}.`);
   }
 
-  if ((bySemester.get('S4') || 0) !== 20) {
-    errors.push(`S4 count mismatch: expected 20, found ${bySemester.get('S4') || 0}.`);
+  if ((bySemester.get('S4') || 0) !== 21) {
+    errors.push(`S4 count mismatch: expected 21, found ${bySemester.get('S4') || 0}.`);
   }
 
   const s3Modules = bySemesterModule.get('S3') || [];
