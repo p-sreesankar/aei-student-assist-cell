@@ -837,6 +837,47 @@ const RESOURCES = [
     addedDate: "2026-04-08",
   },
 
+  // Adding Chemistry Series 2 resources
+  {
+    subject: "Chemistry",
+    series: 2,
+    type: "Question Paper",
+    url: "https://drive.google.com/file/d/1M31SDl7l5TlaPX64tAMedczdtXWcHTHp/view?usp=sharing",
+  },
+  {
+    subject: "Chemistry",
+    series: 2,
+    type: "Answer Key",
+    url: "https://drive.google.com/file/d/1xAUvJl0KAY4k0tw5EBndWydahyiIQd83/view?usp=sharing",
+  },
+
+  // Adding Maths Series 2 resources
+  {
+    subject: "Maths",
+    series: 2,
+    type: "Question Paper",
+    url: "https://drive.google.com/file/d/1oRtXFGciDcWNkCRT7AjisSZGvQAgAW4J/view?usp=sharing",
+  },
+  {
+    subject: "Maths",
+    series: 2,
+    type: "Answer Key",
+    url: "https://drive.google.com/file/d/1ibhckDalmuOZgsOnOKDeDXyxaoLA01Ir/view?usp=sharing",
+  },
+
+  // Adding Network Theory Series 2 resources
+  {
+    subject: "Network Theory",
+    series: 2,
+    type: "Question Paper",
+    url: "https://drive.google.com/file/d/1JPfvMMjiom6G2-tELDHQLuQUFeCxQN55/view?usp=sharing",
+  },
+  {
+    subject: "Network Theory",
+    series: 2,
+    type: "Answer Key",
+    url: "https://drive.google.com/file/d/1KEFNgfDZmteUS6NNOKfTohKQBTCToDI9/view?usp=sharing",
+  },
 ];
 
 export { RESOURCES };
