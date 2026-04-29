@@ -255,7 +255,7 @@ export default function Resources() {
           })
           .map(([moduleName, resources]) => ({
             moduleName,
-            resources: resources.sort((a, b) => b.addedDate.localeCompare(a.addedDate)),
+            resources: resources.sort((a, b) => (b.addedDate || '').localeCompare(a.addedDate || '')),
           })),
       }));
   }, [filtered]);
